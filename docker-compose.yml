@@ -1,0 +1,46 @@
+services:
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: plaminski-db
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "YourSecurePassword123!"
+    ports:
+      - "1433:1433"
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -C -S localhost -U sa -P \"$$MSSQL_SA_PASSWORD\" -Q \"SELECT 1\" || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 30s
+    volumes:
+      - sql_data:/var/opt/mssql
+
+  api:
+    build:
+      context: ./EcoTrails.Api
+      dockerfile: Dockerfile
+    container_name: plaminski-api
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__DefaultConnection: "Server=db;Database=EcoTrailsDb;User Id=sa;Password=YourSecurePassword123!;TrustServerCertificate=True;MultipleActiveResultSets=true"
+    ports:
+      - "5218:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./eco.json:/eco.json:ro
+
+  client:
+    build:
+      context: ./EcoTrails.Client
+      dockerfile: Dockerfile
+    container_name: plaminski-client
+    ports:
+      - "5173:80"
+    depends_on:
+      - api
+
+volumes:
+  sql_data:
