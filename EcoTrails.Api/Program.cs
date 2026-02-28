@@ -17,10 +17,15 @@ builder.Services.AddDbContext<AppDbContext>(options =>
         sqlOptions => sqlOptions.EnableRetryOnFailure()));
 builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("Jwt"));
 builder.Services.Configure<OpenRouteServiceOptions>(builder.Configuration.GetSection("OpenRouteService"));
+builder.Services.Configure<OpenAiOptions>(builder.Configuration.GetSection("OpenAI"));
 builder.Services.AddScoped<JwtTokenService>();
 builder.Services.AddHttpClient<OpenRouteService>(httpClient =>
 {
     httpClient.Timeout = TimeSpan.FromSeconds(12);
+});
+builder.Services.AddHttpClient<OpenAiAssistantService>(httpClient =>
+{
+    httpClient.Timeout = TimeSpan.FromSeconds(25);
 });
 builder.Services.AddIdentityCore<AppUser>(options =>
 {

@@ -70,11 +70,13 @@ public class EcoJsonImportService
             var location = !string.IsNullOrWhiteSpace(nearestTown)
                 ? nearestTown
                 : (!string.IsNullOrWhiteSpace(region) ? region : "Неуточнено");
+            var normalizedRegion = !string.IsNullOrWhiteSpace(region) ? region : location;
 
             var difficultyText = GetNestedString(trailElement, "trail_details", "difficulty");
             var durationText = GetNestedString(trailElement, "trail_details", "duration");
             var latitude = GetNestedDouble(trailElement, "location", "coordinates", "latitude");
             var longitude = GetNestedDouble(trailElement, "location", "coordinates", "longitude");
+            var mappedDifficulty = MapDifficulty(difficultyText);
 
             var key = BuildKey(name, location);
             if (existingByKey.TryGetValue(key, out var existingTrail))
@@ -93,6 +95,12 @@ public class EcoJsonImportService
                     changed = true;
                 }
 
+                if (string.IsNullOrWhiteSpace(existingTrail.Region) && !string.IsNullOrWhiteSpace(normalizedRegion))
+                {
+                    existingTrail.Region = normalizedRegion;
+                    changed = true;
+                }
+
                 if (changed)
                 {
                     updatedItems++;
@@ -106,7 +114,13 @@ public class EcoJsonImportService
                 Name = name,
                 Description = string.IsNullOrWhiteSpace(description) ? "Няма описание." : description,
                 Location = location,
-                Difficulty = MapDifficulty(difficultyText),
+                Region = normalizedRegion,
+                Difficulty = mappedDifficulty,
+                DifficultyLevel = MapDifficultyLevel(mappedDifficulty),
+                WaterSources = false,
+                MaxAltitude = null,
+                SuitableForKids = mappedDifficulty <= 2,
+                RequiredGear = "[\"туристически обувки\",\"вода\"]",
                 DurationInHours = ParseDurationInHours(durationText),
                 ElevationGain = 0,
                 Latitude = latitude,
@@ -194,6 +208,21 @@ public class EcoJsonImportService
         if (normalized.Contains("тежка") || normalized.Contains("екстрем")) return 5;
 
         return 3;
+    }
+
+    private static TrailDifficultyLevel MapDifficultyLevel(int difficulty)
+    {
+        if (difficulty <= 2)
+        {
+            return TrailDifficultyLevel.Easy;
+        }
+
+        if (difficulty >= 4)
+        {
+            return TrailDifficultyLevel.Difficult;
+        }
+
+        return TrailDifficultyLevel.Moderate;
     }
 
     private static double ParseDurationInHours(string duration)

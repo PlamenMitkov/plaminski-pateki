@@ -71,6 +71,41 @@ docker compose up --build
 - Swagger: `http://localhost:5218/swagger`
 - SQL Server: `localhost:1433`
 
+### OpenAI Assistant setup (gpt-3.5-turbo)
+
+Backend assistant endpoint: `POST /api/assistant/chat`
+
+Assistant chat response now includes alternative recommendations via `suggestedAlternativeIds` and `suggestedAlternatives`.
+
+Semantic enrichment endpoint: `POST /api/assistant/enrich`
+
+Note: enrichment is optional and can be skipped for normal assistant chat usage.
+Rate-limit optimization: use `OpenAI.EnrichDelayMs`, `OpenAI.RetryAttempts`, `OpenAI.RetryInitialDelayMs`, and `OpenAI.RetryJitterMs`.
+
+Session persistence endpoints:
+- `POST /api/assistant/sessions` (create new chat session)
+- `GET /api/assistant/sessions/{sessionId}/messages?limit=80` (load conversation history)
+- `GET /api/assistant/sessions/mine?limit=12` (logged-in user's sessions for profile/assistant)
+- `DELETE /api/assistant/sessions/{sessionId}` (delete session from profile/assistant)
+
+Security: deleting session requires authenticated user ownership.
+
+Set API key in environment variable before starting API:
+
+```powershell
+$env:OPENAI_API_KEY="your_openai_key_here"
+```
+
+Default model is configured as `gpt-3.5-turbo` in `EcoTrails.Api/appsettings.json`.
+
+Example semantic enrichment request (process 25 trails):
+
+```bash
+curl -X POST http://localhost:5218/api/assistant/enrich \
+	-H "Content-Type: application/json" \
+	-d '{"limit":25,"overwriteExisting":false}'
+```
+
 ### One-click start (Windows)
 
 ```bat

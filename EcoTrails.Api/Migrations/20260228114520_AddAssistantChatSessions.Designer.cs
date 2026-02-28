@@ -4,6 +4,7 @@ using EcoTrails.Api.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EcoTrails.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260228114520_AddAssistantChatSessions")]
+    partial class AddAssistantChatSessions
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -125,9 +128,6 @@ namespace EcoTrails.Api.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("AppUserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -145,8 +145,6 @@ namespace EcoTrails.Api.Migrations
                         .HasColumnType("nvarchar(180)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AppUserId");
 
                     b.HasIndex("SessionId")
                         .IsUnique();
@@ -202,13 +200,6 @@ namespace EcoTrails.Api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Region")
-                        .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(120)
-                        .HasColumnType("nvarchar(120)")
-                        .HasDefaultValue("");
-
                     b.Property<string>("RequiredGear")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
@@ -245,7 +236,6 @@ namespace EcoTrails.Api.Migrations
                             Longitude = 22.394714,
                             MaxAltitude = 780,
                             Name = "Екопътека \"Ерантис\" – Киреево",
-                            Region = "Видин",
                             RequiredGear = "[\"туристически обувки\",\"вода\",\"дъждобран\"]",
                             SuitableForKids = true,
                             WaterSources = false
@@ -264,7 +254,6 @@ namespace EcoTrails.Api.Migrations
                             Longitude = 25.338270000000001,
                             MaxAltitude = 560,
                             Name = "Екопътека \"Етър-Соколски манастир\"",
-                            Region = "Габрово",
                             RequiredGear = "[\"удобни обувки\",\"вода\",\"лека връхна дреха\"]",
                             SuitableForKids = true,
                             WaterSources = true
@@ -283,7 +272,6 @@ namespace EcoTrails.Api.Migrations
                             Longitude = 22.686319000000001,
                             MaxAltitude = 1060,
                             Name = "Екопътека \"Збегове\" – Белоградчик",
-                            Region = "Видин",
                             RequiredGear = "[\"високи туристически обувки\",\"щеки\",\"вода\",\"слойна екипировка\"]",
                             SuitableForKids = false,
                             WaterSources = false

@@ -271,12 +271,186 @@
   gap: 8px;
 }
 
-.assistant-reply {
+.assistant-thread {
   margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.assistant-reply {
   padding: 10px;
   border-radius: 10px;
   border: 1px solid #bfdbfe;
   background: #eff6ff;
+  white-space: pre-wrap;
+  margin: 0;
+}
+
+.assistant-reply-ai {
+  align-self: flex-start;
+  max-width: 92%;
+}
+
+.assistant-reply-user {
+  align-self: flex-end;
+  max-width: 92%;
+  border-color: #d1fae5;
+  background: #ecfdf5;
+}
+
+.assistant-chips {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.assistant-chip {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 13px;
+  border: 1px solid #d1d5db;
+  background: #f9fafb;
+}
+
+.assistant-chip-warning {
+  border-color: #fbbf24;
+  background: #fffbeb;
+}
+
+.assistant-chip-positive {
+  border-color: #86efac;
+  background: #f0fdf4;
+}
+
+.assistant-chip-gear {
+  border-color: #c4b5fd;
+  background: #f5f3ff;
+}
+
+.assistant-quick-actions {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.assistant-meta {
+  margin: 10px 0 0;
+  font-size: 13px;
+  color: #475569;
+}
+
+.profile-assistant-card {
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
+  padding: 12px;
+  margin: 10px 0 16px;
+  background: #fff;
+}
+
+.profile-assistant-card h3 {
+  margin: 0 0 8px;
+  font-size: 16px;
+}
+
+.assistant-inline-sessions {
+  margin-top: 10px;
+}
+
+.assistant-session-list {
+  display: grid;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.assistant-session-item {
+  border: 1px solid #e5e7eb;
+  background: #f8fafc;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 6px;
+}
+
+.assistant-session-open {
+  flex: 1;
+  border: none;
+  background: transparent;
+  text-align: left;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 4px 6px;
+  cursor: pointer;
+}
+
+.assistant-session-delete {
+  border: 1px solid #fecaca;
+  background: #fef2f2;
+  color: #b91c1c;
+  border-radius: 8px;
+  width: 30px;
+  height: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.assistant-session-item span {
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.assistant-session-item small {
+  color: #475569;
+}
+
+.assistant-session-item-active {
+  border-color: #60a5fa;
+  background: #eff6ff;
+}
+
+.assistant-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 70;
+  padding: 16px;
+}
+
+.assistant-modal-card {
+  width: 100%;
+  max-width: 420px;
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #d1d5db;
+  padding: 14px;
+}
+
+.assistant-modal-card h3 {
+  margin: 0 0 8px;
+}
+
+.assistant-modal-card p {
+  margin: 0;
+  color: #334155;
+}
+
+.assistant-modal-actions {
+  margin-top: 12px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
 }
 
 .map-tools {

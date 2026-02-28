@@ -1,13 +1,31 @@
 namespace EcoTrails.Api.Models
 {
+    public enum TrailDifficultyLevel
+    {
+        Easy,
+        Moderate,
+        Difficult
+    }
+
     public class Trail
     {
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public string Location { get; set; } = string.Empty;
+        public string Region { get; set; } = string.Empty;
 
         public int Difficulty { get; set; }
+
+        public TrailDifficultyLevel DifficultyLevel { get; set; } = TrailDifficultyLevel.Moderate;
+
+        public bool WaterSources { get; set; }
+
+        public int? MaxAltitude { get; set; }
+
+        public bool SuitableForKids { get; set; }
+
+        public string RequiredGear { get; set; } = "[]";
 
         public double DurationInHours { get; set; }
 

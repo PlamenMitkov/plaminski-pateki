@@ -3,6 +3,7 @@ export interface Trail {
   name: string;
   description: string;
   location: string;
+  region: string;
   difficulty: number;
   durationInHours: number;
   elevationGain: number;

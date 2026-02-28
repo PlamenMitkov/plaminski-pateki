@@ -4,6 +4,7 @@ using EcoTrails.Api.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EcoTrails.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260228113211_AddSemanticTrailFields")]
+    partial class AddSemanticTrailFields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -87,73 +90,6 @@ namespace EcoTrails.Api.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("EcoTrails.Api.Models.AssistantChatEntry", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Role")
-                        .IsRequired()
-                        .HasMaxLength(24)
-                        .HasColumnType("nvarchar(24)");
-
-                    b.Property<int>("SessionInternalId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SessionInternalId");
-
-                    b.ToTable("AssistantChatEntries");
-                });
-
-            modelBuilder.Entity("EcoTrails.Api.Models.AssistantChatSession", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("AppUserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("LastActivityAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("SessionId")
-                        .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(180)
-                        .HasColumnType("nvarchar(180)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AppUserId");
-
-                    b.HasIndex("SessionId")
-                        .IsUnique();
-
-                    b.ToTable("AssistantChatSessions");
-                });
-
             modelBuilder.Entity("EcoTrails.Api.Models.Trail", b =>
                 {
                     b.Property<int>("Id")
@@ -174,10 +110,7 @@ namespace EcoTrails.Api.Migrations
 
                     b.Property<string>("DifficultyLevel")
                         .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(16)
-                        .HasColumnType("nvarchar(16)")
-                        .HasDefaultValue("Moderate");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("DurationInHours")
                         .HasColumnType("float");
@@ -202,29 +135,15 @@ namespace EcoTrails.Api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Region")
-                        .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(120)
-                        .HasColumnType("nvarchar(120)")
-                        .HasDefaultValue("");
-
                     b.Property<string>("RequiredGear")
                         .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(1200)
-                        .HasColumnType("nvarchar(1200)")
-                        .HasDefaultValue("[]");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("SuitableForKids")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
+                        .HasColumnType("bit");
 
                     b.Property<bool>("WaterSources")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -237,16 +156,15 @@ namespace EcoTrails.Api.Migrations
                             CreatedAt = new DateTime(2026, 2, 4, 16, 36, 11, 0, DateTimeKind.Utc),
                             Description = "От Киреево тръгва екопътека, която носи името \"Ерантис Булгарикум\" и извежда до защитена местност \"Връшка чука\".",
                             Difficulty = 3,
-                            DifficultyLevel = "Moderate",
+                            DifficultyLevel = "moderate",
                             DurationInHours = 2.5,
                             ElevationGain = 200,
                             Latitude = 43.794448000000003,
                             Location = "Киреево",
                             Longitude = 22.394714,
-                            MaxAltitude = 780,
+                            MaxAltitude = 700,
                             Name = "Екопътека \"Ерантис\" – Киреево",
-                            Region = "Видин",
-                            RequiredGear = "[\"туристически обувки\",\"вода\",\"дъждобран\"]",
+                            RequiredGear = "туристически обувки, вода, ветровка",
                             SuitableForKids = true,
                             WaterSources = false
                         },
@@ -256,16 +174,15 @@ namespace EcoTrails.Api.Migrations
                             CreatedAt = new DateTime(2026, 2, 4, 16, 36, 11, 0, DateTimeKind.Utc),
                             Description = "Трасето на пътеката минава през гориста местност и свързва Етъра и Соколския манастир.",
                             Difficulty = 3,
-                            DifficultyLevel = "Moderate",
+                            DifficultyLevel = "moderate",
                             DurationInHours = 2.0,
                             ElevationGain = 120,
                             Latitude = 42.797310000000003,
                             Location = "Етър",
                             Longitude = 25.338270000000001,
-                            MaxAltitude = 560,
+                            MaxAltitude = 620,
                             Name = "Екопътека \"Етър-Соколски манастир\"",
-                            Region = "Габрово",
-                            RequiredGear = "[\"удобни обувки\",\"вода\",\"лека връхна дреха\"]",
+                            RequiredGear = "удобни обувки, вода",
                             SuitableForKids = true,
                             WaterSources = true
                         },
@@ -275,16 +192,15 @@ namespace EcoTrails.Api.Migrations
                             CreatedAt = new DateTime(2026, 2, 4, 16, 36, 11, 0, DateTimeKind.Utc),
                             Description = "Средно тежък кръгов маршрут с панорамни гледки към Белоградчишките скали и връх Ведерник.",
                             Difficulty = 4,
-                            DifficultyLevel = "Difficult",
+                            DifficultyLevel = "difficult",
                             DurationInHours = 4.0,
                             ElevationGain = 450,
                             Latitude = 43.625169,
                             Location = "Белоградчик",
                             Longitude = 22.686319000000001,
-                            MaxAltitude = 1060,
+                            MaxAltitude = 1124,
                             Name = "Екопътека \"Збегове\" – Белоградчик",
-                            Region = "Видин",
-                            RequiredGear = "[\"високи туристически обувки\",\"щеки\",\"вода\",\"слойна екипировка\"]",
+                            RequiredGear = "високи туристически обувки, вода, щеки",
                             SuitableForKids = false,
                             WaterSources = false
                         });
@@ -441,17 +357,6 @@ namespace EcoTrails.Api.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("EcoTrails.Api.Models.AssistantChatEntry", b =>
-                {
-                    b.HasOne("EcoTrails.Api.Models.AssistantChatSession", "Session")
-                        .WithMany("Messages")
-                        .HasForeignKey("SessionInternalId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Session");
-                });
-
             modelBuilder.Entity("EcoTrails.Api.Models.UserFavoriteTrail", b =>
                 {
                     b.HasOne("EcoTrails.Api.Models.Trail", "Trail")
@@ -525,11 +430,6 @@ namespace EcoTrails.Api.Migrations
             modelBuilder.Entity("EcoTrails.Api.Models.AppUser", b =>
                 {
                     b.Navigation("FavoriteTrails");
-                });
-
-            modelBuilder.Entity("EcoTrails.Api.Models.AssistantChatSession", b =>
-                {
-                    b.Navigation("Messages");
                 });
 
             modelBuilder.Entity("EcoTrails.Api.Models.Trail", b =>

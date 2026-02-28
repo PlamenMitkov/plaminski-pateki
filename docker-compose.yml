@@ -25,6 +25,7 @@ services:
       ASPNETCORE_ENVIRONMENT: Development
       ConnectionStrings__DefaultConnection: "Server=db;Database=EcoTrailsDb;User Id=sa;Password=YourSecurePassword123!;TrustServerCertificate=True;MultipleActiveResultSets=true"
       OpenRouteService__ApiKey: "${OPENROUTESERVICE_API_KEY}"
+      OPENAI_API_KEY: "${OPENAI_API_KEY}"
     ports:
       - "5218:8080"
     depends_on:

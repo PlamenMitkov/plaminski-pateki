@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import axios from 'axios';
-import { Mountain, Search, Download, Heart, MapPin, List, Map, MessageCircle } from 'lucide-react';
+import { Mountain, Search, Download, Heart, MapPin, List, Map, MessageCircle, Trash2 } from 'lucide-react';
 import { Parser } from '@json2csv/plainjs';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import {
   Bar,
   BarChart,
@@ -18,7 +18,21 @@ import type { Trail } from '../types/trail';
 import MapComponent from '../components/MapComponent';
 import { useFavorites } from '../hooks/useFavorites';
 import { getAuthUser, logout } from '../services/authService';
+import {
+  createAssistantSession,
+  deleteAssistantSession,
+  getAssistantSessionMessages,
+  getMyAssistantSessions,
+  requestAssistantReply,
+  type AssistantChatMessage,
+  type AssistantKnowledgeChip,
+  type AssistantQuickAction,
+  type AssistantSessionResponse,
+  type AssistantTrailContext,
+} from '../services/assistantService';
 import '../App.css';
+
+const ASSISTANT_SESSION_STORAGE_KEY = 'ecotrails:assistantSessionId';
 
 interface PagedResponse {
   items: Trail[];
@@ -91,7 +105,24 @@ function parseMapZoom(value: string | null, fallback = 7): number {
   return Math.min(Math.max(Math.round(parsed), 3), 17);
 }
 
+function formatMessageCount(count: number): string {
+  return count === 1 ? '1 съобщение' : `${count} съобщения`;
+}
+
+function formatTrailCount(count: number): string {
+  return count === 1 ? '1 пътека' : `${count} пътеки`;
+}
+
+function formatFilteredTrailCount(count: number): string {
+  return count === 1 ? '1 филтрирана пътека' : `${count} филтрирани пътеки`;
+}
+
+function formatRouteCount(count: number): string {
+  return count === 1 ? '1 маршрут' : `${count} маршрута`;
+}
+
 function HomePage() {
+  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const activeTab = parseTab(searchParams.get('tab'));
 
@@ -143,8 +174,58 @@ function HomePage() {
   const [authUser, setAuthUser] = useState(getAuthUser());
   const [favoriteTrailsForStats, setFavoriteTrailsForStats] = useState<Trail[]>([]);
   const [assistantPrompt, setAssistantPrompt] = useState('Препоръчай ми леки маршрути с координати.');
-  const [assistantReply, setAssistantReply] = useState('');
+  const [assistantSessionId, setAssistantSessionId] = useState(() =>
+    localStorage.getItem(ASSISTANT_SESSION_STORAGE_KEY) ?? '',
+  );
+  const [assistantMessages, setAssistantMessages] = useState<AssistantChatMessage[]>([]);
+  const [assistantChips, setAssistantChips] = useState<AssistantKnowledgeChip[]>([]);
+  const [assistantActions, setAssistantActions] = useState<AssistantQuickAction[]>([]);
+  const [assistantUsedTrails, setAssistantUsedTrails] = useState<AssistantTrailContext[]>([]);
+  const [assistantUserSessions, setAssistantUserSessions] = useState<AssistantSessionResponse[]>([]);
+  const [assistantError, setAssistantError] = useState('');
+  const [isAssistantLoading, setIsAssistantLoading] = useState(false);
+  const [isAssistantSessionsLoading, setIsAssistantSessionsLoading] = useState(false);
+  const [pendingDeleteSessionId, setPendingDeleteSessionId] = useState<string | null>(null);
   const [copyStatus, setCopyStatus] = useState('');
+
+  useEffect(() => {
+    if (!assistantSessionId) {
+      return;
+    }
+
+    getAssistantSessionMessages(assistantSessionId, 80)
+      .then((messages) => {
+        const mapped = messages
+          .filter((item) => item.role === 'assistant' || item.role === 'user')
+          .map((item) => ({ role: item.role, content: item.content }));
+        setAssistantMessages(mapped);
+      })
+      .catch((loadError) => {
+        console.error('Грешка при зареждане на история на сесията:', loadError);
+      });
+  }, [assistantSessionId]);
+
+  const refreshMyAssistantSessions = async () => {
+    if (!authUser) {
+      setAssistantUserSessions([]);
+      return;
+    }
+
+    try {
+      setIsAssistantSessionsLoading(true);
+      const sessions = await getMyAssistantSessions(12);
+      setAssistantUserSessions(sessions);
+    } catch (requestError) {
+      console.error('Грешка при зареждане на AI сесиите за профила:', requestError);
+      setAssistantUserSessions([]);
+    } finally {
+      setIsAssistantSessionsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    void refreshMyAssistantSessions();
+  }, [authUser]);
 
   const {
     favoriteIds,
@@ -365,34 +446,211 @@ function HomePage() {
     setPage(1);
   };
 
-  const generateAssistantReply = () => {
+  const buildAssistantFilterSummary = () => {
+    return [
+      search ? `търсене: ${search}` : null,
+      difficulty !== '' ? `трудност: ${difficulty}` : null,
+      onlyWithCoords ? 'само с координати' : null,
+      minDurationInput.trim() ? `мин. часове: ${minDurationInput.trim()}` : null,
+      maxDurationInput.trim() ? `макс. часове: ${maxDurationInput.trim()}` : null,
+      minElevationInput.trim() ? `мин. денивелация: ${minElevationInput.trim()}` : null,
+      maxElevationInput.trim() ? `макс. денивелация: ${maxElevationInput.trim()}` : null,
+      sortBy !== 'id' ? `сортиране: ${sortBy}` : null,
+      sortDirection !== 'asc' ? `посока: ${sortDirection}` : null,
+    ]
+      .filter(Boolean)
+      .join(', ');
+  };
+
+  const generateAssistantReply = async (promptOverride?: string) => {
+    const effectivePrompt = (promptOverride ?? assistantPrompt).trim();
+    if (effectivePrompt.length === 0) {
+      return;
+    }
+
     if (isLoading) {
-      setAssistantReply('Все още зареждам пътеките. Изчакай няколко секунди и опитай отново.');
+      setAssistantMessages((current) => [
+        ...current,
+        {
+          role: 'assistant',
+          content: 'Все още зареждам пътеките. Изчакай няколко секунди и опитай отново.',
+        },
+      ]);
       return;
     }
 
     if (error) {
-      setAssistantReply('Има проблем със зареждането на данните. Натисни Изчисти след презареждане.');
+      setAssistantMessages((current) => [
+        ...current,
+        {
+          role: 'assistant',
+          content: 'Има проблем със зареждането на данните. Натисни Изчисти след презареждане.',
+        },
+      ]);
       return;
     }
 
-    const preview = trails.slice(0, 3).map((trail) => `${trail.name} (${trail.location})`);
-    const withCoordsCount = trails.filter(
-      (trail) => trail.latitude !== null && trail.longitude !== null,
-    ).length;
-
+    setAssistantError('');
     if (trails.length === 0) {
-      setAssistantReply(
-        `Няма резултати за текущите филтри. Опитай по-широко търсене или друга трудност. Въпрос: ${assistantPrompt}`,
-      );
+      setAssistantMessages((current) => [
+        ...current,
+        {
+          role: 'assistant',
+          content: `Няма резултати за текущите филтри. Опитай по-широко търсене или друга трудност. Въпрос: ${effectivePrompt}`,
+        },
+      ]);
       return;
     }
 
-    setAssistantReply(
-      `Имаш ${trails.length} резултата на текущата страница (${withCoordsCount} с координати). ` +
-        `Подходящи за старт: ${preview.join(', ')}. ` +
-        `Въпрос: ${assistantPrompt}`,
-    );
+    const nextHistory = [...assistantMessages, { role: 'user' as const, content: effectivePrompt }].slice(-10);
+
+    try {
+      setIsAssistantLoading(true);
+      setAssistantMessages(nextHistory);
+
+      const response = await requestAssistantReply({
+        prompt: effectivePrompt,
+        sessionId: assistantSessionId || undefined,
+        history: nextHistory,
+        filterSummary: buildAssistantFilterSummary(),
+        favoriteCount: favoriteIds.length,
+        favoriteTrailIds: favoriteIds,
+        maxContextTrails: 15,
+        onlyWithCoordinates: onlyWithCoords,
+      });
+
+      if (response.sessionId && response.sessionId !== assistantSessionId) {
+        setAssistantSessionId(response.sessionId);
+        localStorage.setItem(ASSISTANT_SESSION_STORAGE_KEY, response.sessionId);
+      }
+
+      if (authUser) {
+        void refreshMyAssistantSessions();
+      }
+
+      setAssistantMessages((current) =>
+        [...current, { role: 'assistant' as const, content: response.reply }].slice(-12),
+      );
+      setAssistantChips(response.knowledgeChips);
+      setAssistantActions(response.quickActions);
+      setAssistantUsedTrails(response.usedTrails);
+      if (!promptOverride) {
+        setAssistantPrompt('');
+      }
+    } catch (requestError) {
+      console.error('Грешка при извикване на асистента:', requestError);
+      setAssistantError('Асистентът е временно недостъпен. Провери OPENAI_API_KEY и опитай отново.');
+    } finally {
+      setIsAssistantLoading(false);
+    }
+  };
+
+  const startNewAssistantSession = async () => {
+    try {
+      setAssistantError('');
+      const session = await createAssistantSession('Нова чат сесия');
+      setAssistantSessionId(session.sessionId);
+      localStorage.setItem(ASSISTANT_SESSION_STORAGE_KEY, session.sessionId);
+      setAssistantMessages([]);
+      setAssistantChips([]);
+      setAssistantActions([]);
+      setAssistantUsedTrails([]);
+      if (authUser) {
+        void refreshMyAssistantSessions();
+      }
+    } catch (requestError) {
+      console.error('Грешка при създаване на нова сесия:', requestError);
+      setAssistantError('Неуспешно създаване на нова сесия. Опитай отново.');
+    }
+  };
+
+  const openAssistantSession = (sessionId: string) => {
+    if (!sessionId) {
+      return;
+    }
+
+    setAssistantSessionId(sessionId);
+    localStorage.setItem(ASSISTANT_SESSION_STORAGE_KEY, sessionId);
+    openTab('assistant');
+  };
+
+  const removeAssistantSession = async (sessionId: string) => {
+    try {
+      setAssistantError('');
+      await deleteAssistantSession(sessionId);
+
+      if (assistantSessionId === sessionId) {
+        setAssistantSessionId('');
+        setAssistantMessages([]);
+        setAssistantChips([]);
+        setAssistantActions([]);
+        setAssistantUsedTrails([]);
+        localStorage.removeItem(ASSISTANT_SESSION_STORAGE_KEY);
+      }
+
+      await refreshMyAssistantSessions();
+    } catch (requestError) {
+      console.error('Грешка при изтриване на сесия:', requestError);
+      setAssistantError('Неуспешно изтриване на сесия. Опитай отново.');
+    }
+  };
+
+  const requestDeleteAssistantSession = (sessionId: string) => {
+    setPendingDeleteSessionId(sessionId);
+  };
+
+  const confirmDeleteAssistantSession = async () => {
+    if (!pendingDeleteSessionId) {
+      return;
+    }
+
+    const sessionId = pendingDeleteSessionId;
+    setPendingDeleteSessionId(null);
+    await removeAssistantSession(sessionId);
+  };
+
+  useEffect(() => {
+    if (!pendingDeleteSessionId) {
+      return;
+    }
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setPendingDeleteSessionId(null);
+      }
+    };
+
+    window.addEventListener('keydown', onKeyDown);
+    return () => {
+      window.removeEventListener('keydown', onKeyDown);
+    };
+  }, [pendingDeleteSessionId]);
+
+  const handleAssistantQuickAction = (action: AssistantQuickAction) => {
+    if (action.id === 'show-map') {
+      const trailId = Number(action.value);
+      if (Number.isInteger(trailId) && trailId > 0) {
+        setSelectedMapTrailId(trailId);
+        setShowOnlySelectedOnMap(true);
+      }
+
+      openTab('map');
+      return;
+    }
+
+    if (action.id === 'weather-now') {
+      const weatherPrompt = `Какво е времето сега около ${action.value} и каква е подходяща подготовка за пътеката?`;
+      setAssistantPrompt(weatherPrompt);
+      void generateAssistantReply(weatherPrompt);
+      return;
+    }
+
+    if (action.id === 'open-trail-details') {
+      const trailId = Number(action.value);
+      if (Number.isInteger(trailId) && trailId > 0) {
+        navigate(`/trail/${trailId}`);
+      }
+    }
   };
 
   const exportCsv = async () => {
@@ -471,6 +729,9 @@ function HomePage() {
                 logout();
                 clearFavorites();
                 setAuthUser(null);
+                setAssistantUserSessions([]);
+                setAssistantSessionId('');
+                localStorage.removeItem(ASSISTANT_SESSION_STORAGE_KEY);
               }}
             >
               Изход
@@ -482,6 +743,45 @@ function HomePage() {
           </Link>
         )}
       </div>
+
+      {authUser && (
+        <div className="profile-assistant-card">
+          <h3>Профил: Моите AI сесии</h3>
+          {isAssistantSessionsLoading ? (
+            <p className="status-text">Зареждане на сесиите...</p>
+          ) : assistantUserSessions.length === 0 ? (
+            <p className="status-text">Все още нямаш запазени AI сесии.</p>
+          ) : (
+            <div className="assistant-session-list">
+              {assistantUserSessions.map((session) => (
+                <div
+                  key={session.sessionId}
+                  className={`assistant-session-item ${
+                    assistantSessionId === session.sessionId ? 'assistant-session-item-active' : ''
+                  }`}
+                >
+                  <button
+                    type="button"
+                    className="assistant-session-open"
+                    onClick={() => openAssistantSession(session.sessionId)}
+                  >
+                    <span>{session.title}</span>
+                    <small>{formatMessageCount(session.messageCount)}</small>
+                  </button>
+                  <button
+                    type="button"
+                    className="assistant-session-delete"
+                    onClick={() => requestDeleteAssistantSession(session.sessionId)}
+                    title="Изтрий сесия"
+                  >
+                    <Trash2 size={14} />
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
 
       {hasPendingCloudSync && (
         <div className="sync-banner">
@@ -684,8 +984,8 @@ function HomePage() {
       {isLoading && <p className="status-text">Зареждане...</p>}
       {!error && (
         <p className="status-text">
-          Списък: страница {page} от {totalPages} (Общо {totalCount} пътеки) · Карта:{' '}
-          {isMapLoading ? 'зареждане...' : `${mapFilteredTrails.length} филтрирани пътеки`}
+          Списък: страница {page} от {totalPages} (Общо {formatTrailCount(totalCount)}) · Карта:{' '}
+          {isMapLoading ? 'зареждане...' : formatFilteredTrailCount(mapFilteredTrails.length)}
         </p>
       )}
 
@@ -737,7 +1037,7 @@ function HomePage() {
               Копирай линк към текущия изглед
             </button>
             <span className="map-counter">
-              На картата: {mapTrailsToShow.length}/{mapFilteredTrails.length}
+              На картата: {formatTrailCount(mapTrailsToShow.length)} от общо {formatRouteCount(mapFilteredTrails.length)}
             </span>
             {copyStatus && <span className="map-copy-status">{copyStatus}</span>}
           </div>
@@ -769,12 +1069,31 @@ function HomePage() {
           <input
             value={assistantPrompt}
             onChange={(event) => setAssistantPrompt(event.target.value)}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter') {
+                event.preventDefault();
+                void generateAssistantReply();
+              }
+            }}
             className="search-input assistant-input"
             placeholder="Напр. препоръчай ми кратка пътека около София"
           />
           <div className="assistant-actions">
-            <button type="button" className="primary-btn" onClick={generateAssistantReply}>
-              Генерирай препоръка
+            <button
+              type="button"
+              className="primary-btn"
+              onClick={() => void generateAssistantReply()}
+              disabled={isAssistantLoading || assistantPrompt.trim().length === 0}
+            >
+              {isAssistantLoading ? 'Генериране...' : 'Генерирай препоръка'}
+            </button>
+            <button
+              type="button"
+              className="secondary-btn"
+              onClick={() => void startNewAssistantSession()}
+              disabled={isAssistantLoading}
+            >
+              Нова сесия
             </button>
             <button type="button" className="secondary-btn" onClick={() => openTab('map')}>
               Към карта
@@ -783,7 +1102,82 @@ function HomePage() {
               Към любими
             </button>
           </div>
-          {assistantReply && <p className="assistant-reply">{assistantReply}</p>}
+          {authUser && (
+            <div className="assistant-inline-sessions">
+              <p className="assistant-meta">Сесии в профила</p>
+              <div className="assistant-session-list">
+                {assistantUserSessions.map((session) => (
+                  <div
+                    key={`assistant-${session.sessionId}`}
+                    className={`assistant-session-item ${
+                      assistantSessionId === session.sessionId ? 'assistant-session-item-active' : ''
+                    }`}
+                  >
+                    <button
+                      type="button"
+                      className="assistant-session-open"
+                      onClick={() => openAssistantSession(session.sessionId)}
+                    >
+                      <span>{session.title}</span>
+                      <small>{formatMessageCount(session.messageCount)}</small>
+                    </button>
+                    <button
+                      type="button"
+                      className="assistant-session-delete"
+                      onClick={() => requestDeleteAssistantSession(session.sessionId)}
+                      title="Изтрий сесия"
+                    >
+                      <Trash2 size={14} />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {assistantChips.length > 0 && (
+            <div className="assistant-chips">
+              {assistantChips.map((chip, index) => (
+                <span key={`${chip.label}-${index}`} className={`assistant-chip assistant-chip-${chip.type}`}>
+                  {chip.label}
+                </span>
+              ))}
+            </div>
+          )}
+
+          {assistantActions.length > 0 && (
+            <div className="assistant-quick-actions">
+              {assistantActions.map((action) => (
+                <button
+                  key={`${action.id}-${action.value}`}
+                  type="button"
+                  className="secondary-btn"
+                  onClick={() => handleAssistantQuickAction(action)}
+                >
+                  {action.label}
+                </button>
+              ))}
+            </div>
+          )}
+
+          {assistantUsedTrails.length > 0 && (
+            <p className="assistant-meta">Контекст: {formatTrailCount(assistantUsedTrails.length)} от базата данни.</p>
+          )}
+          {assistantSessionId && <p className="assistant-meta">Сесия: {assistantSessionId.slice(0, 12)}...</p>}
+
+          {assistantError && <p className="status-text error">{assistantError}</p>}
+          {assistantMessages.length > 0 && (
+            <div className="assistant-thread">
+              {assistantMessages.map((message, index) => (
+                <p
+                  key={`${message.role}-${index}`}
+                  className={`assistant-reply ${message.role === 'assistant' ? 'assistant-reply-ai' : 'assistant-reply-user'}`}
+                >
+                  {message.content}
+                </p>
+              ))}
+            </div>
+          )}
         </div>
       )}
 
@@ -880,6 +1274,28 @@ function HomePage() {
             </div>
           )}
         </>
+      )}
+
+      {pendingDeleteSessionId && (
+        <div
+          className="assistant-modal-backdrop"
+          role="dialog"
+          aria-modal="true"
+          onClick={() => setPendingDeleteSessionId(null)}
+        >
+          <div className="assistant-modal-card" onClick={(event) => event.stopPropagation()}>
+            <h3>Потвърждение за изтриване</h3>
+            <p>Сигурен ли си, че искаш да изтриеш тази AI сесия?</p>
+            <div className="assistant-modal-actions">
+              <button type="button" className="secondary-btn" onClick={() => setPendingDeleteSessionId(null)}>
+                Отказ
+              </button>
+              <button type="button" className="primary-btn" onClick={() => void confirmDeleteAssistantSession()}>
+                Изтрий
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
