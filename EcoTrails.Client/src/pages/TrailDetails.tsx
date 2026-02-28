@@ -3,16 +3,54 @@ import { useEffect } from 'react';
 import axios from 'axios';
 import { ArrowLeft, Heart, Share2 } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
-import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
+import { CircleMarker, MapContainer, Polyline, Popup, TileLayer } from 'react-leaflet';
 import type { Trail } from '../types/trail';
 import { useFavorites } from '../hooks/useFavorites';
 import '../App.css';
 
+interface TrailRouteResponse {
+  startLatitude: number;
+  startLongitude: number;
+  endLatitude: number;
+  endLongitude: number;
+  isEstimatedEnd: boolean;
+  isExternalRoute: boolean;
+  coordinates: [number, number][];
+}
+
+function buildFallbackRoute(trail: Trail): TrailRouteResponse | null {
+  if (trail.latitude === null || trail.longitude === null) {
+    return null;
+  }
+
+  const seedRadians = ((trail.id % 360) * Math.PI) / 180;
+  const distanceFactor = Math.min(Math.max(trail.durationInHours, 1), 6) * 0.01;
+  const latOffset = Math.sin(seedRadians) * distanceFactor;
+  const lngOffset = Math.cos(seedRadians) * distanceFactor;
+  const endLatitude = Number((trail.latitude + latOffset).toFixed(6));
+  const endLongitude = Number((trail.longitude + lngOffset).toFixed(6));
+
+  return {
+    startLatitude: trail.latitude,
+    startLongitude: trail.longitude,
+    endLatitude,
+    endLongitude,
+    isEstimatedEnd: true,
+    isExternalRoute: false,
+    coordinates: [
+      [trail.latitude, trail.longitude],
+      [endLatitude, endLongitude],
+    ],
+  };
+}
+
 function TrailDetails() {
   const { id } = useParams<{ id: string }>();
   const [trail, setTrail] = useState<Trail | null>(null);
+  const [route, setRoute] = useState<TrailRouteResponse | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [routeWarning, setRouteWarning] = useState('');
   const { isFavorite, toggleFavorite } = useFavorites();
 
   useEffect(() => {
@@ -31,13 +69,41 @@ function TrailDetails() {
       .finally(() => setIsLoading(false));
   }, [id]);
 
+  useEffect(() => {
+    if (!trail) {
+      return;
+    }
+
+    const fallback = buildFallbackRoute(trail);
+
+    if (!fallback) {
+      setRoute(null);
+      return;
+    }
+
+    setRouteWarning('');
+
+    axios
+      .get<TrailRouteResponse>(`http://127.0.0.1:5218/api/trails/${trail.id}/route`)
+      .then((response) => setRoute(response.data))
+      .catch((requestError) => {
+        console.error('Грешка при зареждане на маршрут:', requestError);
+        setRoute(fallback);
+        setRouteWarning('Маршрутът е приблизителен, защото външният routing API не отговори.');
+      });
+  }, [trail]);
+
   const mapCenter = useMemo(() => {
+    if (route) {
+      return [route.startLatitude, route.startLongitude] as [number, number];
+    }
+
     if (trail?.latitude !== null && trail?.longitude !== null && trail?.latitude && trail?.longitude) {
       return [trail.latitude, trail.longitude] as [number, number];
     }
 
     return [42.7, 25.3] as [number, number];
-  }, [trail]);
+  }, [trail, route]);
 
   const handleShare = async () => {
     const shareUrl = window.location.href;
@@ -104,16 +170,59 @@ function TrailDetails() {
         style={{ height: '420px', width: '100%', borderRadius: '12px', marginBottom: '20px' }}
       >
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-        {trail.latitude && trail.longitude && (
-          <Marker position={[trail.latitude, trail.longitude]}>
-            <Popup>
-              <strong>{trail.name}</strong>
-              <br />
-              {trail.location}
-            </Popup>
-          </Marker>
+
+        {route && route.coordinates.length >= 2 && (
+          <>
+            <Polyline positions={route.coordinates} color="#2563eb" weight={4} />
+
+            <CircleMarker
+              center={[route.startLatitude, route.startLongitude]}
+              radius={8}
+              pathOptions={{ color: '#ffffff', fillColor: '#16a34a', fillOpacity: 1, weight: 2 }}
+            >
+              <Popup>
+                <strong>Начало</strong>
+                <br />
+                {trail.name}
+              </Popup>
+            </CircleMarker>
+
+            <CircleMarker
+              center={[route.endLatitude, route.endLongitude]}
+              radius={8}
+              pathOptions={{ color: '#ffffff', fillColor: '#dc2626', fillOpacity: 1, weight: 2 }}
+            >
+              <Popup>
+                <strong>Край</strong>
+                <br />
+                {route.isEstimatedEnd
+                  ? 'Ориентировъчен (няма отделна крайна точка в източника)'
+                  : 'Изчислен по маршрут'}
+              </Popup>
+            </CircleMarker>
+          </>
         )}
       </MapContainer>
+
+      {route && (
+        <>
+          <div className="route-legend">
+            <span className="legend-item">
+              <span className="legend-dot start" /> Начало
+            </span>
+            <span className="legend-item">
+              <span className="legend-dot end" /> Край
+            </span>
+          </div>
+          <p className="status-text">
+            {route.isExternalRoute
+              ? 'Линията е изчислена през OpenRouteService (foot-hiking).'
+              : 'Линията е приблизителна, защото няма външен маршрут.'}
+          </p>
+        </>
+      )}
+
+      {routeWarning && <p className="status-text error">{routeWarning}</p>}
 
       <div className="trail-card">
         <p>

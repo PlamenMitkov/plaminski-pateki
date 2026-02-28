@@ -71,6 +71,22 @@ docker compose up --build
 - Swagger: `http://localhost:5218/swagger`
 - SQL Server: `localhost:1433`
 
+### One-click start (Windows)
+
+```bat
+start.bat
+```
+
+Скриптът е в root папката на проекта и стартира целия стек с `docker compose up --build`.
+
+### One-click stop (Windows)
+
+```bat
+stop.bat
+```
+
+Скриптът е в root папката на проекта и спира контейнерите с `docker compose down`.
+
 ---
 
 ## 🧪 Smoke Test & Validation

@@ -1,6 +1,2 @@
 def main():
-    print("Hello from ecoproject!")
-
-
-if __name__ == "__main__":
-    main()
+    print("Използвай start.bat за стартиране и stop.bat за спиране.")

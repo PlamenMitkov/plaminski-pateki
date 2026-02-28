@@ -27,3 +27,6 @@ obj/
 
 # Logs and runtime files
 *.log
+
+# Local environment secrets
+.env
