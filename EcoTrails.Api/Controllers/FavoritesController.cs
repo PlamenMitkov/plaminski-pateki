@@ -48,7 +48,7 @@ public class FavoritesController : ControllerBase
             return Unauthorized();
         }
 
-        var requestedIds = request.TrailIds
+        var requestedIds = (request.TrailIds ?? [])
             .Where(item => item > 0)
             .Distinct()
             .ToHashSet();

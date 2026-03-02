@@ -1,16 +1,18 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Lock, User } from 'lucide-react';
 import { login, register } from '../services/authService';
 import '../App.css';
 
 function AuthPage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [mode, setMode] = useState<'login' | 'register'>('login');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
+  const sessionExpired = searchParams.get('reason') === 'session-expired';
 
   const submit = async () => {
     try {
@@ -36,6 +38,8 @@ function AuthPage() {
     <div className="app-container auth-page">
       <div className="auth-card">
         <h1 className="app-title">{mode === 'login' ? 'Вход' : 'Регистрация'}</h1>
+
+        {sessionExpired && <p className="status-text error">Сесията е изтекла. Влез отново.</p>}
 
         <label className="auth-label">
           <User size={16} />

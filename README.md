@@ -1,5 +1,12 @@
 # 🏔️ Plaminski Pateki (EcoTrails Project)
 
+[![EcoProject CI](https://github.com/PlamenMitkov/plaminski-pateki/actions/workflows/ci.yml/badge.svg)](https://github.com/PlamenMitkov/plaminski-pateki/actions/workflows/ci.yml)
+[![GHCR Packages](https://img.shields.io/badge/GHCR-Packages-blue?logo=github)](https://github.com/PlamenMitkov?tab=packages&repo_name=plaminski-pateki)
+[![API Image Tag](https://img.shields.io/docker/v/plamenmitkov/ecotrails-api/latest?registry_url=ghcr.io&label=API%20Image)](https://github.com/PlamenMitkov?tab=packages&repo_name=plaminski-pateki)
+[![Client Image Tag](https://img.shields.io/docker/v/plamenmitkov/ecotrails-client/latest?registry_url=ghcr.io&label=Client%20Image)](https://github.com/PlamenMitkov?tab=packages&repo_name=plaminski-pateki)
+
+_Docker image таговете се публикуват автоматично от CI при `push` към `main`._
+
 Интерактивна платформа за изследване на екопътеки в България, изградена с ASP.NET Core 10, React + TypeScript и SQL Server. Проектът включва реални данни за 500+ маршрута, интерактивна карта и интелигентен анализ.
 
 ## 🎯 Quick Vision
@@ -124,6 +131,40 @@ stop.bat
 
 ---
 
+## 📦 Container Images (GHCR)
+
+При `push` към `main`, GitHub Actions workflow-ът публикува Docker image-и в GitHub Container Registry (GHCR):
+
+- `ghcr.io/<github-owner>/ecotrails-api`
+- `ghcr.io/<github-owner>/ecotrails-client`
+
+Публикувани тагове:
+
+- `latest`
+- `sha-<commit>`
+
+Примерно теглене на image-и:
+
+```bash
+docker pull ghcr.io/<github-owner>/ecotrails-api:latest
+docker pull ghcr.io/<github-owner>/ecotrails-client:latest
+```
+
+Примерно стартиране локално:
+
+```bash
+docker run --rm -p 8080:8080 ghcr.io/<github-owner>/ecotrails-api:latest
+docker run --rm -p 5173:80 ghcr.io/<github-owner>/ecotrails-client:latest
+```
+
+Ако пакетите са private, първо login към GHCR:
+
+```bash
+echo <github_pat> | docker login ghcr.io -u <github-username> --password-stdin
+```
+
+---
+
 ## 🧪 Smoke Test & Validation
 
 - ✅ **Auth:** регистрация/вход + JWT валидация.
@@ -131,6 +172,82 @@ stop.bat
 - ✅ **Maps:** интерактивно филтриране и визуализация на 500+ локации.
 - ✅ **Export:** CSV експорт на филтрирани масиви.
 - ✅ **Analytics:** Pie/Bar диаграми се актуализират при промяна на favorite state.
+
+### Quick security smoke script
+
+When the API is running locally, execute:
+
+```powershell
+./scripts/smoke-auth.ps1
+```
+
+Optional custom API base URL:
+
+```powershell
+./scripts/smoke-auth.ps1 -BaseUrl "http://127.0.0.1:5218/api"
+```
+
+The script checks register/login, `/auth/me`, unauthenticated access rejection, authenticated assistant session creation, and admin-only enrich rejection for non-admin users.
+
+### Admin-path smoke script
+
+Prerequisite: configure an existing user email under `Admin:Emails` in `EcoTrails.Api/appsettings.json`, then restart the API so role seeding can assign `Admin`.
+
+Run:
+
+```powershell
+./scripts/smoke-admin.ps1 -AdminEmail "admin@example.com" -AdminPassword "YourPassword"
+```
+
+Optional flags:
+
+```powershell
+./scripts/smoke-admin.ps1 -AdminEmail "admin@example.com" -AdminPassword "YourPassword" -BaseUrl "http://127.0.0.1:5218/api" -EnrichLimit 1
+```
+
+The script validates admin login, checks the `Admin` role via `/auth/me`, and verifies that `/assistant/enrich` succeeds for an admin token.
+
+### Cleanup temporary test user
+
+Remove a temporary smoke-test account by email:
+
+```powershell
+./scripts/cleanup-test-user.ps1 -Email "tempadmin_20260301@example.com"
+```
+
+Optional custom SQL connection string:
+
+```powershell
+./scripts/cleanup-test-user.ps1 -Email "tempadmin_20260301@example.com" -ConnectionString "Server=.\\SQLEXPRESS;Database=EcoTrailsDb;Trusted_Connection=True;TrustServerCertificate=True;MultipleActiveResultSets=true"
+```
+
+### One-command admin smoke + cleanup
+
+Run the full end-to-end flow in one command:
+
+```powershell
+./scripts/smoke-admin-e2e.ps1
+```
+
+What it does automatically:
+- Builds solution (unless `-SkipBuild` is used)
+- Starts API
+- Creates a temporary user
+- Restarts API with runtime admin seeding (`Admin__Emails__0`)
+- Runs `smoke-admin.ps1`
+- Cleans up the temporary user
+
+Optional parameters:
+
+```powershell
+./scripts/smoke-admin-e2e.ps1 -TempEmail "tempadmin@example.com" -TempPassword "Passw0rd!" -BaseUrl "http://127.0.0.1:5218/api" -SkipBuild
+```
+
+For CI environments without `OpenRouteService:ApiKey`, you can skip only the OpenRoute validation step:
+
+```powershell
+./scripts/smoke-admin-e2e.ps1 -SkipBuild -SkipOpenRoute
+```
 
 ---
 

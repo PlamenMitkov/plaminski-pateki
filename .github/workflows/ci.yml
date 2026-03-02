@@ -1,0 +1,136 @@
+name: EcoProject CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  DOTNET_NOLOGO: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+
+jobs:
+  build-and-smoke:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: pwsh
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            10.0.x
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+          cache: npm
+          cache-dependency-path: EcoTrails.Client/package-lock.json
+
+      - name: Restore backend dependencies
+        run: dotnet restore EcoProject.sln
+
+      - name: Build backend
+        run: dotnet build EcoProject.sln --configuration Release --no-restore
+
+      - name: Install frontend dependencies
+        working-directory: EcoTrails.Client
+        run: npm ci
+
+      - name: Build frontend
+        working-directory: EcoTrails.Client
+        run: npm run build
+
+      - name: Ensure LocalDB instance
+        run: |
+          sqllocaldb info MSSQLLocalDB | Out-Null
+          if ($LASTEXITCODE -ne 0) {
+            sqllocaldb create MSSQLLocalDB | Out-Host
+          }
+          sqllocaldb start MSSQLLocalDB | Out-Host
+
+      - name: Run admin E2E smoke tests
+        env:
+          ConnectionStrings__DefaultConnection: Server=(localdb)\MSSQLLocalDB;Database=EcoTrailsCi_${{ github.run_id }}_${{ github.run_attempt }};Trusted_Connection=True;TrustServerCertificate=True;MultipleActiveResultSets=true
+          Jwt__Key: CI_JWT_KEY_FOR_GITHUB_ACTIONS_2026_1234567890
+          OpenAI__ApiKey: ${{ secrets.OPENAI_API_KEY }}
+          OpenRouteService__ApiKey: ${{ secrets.OPENROUTE_API_KEY }}
+        run: |
+          if ([string]::IsNullOrWhiteSpace("${{ secrets.OPENROUTE_API_KEY }}")) {
+            Write-Host "OPENROUTE_API_KEY is not set. Running smoke-admin-e2e without OpenRoute validation."
+            ./scripts/smoke-admin-e2e.ps1 -SkipBuild -SkipOpenRoute
+          }
+          else {
+            ./scripts/smoke-admin-e2e.ps1 -SkipBuild
+          }
+
+  docker-publish:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: build-and-smoke
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set image namespace
+        id: vars
+        run: echo "owner_lc=${GITHUB_REPOSITORY_OWNER,,}" >> "$GITHUB_OUTPUT"
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Docker metadata (API)
+        id: meta_api
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ steps.vars.outputs.owner_lc }}/ecotrails-api
+          tags: |
+            type=raw,value=latest
+            type=sha
+
+      - name: Build and push API image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./EcoTrails.Api
+          file: ./EcoTrails.Api/Dockerfile
+          push: true
+          tags: ${{ steps.meta_api.outputs.tags }}
+          labels: ${{ steps.meta_api.outputs.labels }}
+
+      - name: Docker metadata (Client)
+        id: meta_client
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ steps.vars.outputs.owner_lc }}/ecotrails-client
+          tags: |
+            type=raw,value=latest
+            type=sha
+
+      - name: Build and push Client image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./EcoTrails.Client
+          file: ./EcoTrails.Client/Dockerfile
+          push: true
+          tags: ${{ steps.meta_client.outputs.tags }}
+          labels: ${{ steps.meta_client.outputs.labels }}

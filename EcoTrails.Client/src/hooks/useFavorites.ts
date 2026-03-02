@@ -1,6 +1,6 @@
-import axios from 'axios';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { getAuthToken, getAuthUser, isAuthenticated } from '../services/authService';
+import apiClient from '../services/apiClient';
 
 const STORAGE_KEY = 'ecotrails:favorites';
 const SYNCED_USER_STORAGE_KEY = 'ecotrails:favoritesSyncedUser';
@@ -56,11 +56,7 @@ export function useFavorites() {
       setIsSyncing(true);
       setLastSyncError('');
 
-      await axios.post(
-        'http://127.0.0.1:5218/api/favorites/sync',
-        { trailIds: favoriteIds },
-        { headers: { Authorization: `Bearer ${token}` } },
-      );
+      await apiClient.post('/favorites/sync', { trailIds: favoriteIds });
 
       if (authUser?.userId) {
         localStorage.setItem(SYNCED_USER_STORAGE_KEY, authUser.userId);

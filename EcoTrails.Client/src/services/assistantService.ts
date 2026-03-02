@@ -1,7 +1,5 @@
-import axios from 'axios';
-import { getAuthToken } from './authService';
-
-const API_BASE_URL = 'http://127.0.0.1:5218/api';
+import apiClient from './apiClient';
+import { isCurrentUserAdmin } from './authService';
 
 export interface AssistantChatMessage {
   role: 'user' | 'assistant';
@@ -86,39 +84,24 @@ export interface AssistantSessionMessageResponse {
   createdAt: string;
 }
 
-function withAuthHeaders() {
-  const token = getAuthToken();
-  if (!token) {
-    return undefined;
-  }
-
-  return { Authorization: `Bearer ${token}` };
-}
-
 export async function requestAssistantReply(request: AssistantChatRequest): Promise<AssistantChatResponse> {
-  const response = await axios.post<AssistantChatResponse>(`${API_BASE_URL}/assistant/chat`, request, {
-    headers: withAuthHeaders(),
-  });
+  const response = await apiClient.post<AssistantChatResponse>('/assistant/chat', request);
   return response.data;
 }
 
 export async function createAssistantSession(title?: string): Promise<AssistantSessionResponse> {
-  const response = await axios.post<AssistantSessionResponse>(
-    `${API_BASE_URL}/assistant/sessions`,
+  const response = await apiClient.post<AssistantSessionResponse>(
+    '/assistant/sessions',
     {
       title,
-    },
-    {
-      headers: withAuthHeaders(),
     },
   );
   return response.data;
 }
 
 export async function getMyAssistantSessions(limit = 12): Promise<AssistantSessionResponse[]> {
-  const response = await axios.get<AssistantSessionResponse[]>(`${API_BASE_URL}/assistant/sessions/mine`, {
+  const response = await apiClient.get<AssistantSessionResponse[]>('/assistant/sessions/mine', {
     params: { limit },
-    headers: withAuthHeaders(),
   });
   return response.data;
 }
@@ -127,27 +110,26 @@ export async function getAssistantSessionMessages(
   sessionId: string,
   limit = 80,
 ): Promise<AssistantSessionMessageResponse[]> {
-  const response = await axios.get<AssistantSessionMessageResponse[]>(
-    `${API_BASE_URL}/assistant/sessions/${sessionId}/messages`,
+  const response = await apiClient.get<AssistantSessionMessageResponse[]>(
+    `/assistant/sessions/${sessionId}/messages`,
     {
       params: { limit },
-      headers: withAuthHeaders(),
     },
   );
   return response.data;
 }
 
 export async function deleteAssistantSession(sessionId: string): Promise<void> {
-  await axios.delete(`${API_BASE_URL}/assistant/sessions/${sessionId}`, {
-    headers: withAuthHeaders(),
-  });
+  await apiClient.delete(`/assistant/sessions/${sessionId}`);
 }
 
 export async function enrichTrailSemanticData(
   request: AssistantEnrichRequest = {},
 ): Promise<AssistantEnrichResponse> {
-  const response = await axios.post<AssistantEnrichResponse>(`${API_BASE_URL}/assistant/enrich`, request, {
-    headers: withAuthHeaders(),
-  });
+  if (!isCurrentUserAdmin()) {
+    throw new Error('Admin privileges are required to enrich trail semantic data.');
+  }
+
+  const response = await apiClient.post<AssistantEnrichResponse>('/assistant/enrich', request);
   return response.data;
 }

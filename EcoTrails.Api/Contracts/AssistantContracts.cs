@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace EcoTrails.Api.Contracts;
 
 public class AssistantTrailContext
@@ -61,12 +63,27 @@ public class AssistantQuickAction
 
 public class AssistantChatRequest
 {
+    [Required]
+    [MinLength(3)]
+    [MaxLength(2000)]
     public string Prompt { get; set; } = string.Empty;
+
+    [MaxLength(64)]
     public string? SessionId { get; set; }
+
+    [MaxLength(20)]
     public List<AssistantChatMessage> History { get; set; } = [];
+
+    [MaxLength(500)]
     public string? FilterSummary { get; set; }
+
+    [Range(0, 5000)]
     public int FavoriteCount { get; set; }
+
+    [MaxLength(200)]
     public List<int> FavoriteTrailIds { get; set; } = [];
+
+    [Range(1, 25)]
     public int MaxContextTrails { get; set; } = 15;
     public bool OnlyWithCoordinates { get; set; }
 }
@@ -86,13 +103,83 @@ public class AssistantChatResponse
 
 public class AssistantEnrichRequest
 {
+    [Range(1, 300)]
     public int? Limit { get; set; }
     public bool OverwriteExisting { get; set; }
+
+    [MaxLength(300)]
     public List<int>? TrailIds { get; set; }
 }
 
 public class AssistantEnrichResponse
 {
+    public int Processed { get; set; }
+    public int Updated { get; set; }
+    public int Failed { get; set; }
+    public List<string> Errors { get; set; } = [];
+}
+
+public class AssistantVectorIndexRequest
+{
+    [Range(1, 500)]
+    public int? Limit { get; set; }
+
+    public bool OverwriteExisting { get; set; }
+
+    [MaxLength(500)]
+    public List<int>? TrailIds { get; set; }
+}
+
+public class AssistantVectorIndexResponse
+{
+    public int Processed { get; set; }
+    public int Updated { get; set; }
+    public int Failed { get; set; }
+    public List<string> Errors { get; set; } = [];
+}
+
+public class AssistantVectorSearchRequest
+{
+    [Required]
+    [MinLength(3)]
+    [MaxLength(1000)]
+    public string Prompt { get; set; } = string.Empty;
+
+    [Range(1, 10)]
+    public int TopK { get; set; } = 5;
+
+    public bool OnlyWithCoordinates { get; set; }
+}
+
+public class AssistantVectorMatch
+{
+    public AssistantTrailContext Trail { get; set; } = new();
+    public double Score { get; set; }
+}
+
+public class AssistantVectorSearchResponse
+{
+    public string Prompt { get; set; } = string.Empty;
+    public string Model { get; set; } = string.Empty;
+    public List<AssistantVectorMatch> Matches { get; set; } = [];
+}
+
+public class AssistantVectorIndexStartResponse
+{
+    public string JobId { get; set; } = string.Empty;
+    public string Status { get; set; } = "queued";
+    public string Message { get; set; } = "Vector indexing has been queued.";
+}
+
+public class AssistantVectorIndexJobStatusResponse
+{
+    public string JobId { get; set; } = string.Empty;
+    public string Status { get; set; } = "queued";
+    public int Attempt { get; set; }
+    public int MaxAttempts { get; set; }
+    public DateTime RequestedAt { get; set; }
+    public DateTime? StartedAt { get; set; }
+    public DateTime? CompletedAt { get; set; }
     public int Processed { get; set; }
     public int Updated { get; set; }
     public int Failed { get; set; }

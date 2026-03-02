@@ -1,6 +1,5 @@
-import { useEffect, useMemo, useState } from 'react';
-import axios from 'axios';
-import { Mountain, Search, Download, Heart, MapPin, List, Map, MessageCircle, Trash2 } from 'lucide-react';
+import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
+import { Mountain, Heart, List, Map, MessageCircle, Trash2 } from 'lucide-react';
 import { Parser } from '@json2csv/plainjs';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import {
@@ -15,32 +14,28 @@ import {
   YAxis,
 } from 'recharts';
 import type { Trail } from '../types/trail';
-import MapComponent from '../components/MapComponent';
+import FilterSidebar from '../components/home/FilterSidebar';
+import { useAuthCapabilities } from '../hooks/useAuthCapabilities';
+import { useAssistant } from '../hooks/useAssistant';
+import { useTrails } from '../hooks/useTrails';
 import { useFavorites } from '../hooks/useFavorites';
-import { getAuthUser, logout } from '../services/authService';
+import apiClient from '../services/apiClient';
 import {
   createAssistantSession,
   deleteAssistantSession,
+  enrichTrailSemanticData,
   getAssistantSessionMessages,
   getMyAssistantSessions,
-  requestAssistantReply,
-  type AssistantChatMessage,
-  type AssistantKnowledgeChip,
   type AssistantQuickAction,
   type AssistantSessionResponse,
-  type AssistantTrailContext,
 } from '../services/assistantService';
 import '../App.css';
 
-const ASSISTANT_SESSION_STORAGE_KEY = 'ecotrails:assistantSessionId';
+const LazyAssistantPanel = lazy(() => import('../components/home/AssistantPanel'));
+const LazyMapWidget = lazy(() => import('../components/home/MapWidget'));
 
-interface PagedResponse {
-  items: Trail[];
-  totalCount: number;
-  page: number;
-  pageSize: number;
-  totalPages: number;
-}
+const ASSISTANT_SESSION_STORAGE_KEY = 'ecotrails:assistantSessionId';
+const FORBIDDEN_NOTICE_KEY = 'ecotrails:forbiddenNotice';
 
 type HomeTab = 'list' | 'map' | 'favorites' | 'assistant';
 type SortBy = 'id' | 'name' | 'difficulty' | 'duration' | 'elevation';
@@ -52,15 +47,6 @@ function parseTab(value: string | null): HomeTab {
   }
 
   return 'list';
-}
-
-function parseOptionalNumber(value: string): number | undefined {
-  if (value.trim() === '') {
-    return undefined;
-  }
-
-  const parsed = Number(value);
-  return Number.isFinite(parsed) ? parsed : undefined;
 }
 
 function parseBoolean(value: string | null, fallback = false): boolean {
@@ -126,34 +112,63 @@ function HomePage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const activeTab = parseTab(searchParams.get('tab'));
 
-  const [data, setData] = useState<PagedResponse | null>(null);
-  const [mapFilteredTrails, setMapFilteredTrails] = useState<Trail[]>([]);
-  const [page, setPage] = useState(() => {
-    const value = Number(searchParams.get('page'));
-    return Number.isInteger(value) && value > 0 ? value : 1;
-  });
-  const [pageSize] = useState(25);
-  const [searchInput, setSearchInput] = useState(() => searchParams.get('search') ?? '');
-  const [search, setSearch] = useState(() => searchParams.get('search') ?? '');
-  const [difficulty, setDifficulty] = useState<number | ''>(() => {
-    const value = searchParams.get('difficulty');
-    if (!value) {
-      return '';
-    }
+  const {
+    trails: fetchedTrails,
+    isLoading,
+    error,
+    setError,
+    page,
+    setPage,
+    searchInput,
+    setSearchInput,
+    search,
+    setSearch,
+    difficulty,
+    setDifficulty,
+    onlyWithCoords,
+    setOnlyWithCoords,
+    minDurationInput,
+    setMinDurationInput,
+    maxDurationInput,
+    setMaxDurationInput,
+    minElevationInput,
+    setMinElevationInput,
+    maxElevationInput,
+    setMaxElevationInput,
+    sortBy,
+    setSortBy,
+    sortDirection,
+    setSortDirection,
+    totalPages,
+    totalCount,
+    filterParams,
+  } = useTrails({
+    initialPage: Number.isInteger(Number(searchParams.get('page'))) && Number(searchParams.get('page')) > 0
+      ? Number(searchParams.get('page'))
+      : 1,
+    initialPageSize: 25,
+    initialSearchInput: searchParams.get('search') ?? '',
+    initialSearch: searchParams.get('search') ?? '',
+    initialDifficulty: (() => {
+      const value = searchParams.get('difficulty');
+      if (!value) {
+        return '';
+      }
 
-    const parsed = Number(value);
-    return Number.isInteger(parsed) ? parsed : '';
+      const parsed = Number(value);
+      return Number.isInteger(parsed) ? parsed : '';
+    })(),
+    initialOnlyWithCoords: parseBoolean(searchParams.get('onlyWithCoords')),
+    initialMinDurationInput: searchParams.get('minDuration') ?? '',
+    initialMaxDurationInput: searchParams.get('maxDuration') ?? '',
+    initialMinElevationInput: searchParams.get('minElevation') ?? '',
+    initialMaxElevationInput: searchParams.get('maxElevation') ?? '',
+    initialSortBy: parseSortBy(searchParams.get('sortBy')),
+    initialSortDirection: parseSortDirection(searchParams.get('sortDirection')),
   });
-  const [onlyWithCoords, setOnlyWithCoords] = useState(() => parseBoolean(searchParams.get('onlyWithCoords')));
+
+  const [mapFilteredTrails, setMapFilteredTrails] = useState<Trail[]>([]);
   const [showOnlyFavorites, setShowOnlyFavorites] = useState(() => parseBoolean(searchParams.get('onlyFavorites')));
-  const [minDurationInput, setMinDurationInput] = useState(() => searchParams.get('minDuration') ?? '');
-  const [maxDurationInput, setMaxDurationInput] = useState(() => searchParams.get('maxDuration') ?? '');
-  const [minElevationInput, setMinElevationInput] = useState(() => searchParams.get('minElevation') ?? '');
-  const [maxElevationInput, setMaxElevationInput] = useState(() => searchParams.get('maxElevation') ?? '');
-  const [sortBy, setSortBy] = useState<SortBy>(() => parseSortBy(searchParams.get('sortBy')));
-  const [sortDirection, setSortDirection] = useState<SortDirection>(() =>
-    parseSortDirection(searchParams.get('sortDirection')),
-  );
   const [selectedMapTrailId, setSelectedMapTrailId] = useState<number | null>(() => {
     const value = Number(searchParams.get('selectedTrailId'));
     return Number.isInteger(value) && value > 0 ? value : null;
@@ -167,26 +182,54 @@ function HomePage() {
   ]);
   const [mapZoom, setMapZoom] = useState(() => parseMapZoom(searchParams.get('mapZoom')));
 
-  const [isLoading, setIsLoading] = useState(false);
   const [isMapLoading, setIsMapLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [accessNotice, setAccessNotice] = useState('');
   const [isExporting, setIsExporting] = useState(false);
-  const [authUser, setAuthUser] = useState(getAuthUser());
+  const { authUser, refreshSession, clearAuth, isAdmin } = useAuthCapabilities();
   const [favoriteTrailsForStats, setFavoriteTrailsForStats] = useState<Trail[]>([]);
+
+  const {
+    messages: assistantMessages,
+    isTyping,
+    sessionId,
+    error: chatError,
+    sendMessage,
+    usedTrails: assistantUsedTrails,
+    knowledgeChips: assistantChips,
+    quickActions: assistantActions,
+    clearChat,
+    setSessionId,
+    setMessages,
+  } = useAssistant();
+
+  const assistantSessionId = sessionId ?? '';
   const [assistantPrompt, setAssistantPrompt] = useState('Препоръчай ми леки маршрути с координати.');
-  const [assistantSessionId, setAssistantSessionId] = useState(() =>
-    localStorage.getItem(ASSISTANT_SESSION_STORAGE_KEY) ?? '',
-  );
-  const [assistantMessages, setAssistantMessages] = useState<AssistantChatMessage[]>([]);
-  const [assistantChips, setAssistantChips] = useState<AssistantKnowledgeChip[]>([]);
-  const [assistantActions, setAssistantActions] = useState<AssistantQuickAction[]>([]);
-  const [assistantUsedTrails, setAssistantUsedTrails] = useState<AssistantTrailContext[]>([]);
   const [assistantUserSessions, setAssistantUserSessions] = useState<AssistantSessionResponse[]>([]);
-  const [assistantError, setAssistantError] = useState('');
-  const [isAssistantLoading, setIsAssistantLoading] = useState(false);
+  const [assistantAdminError, setAssistantAdminError] = useState('');
+  const [assistantAdminNotice, setAssistantAdminNotice] = useState('');
+  const [isAssistantEnriching, setIsAssistantEnriching] = useState(false);
   const [isAssistantSessionsLoading, setIsAssistantSessionsLoading] = useState(false);
   const [pendingDeleteSessionId, setPendingDeleteSessionId] = useState<string | null>(null);
   const [copyStatus, setCopyStatus] = useState('');
+
+  useEffect(() => {
+    const storedSessionId = localStorage.getItem(ASSISTANT_SESSION_STORAGE_KEY);
+    if (!storedSessionId) {
+      return;
+    }
+
+    setSessionId(storedSessionId);
+  }, [setSessionId]);
+
+  useEffect(() => {
+    const notice = sessionStorage.getItem(FORBIDDEN_NOTICE_KEY);
+    if (!notice) {
+      return;
+    }
+
+    setAccessNotice(notice);
+    sessionStorage.removeItem(FORBIDDEN_NOTICE_KEY);
+  }, []);
 
   useEffect(() => {
     if (!assistantSessionId) {
@@ -197,13 +240,30 @@ function HomePage() {
       .then((messages) => {
         const mapped = messages
           .filter((item) => item.role === 'assistant' || item.role === 'user')
-          .map((item) => ({ role: item.role, content: item.content }));
-        setAssistantMessages(mapped);
+          .map((item) => ({
+            id: `history-${item.id}`,
+            role: item.role,
+            content: item.content,
+            timestamp: new Date(item.createdAt),
+          }));
+        setMessages(mapped);
       })
       .catch((loadError) => {
         console.error('Грешка при зареждане на история на сесията:', loadError);
       });
-  }, [assistantSessionId]);
+  }, [assistantSessionId, setMessages]);
+
+  useEffect(() => {
+    if (!assistantSessionId) {
+      localStorage.removeItem(ASSISTANT_SESSION_STORAGE_KEY);
+      return;
+    }
+
+    localStorage.setItem(ASSISTANT_SESSION_STORAGE_KEY, assistantSessionId);
+    if (authUser) {
+      void refreshMyAssistantSessions();
+    }
+  }, [assistantSessionId, authUser]);
 
   const refreshMyAssistantSessions = async () => {
     if (!authUser) {
@@ -241,59 +301,13 @@ function HomePage() {
 
   const shouldShowOnlyFavorites = showOnlyFavorites || activeTab === 'favorites';
 
-  const filterParams = useMemo(
-    () => ({
-      search: search || undefined,
-      difficulty: difficulty === '' ? undefined : difficulty,
-      onlyWithCoords,
-      minDuration: parseOptionalNumber(minDurationInput),
-      maxDuration: parseOptionalNumber(maxDurationInput),
-      minElevation: parseOptionalNumber(minElevationInput),
-      maxElevation: parseOptionalNumber(maxElevationInput),
-      sortBy: sortBy === 'id' ? undefined : sortBy,
-      sortDirection,
-    }),
-    [
-      search,
-      difficulty,
-      onlyWithCoords,
-      minDurationInput,
-      maxDurationInput,
-      minElevationInput,
-      maxElevationInput,
-      sortBy,
-      sortDirection,
-    ],
-  );
-
-  useEffect(() => {
-    setIsLoading(true);
-    setError('');
-
-    axios
-      .get('http://127.0.0.1:5218/api/trails', {
-        params: {
-          page,
-          pageSize,
-          ...filterParams,
-        },
-      })
-      .then((response) => setData(response.data))
-      .catch((requestError) => {
-        console.error('Грешка при извличане на данни:', requestError);
-        setError('Неуспешно зареждане на пътеките.');
-        setData(null);
-      })
-      .finally(() => setIsLoading(false));
-  }, [page, pageSize, filterParams]);
-
   useEffect(() => {
     setIsMapLoading(true);
 
     const ids = shouldShowOnlyFavorites ? favoriteIds.join(',') : undefined;
 
-    axios
-      .get<Trail[]>('http://127.0.0.1:5218/api/trails/export', {
+    apiClient
+      .get<Trail[]>('/trails/export', {
         params: {
           ...filterParams,
           ids,
@@ -319,10 +333,9 @@ function HomePage() {
     }
   }, [mapFilteredTrails, selectedMapTrailId]);
 
-  const apiTrails = data?.items ?? [];
-  const trails = shouldShowOnlyFavorites ? apiTrails.filter((trail) => isFavorite(trail.id)) : apiTrails;
-  const totalPages = data?.totalPages ?? 1;
-  const totalCount = data?.totalCount ?? 0;
+  const trails = shouldShowOnlyFavorites
+    ? fetchedTrails.filter((trail) => isFavorite(trail.id))
+    : fetchedTrails;
 
   const selectedMapTrail = selectedMapTrailId
     ? mapFilteredTrails.find((trail) => trail.id === selectedMapTrailId) ?? null
@@ -380,9 +393,8 @@ function HomePage() {
   ]);
 
   useEffect(() => {
-    const currentUser = getAuthUser();
-    setAuthUser(currentUser);
-  }, [hasToken]);
+    void refreshSession();
+  }, [hasToken, refreshSession]);
 
   useEffect(() => {
     if (favoriteIds.length === 0) {
@@ -390,8 +402,8 @@ function HomePage() {
       return;
     }
 
-    axios
-      .get<Trail[]>('http://127.0.0.1:5218/api/trails/export', {
+    apiClient
+      .get<Trail[]>('/trails/export', {
         params: { ids: favoriteIds.join(',') },
       })
       .then((response) => setFavoriteTrailsForStats(response.data))
@@ -469,49 +481,15 @@ function HomePage() {
     }
 
     if (isLoading) {
-      setAssistantMessages((current) => [
-        ...current,
-        {
-          role: 'assistant',
-          content: 'Все още зареждам пътеките. Изчакай няколко секунди и опитай отново.',
-        },
-      ]);
       return;
     }
 
-    if (error) {
-      setAssistantMessages((current) => [
-        ...current,
-        {
-          role: 'assistant',
-          content: 'Има проблем със зареждането на данните. Натисни Изчисти след презареждане.',
-        },
-      ]);
-      return;
-    }
-
-    setAssistantError('');
     if (trails.length === 0) {
-      setAssistantMessages((current) => [
-        ...current,
-        {
-          role: 'assistant',
-          content: `Няма резултати за текущите филтри. Опитай по-широко търсене или друга трудност. Въпрос: ${effectivePrompt}`,
-        },
-      ]);
       return;
     }
-
-    const nextHistory = [...assistantMessages, { role: 'user' as const, content: effectivePrompt }].slice(-10);
 
     try {
-      setIsAssistantLoading(true);
-      setAssistantMessages(nextHistory);
-
-      const response = await requestAssistantReply({
-        prompt: effectivePrompt,
-        sessionId: assistantSessionId || undefined,
-        history: nextHistory,
+      await sendMessage(effectivePrompt, {
         filterSummary: buildAssistantFilterSummary(),
         favoriteCount: favoriteIds.length,
         favoriteTrailIds: favoriteIds,
@@ -519,48 +497,26 @@ function HomePage() {
         onlyWithCoordinates: onlyWithCoords,
       });
 
-      if (response.sessionId && response.sessionId !== assistantSessionId) {
-        setAssistantSessionId(response.sessionId);
-        localStorage.setItem(ASSISTANT_SESSION_STORAGE_KEY, response.sessionId);
-      }
-
-      if (authUser) {
-        void refreshMyAssistantSessions();
-      }
-
-      setAssistantMessages((current) =>
-        [...current, { role: 'assistant' as const, content: response.reply }].slice(-12),
-      );
-      setAssistantChips(response.knowledgeChips);
-      setAssistantActions(response.quickActions);
-      setAssistantUsedTrails(response.usedTrails);
       if (!promptOverride) {
         setAssistantPrompt('');
       }
     } catch (requestError) {
       console.error('Грешка при извикване на асистента:', requestError);
-      setAssistantError('Асистентът е временно недостъпен. Провери OPENAI_API_KEY и опитай отново.');
-    } finally {
-      setIsAssistantLoading(false);
     }
   };
 
   const startNewAssistantSession = async () => {
     try {
-      setAssistantError('');
+      setAssistantAdminError('');
       const session = await createAssistantSession('Нова чат сесия');
-      setAssistantSessionId(session.sessionId);
-      localStorage.setItem(ASSISTANT_SESSION_STORAGE_KEY, session.sessionId);
-      setAssistantMessages([]);
-      setAssistantChips([]);
-      setAssistantActions([]);
-      setAssistantUsedTrails([]);
+      clearChat();
+      setSessionId(session.sessionId);
       if (authUser) {
         void refreshMyAssistantSessions();
       }
     } catch (requestError) {
       console.error('Грешка при създаване на нова сесия:', requestError);
-      setAssistantError('Неуспешно създаване на нова сесия. Опитай отново.');
+      setAssistantAdminError('Неуспешно създаване на нова сесия. Опитай отново.');
     }
   };
 
@@ -569,29 +525,24 @@ function HomePage() {
       return;
     }
 
-    setAssistantSessionId(sessionId);
-    localStorage.setItem(ASSISTANT_SESSION_STORAGE_KEY, sessionId);
+    setSessionId(sessionId);
     openTab('assistant');
   };
 
   const removeAssistantSession = async (sessionId: string) => {
     try {
-      setAssistantError('');
+      setAssistantAdminError('');
       await deleteAssistantSession(sessionId);
 
       if (assistantSessionId === sessionId) {
-        setAssistantSessionId('');
-        setAssistantMessages([]);
-        setAssistantChips([]);
-        setAssistantActions([]);
-        setAssistantUsedTrails([]);
+        clearChat();
         localStorage.removeItem(ASSISTANT_SESSION_STORAGE_KEY);
       }
 
       await refreshMyAssistantSessions();
     } catch (requestError) {
       console.error('Грешка при изтриване на сесия:', requestError);
-      setAssistantError('Неуспешно изтриване на сесия. Опитай отново.');
+      setAssistantAdminError('Неуспешно изтриване на сесия. Опитай отново.');
     }
   };
 
@@ -653,13 +604,35 @@ function HomePage() {
     }
   };
 
+  const runAdminSemanticEnrichment = async () => {
+    try {
+      setAssistantAdminError('');
+      setAssistantAdminNotice('');
+      setIsAssistantEnriching(true);
+
+      const response = await enrichTrailSemanticData({
+        limit: 20,
+        overwriteExisting: false,
+      });
+
+      setAssistantAdminNotice(
+        `Обогатяване: обработени ${response.processed}, обновени ${response.updated}, грешки ${response.failed}.`,
+      );
+    } catch (requestError) {
+      console.error('Грешка при admin обогатяване:', requestError);
+      setAssistantAdminError('Неуспешно обогатяване на семантични данни. Опитай отново.');
+    } finally {
+      setIsAssistantEnriching(false);
+    }
+  };
+
   const exportCsv = async () => {
     try {
       setIsExporting(true);
 
       const ids = shouldShowOnlyFavorites ? favoriteIds.join(',') : undefined;
 
-      const response = await axios.get<Trail[]>('http://127.0.0.1:5218/api/trails/export', {
+      const response = await apiClient.get<Trail[]>('/trails/export', {
         params: {
           ...filterParams,
           ids,
@@ -711,6 +684,51 @@ function HomePage() {
     }, 2200);
   };
 
+  const mapHandlers = {
+    onSelectedTrailChange: (trailId: number | null) => {
+      setSelectedMapTrailId(trailId);
+      setShowOnlySelectedOnMap(trailId !== null);
+    },
+    onToggleOnlySelected: () => setShowOnlySelectedOnMap((current) => !current),
+    onClearSelected: () => {
+      setSelectedMapTrailId(null);
+      setShowOnlySelectedOnMap(false);
+    },
+    onCopyCurrentViewLink: () => {
+      void copyCurrentViewLink();
+    },
+    onSelectTrailFromMap: (trailId: number) => {
+      setSelectedMapTrailId(trailId);
+      setShowOnlySelectedOnMap(true);
+    },
+  };
+
+  const assistantHandlers = {
+    onPromptChange: (value: string) => setAssistantPrompt(value),
+    onGenerateReply: () => {
+      void generateAssistantReply();
+    },
+    onStartNewSession: () => {
+      void startNewAssistantSession();
+    },
+    onOpenMapTab: () => openTab('map'),
+    onOpenFavoritesTab: () => openTab('favorites'),
+    onRunAdminEnrichment: () => {
+      void runAdminSemanticEnrichment();
+    },
+    onOpenAssistantSession: (sessionId: string) => openAssistantSession(sessionId),
+    onRequestDeleteSession: (sessionId: string) => requestDeleteAssistantSession(sessionId),
+    onQuickAction: (action: AssistantQuickAction) => handleAssistantQuickAction(action),
+  };
+
+  if (isLoading) {
+    return <div>Зареждане на екопътеките...</div>;
+  }
+
+  if (error) {
+    return <div>Възникна грешка: {error}</div>;
+  }
+
   return (
     <div className="app-container">
       <h1 className="app-title">
@@ -726,11 +744,10 @@ function HomePage() {
               type="button"
               className="secondary-btn"
               onClick={() => {
-                logout();
+                clearAuth();
                 clearFavorites();
-                setAuthUser(null);
                 setAssistantUserSessions([]);
-                setAssistantSessionId('');
+                clearChat();
                 localStorage.removeItem(ASSISTANT_SESSION_STORAGE_KEY);
               }}
             >
@@ -834,152 +851,62 @@ function HomePage() {
         </button>
       </div>
 
-      <div className="toolbar">
-        <div className="search-group">
-          <input
-            value={searchInput}
-            onChange={(event) => setSearchInput(event.target.value)}
-            placeholder="Търси по име или локация"
-            className="search-input"
-          />
-          <button onClick={applySearch} className="primary-btn" type="button">
-            <Search size={16} />
-            Търси
-          </button>
-        </div>
+      <FilterSidebar
+        searchInput={searchInput}
+        difficulty={difficulty}
+        sortBy={sortBy}
+        sortDirection={sortDirection}
+        minDurationInput={minDurationInput}
+        maxDurationInput={maxDurationInput}
+        minElevationInput={minElevationInput}
+        maxElevationInput={maxElevationInput}
+        onlyWithCoords={onlyWithCoords}
+        shouldShowOnlyFavorites={shouldShowOnlyFavorites}
+        isExporting={isExporting}
+        isLoading={isLoading}
+        onSearchInputChange={(value) => setSearchInput(value)}
+        onApplySearch={applySearch}
+        onDifficultyChange={(value) => {
+          setPage(1);
+          setDifficulty(value);
+        }}
+        onSortByChange={(value) => {
+          setPage(1);
+          setSortBy(value);
+        }}
+        onSortDirectionChange={(value) => {
+          setPage(1);
+          setSortDirection(value);
+        }}
+        onMinDurationChange={(value) => {
+          setPage(1);
+          setMinDurationInput(value);
+        }}
+        onMaxDurationChange={(value) => {
+          setPage(1);
+          setMaxDurationInput(value);
+        }}
+        onMinElevationChange={(value) => {
+          setPage(1);
+          setMinElevationInput(value);
+        }}
+        onMaxElevationChange={(value) => {
+          setPage(1);
+          setMaxElevationInput(value);
+        }}
+        onClearFilters={clearFilters}
+        onToggleOnlyWithCoords={() => {
+          setPage(1);
+          setOnlyWithCoords((current) => !current);
+        }}
+        onToggleOnlyFavorites={() => {
+          setPage(1);
+          setShowOnlyFavorites((current) => !current);
+        }}
+        onExportCsv={() => void exportCsv()}
+      />
 
-        <div className="filter-group">
-          <select
-            value={difficulty}
-            onChange={(event) => {
-              const value = event.target.value;
-              setPage(1);
-              setDifficulty(value === '' ? '' : Number(value));
-            }}
-            className="select-input"
-          >
-            <option value="">Всички трудности</option>
-            <option value="1">1 - Лесно</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5 - Тежко</option>
-          </select>
-
-          <select
-            value={sortBy}
-            onChange={(event) => {
-              setPage(1);
-              setSortBy(parseSortBy(event.target.value));
-            }}
-            className="select-input compact-input"
-          >
-            <option value="id">Сортиране: ID</option>
-            <option value="name">Име</option>
-            <option value="difficulty">Трудност</option>
-            <option value="duration">Часове</option>
-            <option value="elevation">Денивелация</option>
-          </select>
-
-          <select
-            value={sortDirection}
-            onChange={(event) => {
-              setPage(1);
-              setSortDirection(parseSortDirection(event.target.value));
-            }}
-            className="select-input compact-input"
-          >
-            <option value="asc">Възходящо</option>
-            <option value="desc">Низходящо</option>
-          </select>
-
-          <input
-            type="number"
-            min={0}
-            step="0.5"
-            value={minDurationInput}
-            onChange={(event) => {
-              setPage(1);
-              setMinDurationInput(event.target.value);
-            }}
-            className="select-input compact-input"
-            placeholder="Мин. часове"
-          />
-          <input
-            type="number"
-            min={0}
-            step="0.5"
-            value={maxDurationInput}
-            onChange={(event) => {
-              setPage(1);
-              setMaxDurationInput(event.target.value);
-            }}
-            className="select-input compact-input"
-            placeholder="Макс. часове"
-          />
-
-          <input
-            type="number"
-            min={0}
-            step="50"
-            value={minElevationInput}
-            onChange={(event) => {
-              setPage(1);
-              setMinElevationInput(event.target.value);
-            }}
-            className="select-input compact-input"
-            placeholder="Мин. денивелация"
-          />
-          <input
-            type="number"
-            min={0}
-            step="50"
-            value={maxElevationInput}
-            onChange={(event) => {
-              setPage(1);
-              setMaxElevationInput(event.target.value);
-            }}
-            className="select-input compact-input"
-            placeholder="Макс. денивелация"
-          />
-
-          <button onClick={clearFilters} className="secondary-btn" type="button">
-            Изчисти
-          </button>
-          <button
-            onClick={() => {
-              setPage(1);
-              setOnlyWithCoords((current) => !current);
-            }}
-            className={`secondary-btn ${onlyWithCoords ? 'active-btn' : ''}`}
-            type="button"
-          >
-            <MapPin size={16} />
-            Само с координати
-          </button>
-          <button
-            onClick={() => {
-              setPage(1);
-              setShowOnlyFavorites((current) => !current);
-            }}
-            className={`secondary-btn ${shouldShowOnlyFavorites ? 'active-btn' : ''}`}
-            type="button"
-          >
-            <Heart size={16} fill={shouldShowOnlyFavorites ? 'currentColor' : 'none'} />
-            Покажи само любими
-          </button>
-          <button
-            onClick={exportCsv}
-            className="secondary-btn export-btn"
-            type="button"
-            disabled={isExporting || isLoading}
-          >
-            <Download size={16} />
-            {isExporting ? 'Експортиране...' : 'Експорт CSV'}
-          </button>
-        </div>
-      </div>
-
+      {accessNotice && <p className="status-text error">{accessNotice}</p>}
       {error && <p className="status-text error">{error}</p>}
       {isLoading && <p className="status-text">Зареждане...</p>}
       {!error && (
@@ -990,195 +917,48 @@ function HomePage() {
       )}
 
       {(activeTab === 'map' || activeTab === 'favorites') && (
-        <>
-          <div className="map-tools">
-            <select
-              className="select-input map-select"
-              value={selectedMapTrailId ?? ''}
-              onChange={(event) => {
-                const value = event.target.value;
-                if (value === '') {
-                  setSelectedMapTrailId(null);
-                  setShowOnlySelectedOnMap(false);
-                  return;
-                }
-
-                setSelectedMapTrailId(Number(value));
-                setShowOnlySelectedOnMap(true);
-              }}
-            >
-              <option value="">Избери пътека на картата...</option>
-              {mapFilteredTrails.map((trail) => (
-                <option key={trail.id} value={trail.id}>
-                  {trail.name}
-                </option>
-              ))}
-            </select>
-            <button
-              type="button"
-              className={`secondary-btn ${showOnlySelectedOnMap ? 'active-btn' : ''}`}
-              disabled={!selectedMapTrailId}
-              onClick={() => setShowOnlySelectedOnMap((current) => !current)}
-            >
-              Покажи само избраната
-            </button>
-            <button
-              type="button"
-              className="secondary-btn"
-              disabled={!selectedMapTrailId}
-              onClick={() => {
-                setSelectedMapTrailId(null);
-                setShowOnlySelectedOnMap(false);
-              }}
-            >
-              Изчисти избора
-            </button>
-            <button type="button" className="secondary-btn" onClick={() => void copyCurrentViewLink()}>
-              Копирай линк към текущия изглед
-            </button>
-            <span className="map-counter">
-              На картата: {formatTrailCount(mapTrailsToShow.length)} от общо {formatRouteCount(mapFilteredTrails.length)}
-            </span>
-            {copyStatus && <span className="map-copy-status">{copyStatus}</span>}
-          </div>
-
-          <MapComponent
-            trails={mapTrailsToShow}
-            selectedTrailId={selectedMapTrailId}
-            onSelectTrail={(trailId) => {
-              setSelectedMapTrailId(trailId);
-              setShowOnlySelectedOnMap(true);
-            }}
-            initialCenter={mapCenter}
-            initialZoom={mapZoom}
+        <Suspense fallback={<p className="status-text">Зареждане на картата...</p>}>
+          <LazyMapWidget
+            mapFilteredTrails={mapFilteredTrails}
+            mapTrailsToShow={mapTrailsToShow}
+            selectedMapTrailId={selectedMapTrailId}
+            showOnlySelectedOnMap={showOnlySelectedOnMap}
+            copyStatus={copyStatus}
+            handlers={mapHandlers}
+            mapCenter={mapCenter}
+            mapZoom={mapZoom}
             onMapViewChange={(center, zoom) => {
               setMapCenter(center);
               setMapZoom(zoom);
             }}
+            formatTrailCount={formatTrailCount}
+            formatRouteCount={formatRouteCount}
           />
-        </>
+        </Suspense>
       )}
 
       {activeTab === 'assistant' && (
-        <div className="assistant-card">
-          <h3>Планински асистент</h3>
-          <p>
-            Използва текущите филтри, резултатите от страницата и любимите ти пътеки, за да ти даде
-            бърза препоръка.
-          </p>
-          <input
-            value={assistantPrompt}
-            onChange={(event) => setAssistantPrompt(event.target.value)}
-            onKeyDown={(event) => {
-              if (event.key === 'Enter') {
-                event.preventDefault();
-                void generateAssistantReply();
-              }
-            }}
-            className="search-input assistant-input"
-            placeholder="Напр. препоръчай ми кратка пътека около София"
+        <Suspense fallback={<p className="status-text">Зареждане на асистента...</p>}>
+          <LazyAssistantPanel
+            assistantPrompt={assistantPrompt}
+            isTyping={isTyping}
+            isAdmin={isAdmin}
+            isAssistantEnriching={isAssistantEnriching}
+            authUserEmail={authUser?.email ?? null}
+            assistantUserSessions={assistantUserSessions}
+            assistantSessionId={assistantSessionId}
+            assistantChips={assistantChips}
+            assistantActions={assistantActions}
+            assistantUsedTrails={assistantUsedTrails}
+            assistantMessages={assistantMessages}
+            assistantAdminNotice={assistantAdminNotice}
+            assistantAdminError={assistantAdminError}
+            chatError={chatError}
+            handlers={assistantHandlers}
+            formatMessageCount={formatMessageCount}
+            formatTrailCount={formatTrailCount}
           />
-          <div className="assistant-actions">
-            <button
-              type="button"
-              className="primary-btn"
-              onClick={() => void generateAssistantReply()}
-              disabled={isAssistantLoading || assistantPrompt.trim().length === 0}
-            >
-              {isAssistantLoading ? 'Генериране...' : 'Генерирай препоръка'}
-            </button>
-            <button
-              type="button"
-              className="secondary-btn"
-              onClick={() => void startNewAssistantSession()}
-              disabled={isAssistantLoading}
-            >
-              Нова сесия
-            </button>
-            <button type="button" className="secondary-btn" onClick={() => openTab('map')}>
-              Към карта
-            </button>
-            <button type="button" className="secondary-btn" onClick={() => openTab('favorites')}>
-              Към любими
-            </button>
-          </div>
-          {authUser && (
-            <div className="assistant-inline-sessions">
-              <p className="assistant-meta">Сесии в профила</p>
-              <div className="assistant-session-list">
-                {assistantUserSessions.map((session) => (
-                  <div
-                    key={`assistant-${session.sessionId}`}
-                    className={`assistant-session-item ${
-                      assistantSessionId === session.sessionId ? 'assistant-session-item-active' : ''
-                    }`}
-                  >
-                    <button
-                      type="button"
-                      className="assistant-session-open"
-                      onClick={() => openAssistantSession(session.sessionId)}
-                    >
-                      <span>{session.title}</span>
-                      <small>{formatMessageCount(session.messageCount)}</small>
-                    </button>
-                    <button
-                      type="button"
-                      className="assistant-session-delete"
-                      onClick={() => requestDeleteAssistantSession(session.sessionId)}
-                      title="Изтрий сесия"
-                    >
-                      <Trash2 size={14} />
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {assistantChips.length > 0 && (
-            <div className="assistant-chips">
-              {assistantChips.map((chip, index) => (
-                <span key={`${chip.label}-${index}`} className={`assistant-chip assistant-chip-${chip.type}`}>
-                  {chip.label}
-                </span>
-              ))}
-            </div>
-          )}
-
-          {assistantActions.length > 0 && (
-            <div className="assistant-quick-actions">
-              {assistantActions.map((action) => (
-                <button
-                  key={`${action.id}-${action.value}`}
-                  type="button"
-                  className="secondary-btn"
-                  onClick={() => handleAssistantQuickAction(action)}
-                >
-                  {action.label}
-                </button>
-              ))}
-            </div>
-          )}
-
-          {assistantUsedTrails.length > 0 && (
-            <p className="assistant-meta">Контекст: {formatTrailCount(assistantUsedTrails.length)} от базата данни.</p>
-          )}
-          {assistantSessionId && <p className="assistant-meta">Сесия: {assistantSessionId.slice(0, 12)}...</p>}
-
-          {assistantError && <p className="status-text error">{assistantError}</p>}
-          {assistantMessages.length > 0 && (
-            <div className="assistant-thread">
-              {assistantMessages.map((message, index) => (
-                <p
-                  key={`${message.role}-${index}`}
-                  className={`assistant-reply ${message.role === 'assistant' ? 'assistant-reply-ai' : 'assistant-reply-user'}`}
-                >
-                  {message.content}
-                </p>
-              ))}
-            </div>
-          )}
-        </div>
+        </Suspense>
       )}
 
       {activeTab === 'favorites' && favoriteTrailsForStats.length > 0 && (

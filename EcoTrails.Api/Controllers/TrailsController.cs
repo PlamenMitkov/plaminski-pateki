@@ -1,6 +1,7 @@
 using EcoTrails.Api.Data;
 using EcoTrails.Api.Models;
 using EcoTrails.Api.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -96,6 +97,7 @@ namespace EcoTrails.Api.Controllers
             });
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<Trail>> PostTrail(Trail trail)
         {

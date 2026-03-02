@@ -1,12 +1,16 @@
-import axios from 'axios';
+import apiClient from './apiClient';
 
-const API_BASE_URL = 'http://127.0.0.1:5218/api';
 const TOKEN_STORAGE_KEY = 'ecotrails:authToken';
 const USER_STORAGE_KEY = 'ecotrails:authUser';
+const SESSION_STORAGE_KEY = 'ecotrails:authSession';
 
 export interface AuthUser {
   userId: string;
   email: string;
+}
+
+export interface AuthSessionInfo extends AuthUser {
+  roles: string[];
 }
 
 interface AuthResponse {
@@ -20,6 +24,24 @@ function saveAuth(authResponse: AuthResponse) {
   localStorage.setItem(
     USER_STORAGE_KEY,
     JSON.stringify({ userId: authResponse.userId, email: authResponse.email }),
+  );
+}
+
+function normalizeRoles(roles: string[] | undefined): string[] {
+  if (!Array.isArray(roles)) {
+    return [];
+  }
+
+  return roles
+    .map((role) => String(role).trim())
+    .filter((role) => role.length > 0);
+}
+
+function saveSession(session: AuthSessionInfo) {
+  const roles = normalizeRoles(session.roles);
+  localStorage.setItem(
+    SESSION_STORAGE_KEY,
+    JSON.stringify({ userId: session.userId, email: session.email, roles }),
   );
 }
 
@@ -50,26 +72,81 @@ export function isAuthenticated(): boolean {
 }
 
 export async function login(email: string, password: string): Promise<AuthUser> {
-  const response = await axios.post<AuthResponse>(`${API_BASE_URL}/auth/login`, {
+  const response = await apiClient.post<AuthResponse>('/auth/login', {
     email,
     password,
   });
 
   saveAuth(response.data);
+  await validateAuthSession();
   return { userId: response.data.userId, email: response.data.email };
 }
 
 export async function register(email: string, password: string): Promise<AuthUser> {
-  const response = await axios.post<AuthResponse>(`${API_BASE_URL}/auth/register`, {
+  const response = await apiClient.post<AuthResponse>('/auth/register', {
     email,
     password,
   });
 
   saveAuth(response.data);
+  await validateAuthSession();
   return { userId: response.data.userId, email: response.data.email };
 }
 
 export function logout() {
   localStorage.removeItem(TOKEN_STORAGE_KEY);
   localStorage.removeItem(USER_STORAGE_KEY);
+  localStorage.removeItem(SESSION_STORAGE_KEY);
+}
+
+export async function validateAuthSession(): Promise<AuthSessionInfo | null> {
+  const token = getAuthToken();
+  if (!token) {
+    return null;
+  }
+
+  try {
+    const response = await apiClient.get<AuthSessionInfo>('/auth/me');
+    const session = response.data;
+    localStorage.setItem(
+      USER_STORAGE_KEY,
+      JSON.stringify({ userId: session.userId, email: session.email }),
+    );
+    saveSession(session);
+    return session;
+  } catch {
+    logout();
+    return null;
+  }
+}
+
+export function getAuthSessionInfo(): AuthSessionInfo | null {
+  const value = localStorage.getItem(SESSION_STORAGE_KEY);
+  if (!value) {
+    return null;
+  }
+
+  try {
+    const parsed = JSON.parse(value) as AuthSessionInfo;
+    if (!parsed.userId || !parsed.email) {
+      return null;
+    }
+
+    return {
+      userId: parsed.userId,
+      email: parsed.email,
+      roles: normalizeRoles(parsed.roles),
+    };
+  } catch {
+    return null;
+  }
+}
+
+export function isCurrentUserAdmin(): boolean {
+  const session = getAuthSessionInfo();
+  if (!session) {
+    return false;
+  }
+
+  return session.roles.some((role) => role.toLowerCase() === 'admin');
 }

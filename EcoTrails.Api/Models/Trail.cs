@@ -35,6 +35,12 @@ namespace EcoTrails.Api.Models
 
         public double? Longitude { get; set; }
 
+        public string? EmbeddingVector { get; set; }
+
+        public string? EmbeddingModel { get; set; }
+
+        public DateTime? EmbeddingUpdatedAt { get; set; }
+
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         public ICollection<UserFavoriteTrail> FavoritedByUsers { get; set; } = new List<UserFavoriteTrail>();

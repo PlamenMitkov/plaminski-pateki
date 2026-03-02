@@ -84,6 +84,14 @@ namespace EcoTrails.Api.Data
                 .HasMaxLength(120)
                 .HasDefaultValue(string.Empty);
 
+            modelBuilder.Entity<Trail>()
+                .Property(item => item.EmbeddingVector)
+                .HasColumnType("nvarchar(max)");
+
+            modelBuilder.Entity<Trail>()
+                .Property(item => item.EmbeddingModel)
+                .HasMaxLength(120);
+
             modelBuilder.Entity<Trail>().HasData(
                 new Trail
                 {

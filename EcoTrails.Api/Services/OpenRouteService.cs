@@ -1,5 +1,6 @@
 using System.Globalization;
 using System.Text.Json;
+using System.Net.Http.Headers;
 using Microsoft.Extensions.Options;
 
 namespace EcoTrails.Api.Services;
@@ -47,12 +48,14 @@ public class OpenRouteService
 
             var endpoint =
                 $"{_options.BaseUrl.TrimEnd('/')}/v2/directions/foot-hiking" +
-                $"?api_key={Uri.EscapeDataString(_options.ApiKey)}" +
-                $"&start={Uri.EscapeDataString(startParam)}" +
+                $"?start={Uri.EscapeDataString(startParam)}" +
                 $"&end={Uri.EscapeDataString(endParam)}" +
                 "&format=geojson";
 
-            using var response = await _httpClient.GetAsync(endpoint, cancellationToken);
+            using var request = new HttpRequestMessage(HttpMethod.Get, endpoint);
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _options.ApiKey);
+
+            using var response = await _httpClient.SendAsync(request, cancellationToken);
             if (!response.IsSuccessStatusCode)
             {
                 _logger.LogWarning("OpenRouteService returned status code {StatusCode}", response.StatusCode);

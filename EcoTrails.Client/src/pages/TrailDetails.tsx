@@ -1,11 +1,11 @@
 import { useMemo, useState } from 'react';
 import { useEffect } from 'react';
-import axios from 'axios';
 import { ArrowLeft, Heart, Share2 } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
 import { CircleMarker, MapContainer, Polyline, Popup, TileLayer } from 'react-leaflet';
 import type { Trail } from '../types/trail';
 import { useFavorites } from '../hooks/useFavorites';
+import apiClient from '../services/apiClient';
 import '../App.css';
 
 interface TrailRouteResponse {
@@ -62,8 +62,8 @@ function TrailDetails() {
     setIsLoading(true);
     setError('');
 
-    axios
-      .get(`http://127.0.0.1:5218/api/trails/${id}`)
+    apiClient
+      .get(`/trails/${id}`)
       .then((response) => setTrail(response.data))
       .catch(() => setError('Пътеката не е намерена.'))
       .finally(() => setIsLoading(false));
@@ -83,8 +83,8 @@ function TrailDetails() {
 
     setRouteWarning('');
 
-    axios
-      .get<TrailRouteResponse>(`http://127.0.0.1:5218/api/trails/${trail.id}/route`)
+    apiClient
+      .get<TrailRouteResponse>(`/trails/${trail.id}/route`)
       .then((response) => setRoute(response.data))
       .catch((requestError) => {
         console.error('Грешка при зареждане на маршрут:', requestError);
@@ -98,7 +98,12 @@ function TrailDetails() {
       return [route.startLatitude, route.startLongitude] as [number, number];
     }
 
-    if (trail?.latitude !== null && trail?.longitude !== null && trail?.latitude && trail?.longitude) {
+    if (
+      trail?.latitude !== null &&
+      trail?.latitude !== undefined &&
+      trail?.longitude !== null &&
+      trail?.longitude !== undefined
+    ) {
       return [trail.latitude, trail.longitude] as [number, number];
     }
 
@@ -166,7 +171,7 @@ function TrailDetails() {
 
       <MapContainer
         center={mapCenter}
-        zoom={trail.latitude && trail.longitude ? 11 : 7}
+        zoom={trail.latitude !== null && trail.longitude !== null ? 11 : 7}
         style={{ height: '420px', width: '100%', borderRadius: '12px', marginBottom: '20px' }}
       >
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />

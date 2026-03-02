@@ -13,31 +13,175 @@ public class OpenAiOptions
     public string ApiKey { get; set; } = string.Empty;
     public string BaseUrl { get; set; } = "https://api.openai.com/v1";
     public string Model { get; set; } = "gpt-3.5-turbo";
+    public string EmbeddingModel { get; set; } = "text-embedding-3-small";
     public double Temperature { get; set; } = 0.3;
     public int MaxTokens { get; set; } = 500;
     public int EnrichDelayMs { get; set; } = 200;
     public int RetryAttempts { get; set; } = 3;
     public int RetryInitialDelayMs { get; set; } = 500;
     public int RetryJitterMs { get; set; } = 200;
+    public int EmbeddingBatchSize { get; set; } = 20;
+    public int RrfK { get; set; } = 60;
+    public int VectorMultiplier { get; set; } = 2;
+    public int TopK { get; set; } = 5;
 }
 
-public class OpenAiAssistantService
+public class OpenAiAssistantService : IOpenAiAssistantService
 {
     private readonly HttpClient _httpClient;
     private readonly OpenAiOptions _options;
     private readonly AppDbContext _dbContext;
     private readonly ILogger<OpenAiAssistantService> _logger;
+    private readonly IVectorService _vectorService;
 
     public OpenAiAssistantService(
         HttpClient httpClient,
         IOptions<OpenAiOptions> options,
         AppDbContext dbContext,
+        IVectorService vectorService,
         ILogger<OpenAiAssistantService> logger)
     {
         _httpClient = httpClient;
         _options = options.Value;
         _dbContext = dbContext;
+        _vectorService = vectorService;
         _logger = logger;
+    }
+
+    public async Task<AssistantVectorIndexResponse> IndexTrailsAsync(
+        AssistantVectorIndexRequest request,
+        CancellationToken cancellationToken)
+    {
+        var query = _dbContext.Trails.AsQueryable();
+        if (request.TrailIds is { Count: > 0 })
+        {
+            query = query.Where(item => request.TrailIds.Contains(item.Id));
+        }
+
+        var limit = Math.Clamp(request.Limit ?? 100, 1, 500);
+        var trails = await query
+            .OrderBy(item => item.Id)
+            .Take(limit)
+            .ToListAsync(cancellationToken);
+
+        var response = new AssistantVectorIndexResponse();
+        var batchSize = Math.Clamp(_options.EmbeddingBatchSize, 1, 50);
+        for (var offset = 0; offset < trails.Count; offset += batchSize)
+        {
+            var batch = trails.Skip(offset).Take(batchSize).ToList();
+            var pending = batch
+                .Where(item => request.OverwriteExisting || string.IsNullOrWhiteSpace(item.EmbeddingVector))
+                .ToList();
+
+            response.Processed += batch.Count;
+            if (pending.Count == 0)
+            {
+                continue;
+            }
+
+            try
+            {
+                var inputList = pending.Select(BuildTrailEmbeddingInput).ToList();
+                var embeddings = await _vectorService.CreateEmbeddingsAsync(inputList, cancellationToken);
+                var now = DateTime.UtcNow;
+
+                var vectorCount = Math.Min(pending.Count, embeddings.Values.Count);
+                for (var index = 0; index < vectorCount; index++)
+                {
+                    var trail = pending[index];
+                    trail.EmbeddingVector = JsonSerializer.Serialize(embeddings.Values[index]);
+                    trail.EmbeddingModel = embeddings.Model;
+                    trail.EmbeddingUpdatedAt = now;
+                    response.Updated++;
+                }
+
+                if (embeddings.Values.Count < pending.Count)
+                {
+                    var missing = pending.Count - embeddings.Values.Count;
+                    response.Failed += missing;
+                    response.Errors.Add($"Batch starting at trail offset {offset}: missing {missing} embedding vectors.");
+                }
+            }
+            catch (Exception exception)
+            {
+                response.Failed += pending.Count;
+                response.Errors.Add($"Batch starting at trail offset {offset}: {exception.Message}");
+                _logger.LogWarning(exception, "Failed to create embedding batch at offset {Offset}", offset);
+            }
+
+            if (_options.EnrichDelayMs > 0)
+            {
+                await Task.Delay(_options.EnrichDelayMs, cancellationToken);
+            }
+        }
+
+        await _dbContext.SaveChangesAsync(cancellationToken);
+        return response;
+    }
+
+    public async Task<AssistantVectorSearchResponse> SearchSimilarTrailsAsync(
+        AssistantVectorSearchRequest request,
+        CancellationToken cancellationToken)
+    {
+        var prompt = request.Prompt.Trim();
+        var configuredTopK = Math.Clamp(_options.TopK, 1, 10);
+        var requestedTopK = request.TopK <= 0 ? configuredTopK : request.TopK;
+        var topK = Math.Clamp(requestedTopK, 1, 10);
+
+        var queryEmbedding = await _vectorService.CreateEmbeddingAsync(prompt, cancellationToken);
+
+        var query = _dbContext.Trails.AsNoTracking()
+            .Where(item => !string.IsNullOrWhiteSpace(item.EmbeddingVector));
+
+        if (request.OnlyWithCoordinates)
+        {
+            query = query.Where(item => item.Latitude.HasValue && item.Longitude.HasValue);
+        }
+
+        var candidates = await query
+            .Select(item => new TrailSearchCandidate
+            {
+                Id = item.Id,
+                Name = item.Name,
+                Location = item.Location,
+                Region = item.Region,
+                Description = item.Description,
+                Difficulty = item.Difficulty,
+                DifficultyLevel = item.DifficultyLevel,
+                DurationInHours = item.DurationInHours,
+                ElevationGain = item.ElevationGain,
+                Latitude = item.Latitude,
+                Longitude = item.Longitude,
+                WaterSources = item.WaterSources,
+                MaxAltitude = item.MaxAltitude,
+                SuitableForKids = item.SuitableForKids,
+                RequiredGear = item.RequiredGear,
+                EmbeddingVector = item.EmbeddingVector
+            })
+            .ToListAsync(cancellationToken);
+
+        var matches = candidates
+            .Select(item => new
+            {
+                Trail = item,
+                Score = ComputeCosineSimilarity(queryEmbedding.Values, ParseEmbedding(item.EmbeddingVector))
+            })
+            .Where(item => item.Score > 0)
+            .OrderByDescending(item => item.Score)
+            .Take(topK)
+            .Select(item => new AssistantVectorMatch
+            {
+                Trail = MapToContext(item.Trail),
+                Score = Math.Round(item.Score, 6)
+            })
+            .ToList();
+
+        return new AssistantVectorSearchResponse
+        {
+            Prompt = prompt,
+            Model = queryEmbedding.Model,
+            Matches = matches
+        };
     }
 
     public async Task<AssistantChatResponse> GenerateReplyAsync(
@@ -369,6 +513,12 @@ public class OpenAiAssistantService
         CancellationToken cancellationToken)
     {
         var maxResults = Math.Clamp(request.MaxContextTrails, 5, 25);
+        var hybridTrails = await HybridSearchTrailsAsync(prompt, maxResults, request.OnlyWithCoordinates, cancellationToken);
+        if (hybridTrails.Count > 0)
+        {
+            return hybridTrails.Select(MapToContext).ToList();
+        }
+
         var query = _dbContext.Trails.AsNoTracking().AsQueryable();
 
         if (request.OnlyWithCoordinates)
@@ -420,6 +570,260 @@ public class OpenAiAssistantService
             .ToList();
 
         return ranked;
+    }
+
+    private async Task<List<TrailSearchCandidate>> HybridSearchTrailsAsync(
+        string query,
+        int topK = 5,
+        bool onlyWithCoordinates = false,
+        CancellationToken cancellationToken = default)
+    {
+        var normalizedQuery = query?.Trim() ?? string.Empty;
+        if (string.IsNullOrWhiteSpace(normalizedQuery))
+        {
+            return [];
+        }
+
+        var configuredTopK = Math.Clamp(_options.TopK, 1, 25);
+        var effectiveTopK = topK <= 0 ? configuredTopK : topK;
+        var normalizedTopK = Math.Clamp(effectiveTopK, 1, 25);
+        var vectorMultiplier = Math.Clamp(_options.VectorMultiplier, 1, 10);
+        var fetchLimit = Math.Clamp(normalizedTopK * vectorMultiplier, normalizedTopK, 100);
+
+        var vectorTask = GetVectorSearchResultsAsync(normalizedQuery, fetchLimit, onlyWithCoordinates, cancellationToken);
+        var textTask = GetFullTextSearchResultsAsync(normalizedQuery, fetchLimit, onlyWithCoordinates, cancellationToken);
+
+        await Task.WhenAll(vectorTask, textTask);
+
+        var vectorResults = await vectorTask;
+        var textResults = await textTask;
+
+        if (vectorResults.Count == 0 && textResults.Count == 0)
+        {
+            return [];
+        }
+
+        var rrfK = Math.Clamp(_options.RrfK, 1, 500);
+        var scores = new Dictionary<int, ScoredTrail>();
+
+        for (var index = 0; index < vectorResults.Count; index++)
+        {
+            var trail = vectorResults[index];
+            var score = 1.0 / (rrfK + index + 1);
+            scores[trail.Id] = new ScoredTrail
+            {
+                Trail = trail,
+                CombinedScore = score
+            };
+        }
+
+        for (var index = 0; index < textResults.Count; index++)
+        {
+            var trail = textResults[index];
+            var score = 1.0 / (rrfK + index + 1);
+            if (scores.TryGetValue(trail.Id, out var existing))
+            {
+                existing.CombinedScore += score;
+            }
+            else
+            {
+                scores[trail.Id] = new ScoredTrail
+                {
+                    Trail = trail,
+                    CombinedScore = score
+                };
+            }
+        }
+
+        return scores.Values
+            .OrderByDescending(item => item.CombinedScore)
+            .ThenBy(item => item.Trail.Difficulty)
+            .ThenBy(item => item.Trail.DurationInHours)
+            .Take(normalizedTopK)
+            .Select(item => item.Trail)
+            .ToList();
+    }
+
+    private async Task<List<TrailSearchCandidate>> GetVectorSearchResultsAsync(
+        string query,
+        int limit,
+        bool onlyWithCoordinates,
+        CancellationToken cancellationToken)
+    {
+        VectorEmbeddingResult promptEmbedding;
+        try
+        {
+            promptEmbedding = await _vectorService.CreateEmbeddingAsync(query, cancellationToken);
+        }
+        catch (Exception exception)
+        {
+            _logger.LogWarning(exception, "Failed to create prompt embedding. Vector part of hybrid search will be skipped.");
+            return [];
+        }
+
+        var trailsQuery = _dbContext.Trails.AsNoTracking()
+            .Where(item => !string.IsNullOrWhiteSpace(item.EmbeddingVector));
+
+        if (onlyWithCoordinates)
+        {
+            trailsQuery = trailsQuery.Where(item => item.Latitude.HasValue && item.Longitude.HasValue);
+        }
+
+        var candidates = await trailsQuery
+            .Select(item => new TrailSearchCandidate
+            {
+                Id = item.Id,
+                Name = item.Name,
+                Location = item.Location,
+                Region = item.Region,
+                Description = item.Description,
+                Difficulty = item.Difficulty,
+                DifficultyLevel = item.DifficultyLevel,
+                DurationInHours = item.DurationInHours,
+                ElevationGain = item.ElevationGain,
+                Latitude = item.Latitude,
+                Longitude = item.Longitude,
+                WaterSources = item.WaterSources,
+                MaxAltitude = item.MaxAltitude,
+                SuitableForKids = item.SuitableForKids,
+                RequiredGear = item.RequiredGear,
+                EmbeddingVector = item.EmbeddingVector
+            })
+            .ToListAsync(cancellationToken);
+
+        if (candidates.Count == 0)
+        {
+            return [];
+        }
+
+        return candidates
+            .Select(item => new
+            {
+                Trail = item,
+                Score = ComputeCosineSimilarity(promptEmbedding.Values, ParseEmbedding(item.EmbeddingVector))
+            })
+            .Where(item => item.Score > 0)
+            .OrderByDescending(item => item.Score)
+            .ThenBy(item => item.Trail.Difficulty)
+            .ThenBy(item => item.Trail.DurationInHours)
+            .Take(Math.Clamp(limit, 1, 100))
+            .Select(item => item.Trail)
+            .ToList();
+    }
+
+    private async Task<List<TrailSearchCandidate>> GetFullTextSearchResultsAsync(
+        string query,
+        int limit,
+        bool onlyWithCoordinates,
+        CancellationToken cancellationToken)
+    {
+        try
+        {
+            var searchQuery = _dbContext.Trails
+                .FromSqlInterpolated($"SELECT * FROM [Trails] WHERE FREETEXT((Name, Description, Location), {query})")
+                .AsNoTracking()
+                .AsQueryable();
+
+            if (onlyWithCoordinates)
+            {
+                searchQuery = searchQuery.Where(item => item.Latitude.HasValue && item.Longitude.HasValue);
+            }
+
+            var items = await searchQuery
+                .Take(Math.Clamp(limit, 1, 100))
+                .Select(item => new TrailSearchCandidate
+                {
+                    Id = item.Id,
+                    Name = item.Name,
+                    Location = item.Location,
+                    Region = item.Region,
+                    Description = item.Description,
+                    Difficulty = item.Difficulty,
+                    DifficultyLevel = item.DifficultyLevel,
+                    DurationInHours = item.DurationInHours,
+                    ElevationGain = item.ElevationGain,
+                    Latitude = item.Latitude,
+                    Longitude = item.Longitude,
+                    WaterSources = item.WaterSources,
+                    MaxAltitude = item.MaxAltitude,
+                    SuitableForKids = item.SuitableForKids,
+                    RequiredGear = item.RequiredGear,
+                    EmbeddingVector = item.EmbeddingVector
+                })
+                .ToListAsync(cancellationToken);
+
+            return items;
+        }
+        catch (Exception exception)
+        {
+            _logger.LogWarning(exception, "Full-text search unavailable. Text part of hybrid search will be skipped.");
+            return [];
+        }
+    }
+
+    private static string BuildTrailEmbeddingInput(Trail trail)
+    {
+        return $"Име: {trail.Name}\n" +
+               $"Описание: {trail.Description}\n" +
+               $"Локация: {trail.Location}\n" +
+               $"Регион: {trail.Region}\n" +
+               $"Трудност: {trail.Difficulty}/5 ({trail.DifficultyLevel})\n" +
+               $"Продължителност: {trail.DurationInHours:F1} часа\n" +
+               $"Денивелация: {trail.ElevationGain} м\n" +
+               $"Водоизточници: {(trail.WaterSources ? "да" : "не")}\n" +
+               $"Подходяща за деца: {(trail.SuitableForKids ? "да" : "не")}";
+    }
+
+    private static IReadOnlyList<float>? ParseEmbedding(string? raw)
+    {
+        if (string.IsNullOrWhiteSpace(raw))
+        {
+            return null;
+        }
+
+        try
+        {
+            var parsed = JsonSerializer.Deserialize<List<float>>(raw);
+            return parsed is { Count: > 0 } ? parsed : null;
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    private static double ComputeCosineSimilarity(IReadOnlyList<float> first, IReadOnlyList<float>? second)
+    {
+        if (second is null || first.Count == 0 || second.Count == 0)
+        {
+            return 0;
+        }
+
+        var dimensions = Math.Min(first.Count, second.Count);
+        if (dimensions == 0)
+        {
+            return 0;
+        }
+
+        double dot = 0;
+        double firstNorm = 0;
+        double secondNorm = 0;
+
+        for (var index = 0; index < dimensions; index++)
+        {
+            var firstValue = first[index];
+            var secondValue = second[index];
+            dot += firstValue * secondValue;
+            firstNorm += firstValue * firstValue;
+            secondNorm += secondValue * secondValue;
+        }
+
+        if (firstNorm <= 0 || secondNorm <= 0)
+        {
+            return 0;
+        }
+
+        return dot / (Math.Sqrt(firstNorm) * Math.Sqrt(secondNorm));
     }
 
     private static int CalculateScore(TrailSearchCandidate trail, List<string> tokens, string prompt)
@@ -661,24 +1065,26 @@ public class OpenAiAssistantService
             try
             {
                 using var response = await _httpClient.SendAsync(httpRequest, cancellationToken);
-                var content = await response.Content.ReadAsStringAsync(cancellationToken);
-
                 if (response.IsSuccessStatusCode)
                 {
+                    var content = await response.Content.ReadAsStringAsync(cancellationToken);
                     return content;
                 }
 
                 var statusCode = (int)response.StatusCode;
+                var correlationId = response.Headers.TryGetValues("x-request-id", out var values)
+                    ? values.FirstOrDefault() ?? "N/A"
+                    : "N/A";
                 var isTransient = statusCode == 429 || statusCode == 503 || statusCode >= 500;
                 if (!isTransient || attempt == attempts)
                 {
-                    _logger.LogWarning(
-                        "OpenAI request failed with {StatusCode} on attempt {Attempt}/{Attempts}: {Body}",
+                    _logger.LogError(
+                        "OpenAI API request failed. Status Code: {StatusCode}. Correlation ID: {CorrelationId}. Attempt: {Attempt}/{Attempts}. Response body redacted for security.",
                         response.StatusCode,
+                        correlationId,
                         attempt,
-                        attempts,
-                        content);
-                    throw new InvalidOperationException("OpenAI request failed.");
+                        attempts);
+                    throw new InvalidOperationException("Възникна проблем при комуникацията с AI услугата. Моля, опитайте отново по-късно.");
                 }
 
                 var retryAfter = response.Headers.RetryAfter?.Delta;
@@ -688,8 +1094,9 @@ public class OpenAiAssistantService
                 var delay = retryAfter ?? TimeSpan.FromMilliseconds(baseDelayMs + jitterDelayMs);
 
                 _logger.LogWarning(
-                    "Transient OpenAI error {StatusCode} on attempt {Attempt}/{Attempts}. Retrying in {DelayMs} ms.",
+                    "Transient OpenAI API error. Status Code: {StatusCode}. Correlation ID: {CorrelationId}. Attempt: {Attempt}/{Attempts}. Retrying in {DelayMs} ms. Response body redacted for security.",
                     response.StatusCode,
+                    correlationId,
                     attempt,
                     attempts,
                     (int)delay.TotalMilliseconds);
@@ -734,7 +1141,7 @@ public class OpenAiAssistantService
                     "Network error during OpenAI request on final attempt {Attempt}/{Attempts}.",
                     attempt,
                     attempts);
-                throw new InvalidOperationException("OpenAI request failed.");
+                throw new InvalidOperationException("Възникна проблем при комуникацията с AI услугата. Моля, опитайте отново по-късно.");
             }
             catch (TaskCanceledException exception) when (!cancellationToken.IsCancellationRequested)
             {
@@ -743,11 +1150,11 @@ public class OpenAiAssistantService
                     "Timeout during OpenAI request on final attempt {Attempt}/{Attempts}.",
                     attempt,
                     attempts);
-                throw new InvalidOperationException("OpenAI request failed.");
+                throw new InvalidOperationException("Възникна проблем при комуникацията с AI услугата. Моля, опитайте отново по-късно.");
             }
         }
 
-        throw new InvalidOperationException("OpenAI request failed.");
+        throw new InvalidOperationException("Възникна проблем при комуникацията с AI услугата. Моля, опитайте отново по-късно.");
     }
 
     private static bool HasSemanticData(Trail trail)
@@ -804,12 +1211,8 @@ public class OpenAiAssistantService
 
     private static bool CanAccessSession(AssistantChatSession session, string? currentUserId)
     {
-        if (string.IsNullOrWhiteSpace(session.AppUserId))
-        {
-            return true;
-        }
-
         return !string.IsNullOrWhiteSpace(currentUserId)
+            && !string.IsNullOrWhiteSpace(session.AppUserId)
             && string.Equals(session.AppUserId, currentUserId, StringComparison.Ordinal);
     }
 
@@ -1180,6 +1583,13 @@ public class OpenAiAssistantService
         public int? MaxAltitude { get; set; }
         public bool SuitableForKids { get; set; }
         public string RequiredGear { get; set; } = "[]";
+        public string? EmbeddingVector { get; set; }
+    }
+
+    private sealed class ScoredTrail
+    {
+        public TrailSearchCandidate Trail { get; set; } = new();
+        public double CombinedScore { get; set; }
     }
 
     private sealed class ExtractedSemanticData

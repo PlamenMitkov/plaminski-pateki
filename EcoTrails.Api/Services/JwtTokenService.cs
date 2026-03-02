@@ -16,7 +16,7 @@ public class JwtTokenService
         _options = options.Value;
     }
 
-    public string CreateToken(AppUser user)
+    public string CreateToken(AppUser user, IEnumerable<string>? roles = null)
     {
         var claims = new List<Claim>
         {
@@ -25,6 +25,14 @@ public class JwtTokenService
             new(ClaimTypes.NameIdentifier, user.Id),
             new(ClaimTypes.Email, user.Email ?? string.Empty),
         };
+
+        if (roles is not null)
+        {
+            claims.AddRange(roles
+                .Where(role => !string.IsNullOrWhiteSpace(role))
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .Select(role => new Claim(ClaimTypes.Role, role.Trim())));
+        }
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.Key));
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -44,6 +52,6 @@ public class JwtOptions
 {
     public string Issuer { get; set; } = "EcoTrails.Api";
     public string Audience { get; set; } = "EcoTrails.Client";
-    public string Key { get; set; } = "ChangeThisToALongRandomSecretKey123!";
+    public string Key { get; set; } = string.Empty;
     public int ExpiryHours { get; set; } = 12;
 }
