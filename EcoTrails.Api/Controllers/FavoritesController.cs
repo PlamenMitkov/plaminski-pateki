@@ -1,10 +1,8 @@
 using System.Security.Claims;
 using EcoTrails.Api.Contracts;
-using EcoTrails.Api.Data;
-using EcoTrails.Api.Models;
+using EcoTrails.Api.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace EcoTrails.Api.Controllers;
 
@@ -13,15 +11,15 @@ namespace EcoTrails.Api.Controllers;
 [Authorize]
 public class FavoritesController : ControllerBase
 {
-    private readonly AppDbContext _context;
+    private readonly IFavoritesRepository _favoritesRepository;
 
-    public FavoritesController(AppDbContext context)
+    public FavoritesController(IFavoritesRepository favoritesRepository)
     {
-        _context = context;
+        _favoritesRepository = favoritesRepository;
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<int>>> GetFavorites()
+    public async Task<ActionResult<IEnumerable<int>>> GetFavorites(CancellationToken cancellationToken)
     {
         var userId = GetUserId();
         if (string.IsNullOrWhiteSpace(userId))
@@ -29,18 +27,13 @@ public class FavoritesController : ControllerBase
             return Unauthorized();
         }
 
-        var trailIds = await _context.UserFavoriteTrails
-            .AsNoTracking()
-            .Where(item => item.UserId == userId)
-            .Select(item => item.TrailId)
-            .OrderBy(item => item)
-            .ToListAsync();
+        var trailIds = await _favoritesRepository.GetFavoriteTrailIdsAsync(userId, cancellationToken);
 
         return Ok(trailIds);
     }
 
     [HttpPost("sync")]
-    public async Task<ActionResult<IEnumerable<int>>> SyncFavorites(FavoritesSyncRequest request)
+    public async Task<ActionResult<IEnumerable<int>>> SyncFavorites(FavoritesSyncRequest request, CancellationToken cancellationToken)
     {
         var userId = GetUserId();
         if (string.IsNullOrWhiteSpace(userId))
@@ -48,36 +41,12 @@ public class FavoritesController : ControllerBase
             return Unauthorized();
         }
 
-        var requestedIds = (request.TrailIds ?? [])
-            .Where(item => item > 0)
-            .Distinct()
-            .ToHashSet();
+        var validTrailIds = await _favoritesRepository.SyncFavoritesAsync(
+            userId,
+            request.TrailIds ?? [],
+            cancellationToken);
 
-        var validTrailIds = await _context.Trails
-            .AsNoTracking()
-            .Where(item => requestedIds.Contains(item.Id))
-            .Select(item => item.Id)
-            .ToListAsync();
-
-        var existing = await _context.UserFavoriteTrails
-            .Where(item => item.UserId == userId)
-            .ToListAsync();
-
-        _context.UserFavoriteTrails.RemoveRange(existing);
-
-        var newFavorites = validTrailIds
-            .Select(trailId => new UserFavoriteTrail
-            {
-                UserId = userId,
-                TrailId = trailId,
-                CreatedAt = DateTime.UtcNow,
-            })
-            .ToList();
-
-        await _context.UserFavoriteTrails.AddRangeAsync(newFavorites);
-        await _context.SaveChangesAsync();
-
-        return Ok(validTrailIds.OrderBy(item => item));
+        return Ok(validTrailIds);
     }
 
     private string? GetUserId()

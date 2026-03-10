@@ -112,25 +112,43 @@ export function useTrails(options: UseTrailsOptions = {}) {
     setIsLoading(true);
     setError('');
 
-    apiClient
-      .get<PagedResponse<Trail>>('/trails', {
-        params: requestParams,
-      })
-      .then((response) => {
-        setTrails(response.data.items ?? []);
-        setTotalCount(response.data.totalCount ?? 0);
-        setTotalPages(response.data.totalPages ?? 1);
-      })
-      .catch((requestError) => {
-        console.error('Грешка при зареждане на пътеките:', requestError);
-        setTrails([]);
-        setTotalCount(0);
-        setTotalPages(1);
-        setError('Неуспешно зареждане на пътеките.');
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+    const abortController = new AbortController();
+    const requestDebounceTimer = window.setTimeout(() => {
+      apiClient
+        .get<PagedResponse<Trail>>('/trails', {
+          params: requestParams,
+          signal: abortController.signal,
+        })
+        .then((response) => {
+          setTrails(response.data.items ?? []);
+          setTotalCount(response.data.totalCount ?? 0);
+          setTotalPages(response.data.totalPages ?? 1);
+        })
+        .catch((requestError) => {
+          const isAbortError =
+            requestError?.name === 'CanceledError' || requestError?.code === 'ERR_CANCELED';
+
+          if (isAbortError) {
+            return;
+          }
+
+          console.error('Грешка при зареждане на пътеките:', requestError);
+          setTrails([]);
+          setTotalCount(0);
+          setTotalPages(1);
+          setError('Неуспешно зареждане на пътеките.');
+        })
+        .finally(() => {
+          if (!abortController.signal.aborted) {
+            setIsLoading(false);
+          }
+        });
+    }, 220);
+
+    return () => {
+      window.clearTimeout(requestDebounceTimer);
+      abortController.abort();
+    };
   }, [requestParams, refreshNonce]);
 
   const refetch = () => {

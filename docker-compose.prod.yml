@@ -1,0 +1,60 @@
+services:
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: plaminski-db
+    restart: unless-stopped
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: ${MSSQL_SA_PASSWORD:?Set MSSQL_SA_PASSWORD in env file}
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -C -S localhost -U sa -P \"$$MSSQL_SA_PASSWORD\" -Q \"SELECT 1\" || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 30s
+    volumes:
+      - sql_data:/var/opt/mssql
+
+  api:
+    image: ghcr.io/${GHCR_OWNER:?Set GHCR_OWNER in env file}/ecotrails-api:${API_IMAGE_TAG:-latest}
+    container_name: plaminski-api
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ConnectionStrings__DefaultConnection: Server=db;Database=${DB_NAME:-EcoTrailsDb};User Id=sa;Password=${MSSQL_SA_PASSWORD};TrustServerCertificate=True;MultipleActiveResultSets=true
+      Jwt__Issuer: ${JWT_ISSUER:-EcoTrails.Api}
+      Jwt__Audience: ${JWT_AUDIENCE:-EcoTrails.Client}
+      Jwt__Key: ${JWT_KEY:?Set JWT_KEY in env file}
+      OpenRouteService__ApiKey: ${APP_OPENROUTESERVICE_API_KEY:-}
+      OPENAI_API_KEY: ${APP_OPENAI_API_KEY:-}
+      OpenTelemetry__Otlp__Endpoint: ${OTEL_EXPORTER_OTLP_ENDPOINT:-}
+      OpenTelemetry__Otlp__Protocol: ${OTEL_EXPORTER_OTLP_PROTOCOL:-grpc}
+      Cors__AllowedOrigins__0: ${CORS_ORIGIN_0:?Set CORS_ORIGIN_0 in env file}
+      Cors__AllowedOrigins__1: ${CORS_ORIGIN_1:-}
+      Admin__Emails__0: ${ADMIN_EMAIL_0:-}
+      Admin__Emails__1: ${ADMIN_EMAIL_1:-}
+    ports:
+      - "${API_PORT:-5218}:8080"
+    volumes:
+      - ./eco.json:/eco.json:ro
+
+  client:
+    image: ghcr.io/${GHCR_OWNER:?Set GHCR_OWNER in env file}/ecotrails-client:${CLIENT_IMAGE_TAG:-latest}
+    container_name: plaminski-client
+    restart: unless-stopped
+    depends_on:
+      - api
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://localhost || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    ports:
+      - "${CLIENT_PORT:-5173}:80"
+
+volumes:
+  sql_data:

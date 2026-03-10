@@ -44,6 +44,8 @@ Plaminski Pateki обединява GIS визуализация, филтрир
 - RESTful контролери за trails, auth и favorites.
 - Пагинация, търсене, филтриране по трудност и координати.
 - `X-Total-Count` header + paged response metadata.
+- HTTP кеширане за списъци с пътеки: `Cache-Control`, `ETag`, `If-None-Match` (`304 Not Modified`).
+- Health probes за оркестратори: `/health/live` (liveness) и `/health/ready` (readiness + DB).
 
 ### Auth Layer
 - Регистрация/вход с JWT.
@@ -76,6 +78,8 @@ docker compose up --build
 - Frontend: `http://localhost:5173`
 - API: `http://localhost:5218`
 - Swagger: `http://localhost:5218/swagger`
+- Health (liveness): `http://localhost:5218/health/live`
+- Health (readiness): `http://localhost:5218/health/ready`
 - SQL Server: `localhost:1433`
 
 ### OpenAI Assistant setup (gpt-3.5-turbo)
@@ -112,6 +116,25 @@ curl -X POST http://localhost:5218/api/assistant/enrich \
 	-H "Content-Type: application/json" \
 	-d '{"limit":25,"overwriteExisting":false}'
 ```
+
+### OpenTelemetry (traces + metrics)
+
+API-то вече публикува:
+- traces: ASP.NET Core requests, HttpClient outbound заявки, EF Core DB операции
+- metrics: ASP.NET Core, HttpClient, runtime metrics + custom `external.http.request.duration` и `external.http.requests`
+
+За export към OTLP collector (Grafana/Tempo/Alloy/Collector), задайте:
+
+```powershell
+$env:OpenTelemetry__Otlp__Endpoint="http://localhost:4317"
+$env:OpenTelemetry__Otlp__Protocol="grpc"
+```
+
+Алтернативно в `EcoTrails.Api/appsettings.json`:
+- `OpenTelemetry:Otlp:Endpoint`
+- `OpenTelemetry:Otlp:Protocol` (`grpc` или `http/protobuf`)
+
+Ако endpoint не е конфигуриран, telemetry се събира локално в процеса, но не се експортира навън.
 
 ### One-click start (Windows)
 
@@ -163,15 +186,122 @@ docker run --rm -p 5173:80 ghcr.io/<github-owner>/ecotrails-client:latest
 echo <github_pat> | docker login ghcr.io -u <github-username> --password-stdin
 ```
 
+### Production deployment with Docker Compose
+
+1) Създай production env файл от шаблона:
+
+```bash
+cp .env.production.example .env.production
+```
+
+2) Попълни задължително:
+- `MSSQL_SA_PASSWORD`
+- `JWT_KEY`
+- `CORS_ORIGIN_0`
+- `GHCR_OWNER`
+
+3) (Опционално) външни API ключове за backend:
+- `APP_OPENROUTESERVICE_API_KEY`
+- `APP_OPENAI_API_KEY`
+
+4) (Опционално) за telemetry export към Grafana/Tempo/Collector:
+- `OTEL_EXPORTER_OTLP_ENDPOINT`
+- `OTEL_EXPORTER_OTLP_PROTOCOL` (`grpc` или `http/protobuf`)
+
+5) Изтегли и стартирай production стека:
+
+```bash
+docker compose --env-file .env.production -f docker-compose.prod.yml pull
+docker compose --env-file .env.production -f docker-compose.prod.yml up -d
+```
+
+6) Проверка на услугите:
+- API health: `http://<host>:<API_PORT>/health/ready`
+- Client: `http://<host>:<CLIENT_PORT>`
+
+Helper scripts:
+
+```powershell
+./scripts/deploy-prod.ps1 -Action config
+./scripts/deploy-prod.ps1 -Action up
+./scripts/deploy-prod.ps1 -Action ps
+./scripts/deploy-prod.ps1 -Action status
+./scripts/deploy-prod.ps1 -Action status -Json
+./scripts/deploy-prod.ps1 -Action status -ClientHealthUrl http://127.0.0.1:5173
+./scripts/deploy-prod.ps1 -Action logs
+./scripts/deploy-prod.ps1 -Action rollback -ApiTag sha-abc1234
+./scripts/deploy-prod.ps1 -Action rollback -ApiTag sha-abc1234 -ClientTag sha-def5678
+./scripts/deploy-prod.ps1 -Action down
+```
+
+```bash
+bash ./scripts/deploy-prod.sh config
+bash ./scripts/deploy-prod.sh up
+bash ./scripts/deploy-prod.sh ps
+bash ./scripts/deploy-prod.sh status
+bash ./scripts/deploy-prod.sh status .env.production docker-compose.prod.yml "" "" http://127.0.0.1:5218/health/ready true
+bash ./scripts/deploy-prod.sh status .env.production docker-compose.prod.yml "" "" http://127.0.0.1:5218/health/ready true http://127.0.0.1:5173
+bash ./scripts/deploy-prod.sh logs
+bash ./scripts/deploy-prod.sh rollback .env.production docker-compose.prod.yml sha-abc1234
+bash ./scripts/deploy-prod.sh rollback .env.production docker-compose.prod.yml sha-abc1234 sha-def5678
+bash ./scripts/deploy-prod.sh down
+```
+
+`status` изпълнява `compose ps` и проверява API health endpoint (по подразбиране `http://127.0.0.1:5218/health/ready`).
+`status` може опционално да проверява и frontend URL, а JSON режимът връща `overallOk`, `compose`, `apiHealth` и `clientHealth`.
+
+CI deployment health gate:
+- Workflow job `deploy-health-gate` използва JSON режима на `status` и fail-ва при `overallOk=false`.
+- За да е активен gate-ът в GitHub Actions, добави repository secret `DEPLOY_API_HEALTH_URL` (например `https://api.example.com/health/ready`).
+- За frontend gate добави и `DEPLOY_CLIENT_HEALTH_URL` (например `https://app.example.com/`). Ако липсва, frontend check се пропуска.
+
+Спиране:
+
+```bash
+docker compose --env-file .env.production -f docker-compose.prod.yml down
+```
+
 ---
 
 ## 🧪 Smoke Test & Validation
+
+Подробно ръководство за unit/integration тестове и филтриране по test групи: [TESTING.md](TESTING.md)
 
 - ✅ **Auth:** регистрация/вход + JWT валидация.
 - ✅ **Sync:** хибридна синхронизация на любими пътеки (LocalStorage ↔ Cloud DB).
 - ✅ **Maps:** интерактивно филтриране и визуализация на 500+ локации.
 - ✅ **Export:** CSV експорт на филтрирани масиви.
 - ✅ **Analytics:** Pie/Bar диаграми се актуализират при промяна на favorite state.
+
+### HTTP caching quick check (`ETag` / `304`)
+
+Проверка за условни заявки към списъка с пътеки:
+
+```powershell
+$r1 = Invoke-WebRequest -Uri "http://localhost:5218/api/trails?page=1&pageSize=2&sortBy=name&sortDirection=asc"
+$etag = $r1.Headers.ETag
+Invoke-WebRequest -Uri "http://localhost:5218/api/trails?page=1&pageSize=2&sortBy=name&sortDirection=asc" -Headers @{ "If-None-Match" = $etag } -SkipHttpErrorCheck
+```
+
+Очакван резултат:
+- Първа заявка: `200 OK` + `ETag` + `Cache-Control: public,max-age=60`
+- Втора заявка (с `If-None-Match`): `304 Not Modified`
+
+Linux/macOS (`bash`) вариант:
+
+```bash
+URL="http://localhost:5218/api/trails?page=1&pageSize=2&sortBy=name&sortDirection=asc"
+ETAG=$(curl -sSI "$URL" | awk -F': ' 'tolower($1)=="etag" {gsub("\r", "", $2); print $2}')
+curl -sSI -H "If-None-Match: $ETAG" "$URL"
+```
+
+`httpie` вариант:
+
+```bash
+URL="http://localhost:5218/api/trails?page=1&pageSize=2&sortBy=name&sortDirection=asc"
+ETAG=$(http --headers GET "$URL" | awk -F': ' 'tolower($1)=="etag" {print $2}' | tr -d '\r')
+http --headers GET "$URL" "If-None-Match:$ETAG"
+```
 
 ### Quick security smoke script
 
@@ -188,6 +318,28 @@ Optional custom API base URL:
 ```
 
 The script checks register/login, `/auth/me`, unauthenticated access rejection, authenticated assistant session creation, and admin-only enrich rejection for non-admin users.
+
+### HTTP cache smoke script
+
+One-command validation for `ETag` / `Cache-Control` / `304 Not Modified`:
+
+```powershell
+./scripts/smoke-cache.ps1
+```
+
+Optional custom API base URL:
+
+```powershell
+./scripts/smoke-cache.ps1 -BaseUrl "http://127.0.0.1:5218/api"
+```
+
+Linux/macOS:
+
+```bash
+bash ./scripts/smoke-cache.sh
+# or with custom base URL
+bash ./scripts/smoke-cache.sh http://127.0.0.1:5218/api
+```
 
 ### Admin-path smoke script
 

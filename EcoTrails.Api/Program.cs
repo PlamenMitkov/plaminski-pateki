@@ -1,46 +1,152 @@
 using EcoTrails.Api.Data;
+using EcoTrails.Api.Middleware;
 using EcoTrails.Api.Models;
+using EcoTrails.Api.OpenApi;
+using EcoTrails.Api.Repositories;
 using EcoTrails.Api.Services;
 using Hangfire;
 using Hangfire.Dashboard;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi;
+using OpenTelemetry.Exporter;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
+using Serilog;
+using System.Security.Claims;
+using System.Globalization;
+using System.Diagnostics.Metrics;
 using System.Threading.RateLimiting;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Host.UseSerilog((context, services, loggerConfiguration) => loggerConfiguration
+    .ReadFrom.Configuration(context.Configuration)
+    .ReadFrom.Services(services)
+    .Enrich.FromLogContext());
+
+var isTesting = builder.Environment.IsEnvironment("Testing");
+var disableBackgroundServices = isTesting || builder.Configuration.GetValue<bool>("Testing:DisableBackgroundServices");
+var skipDataInitialization = isTesting || builder.Configuration.GetValue<bool>("Testing:SkipDataInitialization");
+var telemetryServiceName = builder.Configuration["OpenTelemetry:ServiceName"];
+if (string.IsNullOrWhiteSpace(telemetryServiceName))
+{
+    telemetryServiceName = "EcoTrails.Api";
+}
+
+var telemetryEndpoint = builder.Configuration["OpenTelemetry:Otlp:Endpoint"];
+var hasTelemetryExporter = Uri.TryCreate(telemetryEndpoint, UriKind.Absolute, out var telemetryEndpointUri);
+var telemetryProtocolValue = builder.Configuration["OpenTelemetry:Otlp:Protocol"];
+var telemetryProtocol = string.Equals(telemetryProtocolValue, "http/protobuf", StringComparison.OrdinalIgnoreCase)
+    ? OtlpExportProtocol.HttpProtobuf
+    : OtlpExportProtocol.Grpc;
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(
-        builder.Configuration.GetConnectionString("DefaultConnection"),
-        sqlOptions => sqlOptions.EnableRetryOnFailure()));
+if (isTesting)
+{
+    var testDatabaseName = builder.Configuration.GetValue<string>("Testing:DatabaseName") ?? "EcoTrailsTesting";
+    builder.Services.AddDbContext<AppDbContext>(options =>
+        options.UseInMemoryDatabase(testDatabaseName));
+}
+else
+{
+    builder.Services.AddDbContext<AppDbContext>(options =>
+        options.UseSqlServer(
+            builder.Configuration.GetConnectionString("DefaultConnection"),
+            sqlOptions => sqlOptions.EnableRetryOnFailure()));
+}
 builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("Jwt"));
 builder.Services.Configure<OpenRouteServiceOptions>(builder.Configuration.GetSection("OpenRouteService"));
 builder.Services.Configure<OpenAiOptions>(builder.Configuration.GetSection("OpenAI"));
+builder.Services.AddScoped<ITrailRepository, TrailRepository>();
+builder.Services.AddScoped<IFavoritesRepository, FavoritesRepository>();
+builder.Services.AddScoped<IAssistantSessionReadRepository, AssistantSessionReadRepository>();
+builder.Services.AddScoped<IAssistantSessionWriteRepository, AssistantSessionWriteRepository>();
+builder.Services.AddScoped<IAssistantMessageRepository, AssistantMessageRepository>();
 builder.Services.AddScoped<JwtTokenService>();
 builder.Services.AddHttpClient<OpenRouteService>(httpClient =>
 {
     httpClient.Timeout = TimeSpan.FromSeconds(12);
-});
+})
+    .AddHttpMessageHandler(serviceProvider =>
+        new OutboundHttpMetricsHandler(serviceProvider.GetRequiredService<IMeterFactory>(), "openroute"));
 builder.Services.AddHttpClient<IOpenAiAssistantService, OpenAiAssistantService>(httpClient =>
 {
     httpClient.Timeout = TimeSpan.FromSeconds(25);
-});
+})
+    .AddHttpMessageHandler(serviceProvider =>
+        new OutboundHttpMetricsHandler(serviceProvider.GetRequiredService<IMeterFactory>(), "openai-assistant"));
 builder.Services.AddHttpClient<IVectorService, OpenAiVectorService>(httpClient =>
 {
     httpClient.Timeout = TimeSpan.FromSeconds(20);
-});
-builder.Services.AddHangfire(configuration => configuration
-    .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
-    .UseSimpleAssemblyNameTypeSerializer()
-    .UseRecommendedSerializerSettings()
-    .UseSqlServerStorage(builder.Configuration.GetConnectionString("DefaultConnection")));
-builder.Services.AddHangfireServer();
+})
+    .AddHttpMessageHandler(serviceProvider =>
+        new OutboundHttpMetricsHandler(serviceProvider.GetRequiredService<IMeterFactory>(), "openai-vector"));
+
+builder.Services.AddOpenTelemetry()
+    .ConfigureResource(resourceBuilder =>
+    {
+        resourceBuilder.AddService(serviceName: telemetryServiceName);
+    })
+    .WithTracing(tracing =>
+    {
+        tracing
+            .AddAspNetCoreInstrumentation(options =>
+            {
+                options.RecordException = true;
+            })
+            .AddHttpClientInstrumentation(options =>
+            {
+                options.RecordException = true;
+            })
+            .AddEntityFrameworkCoreInstrumentation(options =>
+            {
+                options.SetDbStatementForText = false;
+                options.SetDbStatementForStoredProcedure = false;
+            });
+
+        if (hasTelemetryExporter && telemetryEndpointUri is not null)
+        {
+            tracing.AddOtlpExporter(options =>
+            {
+                options.Endpoint = telemetryEndpointUri;
+                options.Protocol = telemetryProtocol;
+            });
+        }
+    })
+    .WithMetrics(metrics =>
+    {
+        metrics
+            .AddAspNetCoreInstrumentation()
+            .AddHttpClientInstrumentation()
+            .AddRuntimeInstrumentation()
+            .AddMeter(OutboundHttpMetricsHandler.MeterName);
+
+        if (hasTelemetryExporter && telemetryEndpointUri is not null)
+        {
+            metrics.AddOtlpExporter(options =>
+            {
+                options.Endpoint = telemetryEndpointUri;
+                options.Protocol = telemetryProtocol;
+            });
+        }
+    });
+if (!disableBackgroundServices)
+{
+    builder.Services.AddHangfire(configuration => configuration
+        .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+        .UseSimpleAssemblyNameTypeSerializer()
+        .UseRecommendedSerializerSettings()
+        .UseSqlServerStorage(builder.Configuration.GetConnectionString("DefaultConnection")));
+    builder.Services.AddHangfireServer();
+}
 builder.Services.AddIdentityCore<AppUser>(options =>
 {
     options.Password.RequireDigit = true;
@@ -58,7 +164,14 @@ if (string.IsNullOrWhiteSpace(jwtOptions.Key) ||
     jwtOptions.Key.Contains("changethis", StringComparison.OrdinalIgnoreCase) ||
     jwtOptions.Key.Length < 32)
 {
-    throw new InvalidOperationException("JWT key must be configured and at least 32 characters long.");
+    if (isTesting)
+    {
+        jwtOptions.Key = "testing-jwt-key-please-change-1234567890";
+    }
+    else
+    {
+        throw new InvalidOperationException("JWT key must be configured and at least 32 characters long.");
+    }
 }
 
 var jwtKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Key));
@@ -86,6 +199,16 @@ builder.Services.AddAuthorization();
 builder.Services.AddRateLimiter(options =>
 {
     options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+    options.OnRejected = async (context, cancellationToken) =>
+    {
+        if (context.Lease.TryGetMetadata(MetadataName.RetryAfter, out var retryAfter))
+        {
+            var seconds = Math.Max(1, (int)Math.Ceiling(retryAfter.TotalSeconds));
+            context.HttpContext.Response.Headers.RetryAfter = seconds.ToString(CultureInfo.InvariantCulture);
+        }
+
+        await context.HttpContext.Response.WriteAsync("Too many requests.", cancellationToken);
+    };
 
     options.AddFixedWindowLimiter("auth", limiterOptions =>
     {
@@ -111,6 +234,10 @@ builder.Services.AddRateLimiter(options =>
     });
 });
 builder.Services.AddScoped<EcoJsonImportService>();
+builder.Services.AddMemoryCache();
+builder.Services.AddHealthChecks()
+    .AddCheck("self", () => HealthCheckResult.Healthy(), tags: ["live"])
+    .AddDbContextCheck<AppDbContext>(name: "database", tags: ["ready"]);
 builder.Services.AddControllers();
 var configuredCorsOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? [];
 var corsOrigins = configuredCorsOrigins
@@ -143,47 +270,70 @@ builder.Services.AddCors(options =>
             .WithExposedHeaders("X-Total-Count"));
 });
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Description = "Enter JWT token in format: Bearer {token}",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.Http,
+        Scheme = JwtBearerDefaults.AuthenticationScheme.ToLowerInvariant(),
+        BearerFormat = "JWT"
+    });
+
+    options.OperationFilter<AuthAndRateLimitOperationFilter>();
+});
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
+if (!skipDataInitialization)
 {
-    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
-    await dbContext.Database.MigrateAsync();
-
-    const string adminRoleName = "Admin";
-    if (!await roleManager.RoleExistsAsync(adminRoleName))
+    using (var scope = app.Services.CreateScope())
     {
-        await roleManager.CreateAsync(new IdentityRole(adminRoleName));
+        var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+        var userManager = scope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
+        if (dbContext.Database.IsRelational())
+        {
+            await dbContext.Database.MigrateAsync();
+        }
+        else
+        {
+            await dbContext.Database.EnsureCreatedAsync();
+        }
+
+        const string adminRoleName = "Admin";
+        if (!await roleManager.RoleExistsAsync(adminRoleName))
+        {
+            await roleManager.CreateAsync(new IdentityRole(adminRoleName));
+        }
+
+        var adminEmails = builder.Configuration.GetSection("Admin:Emails").Get<string[]>() ?? [];
+        foreach (var email in adminEmails)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                continue;
+            }
+
+            var normalizedEmail = email.Trim();
+            var user = await userManager.FindByEmailAsync(normalizedEmail);
+            if (user is null)
+            {
+                continue;
+            }
+
+            if (!await userManager.IsInRoleAsync(user, adminRoleName))
+            {
+                await userManager.AddToRoleAsync(user, adminRoleName);
+            }
+        }
+
+        var importer = scope.ServiceProvider.GetRequiredService<EcoJsonImportService>();
+        await importer.ImportFromEcoJsonAsync();
     }
-
-    var adminEmails = builder.Configuration.GetSection("Admin:Emails").Get<string[]>() ?? [];
-    foreach (var email in adminEmails)
-    {
-        if (string.IsNullOrWhiteSpace(email))
-        {
-            continue;
-        }
-
-        var normalizedEmail = email.Trim();
-        var user = await userManager.FindByEmailAsync(normalizedEmail);
-        if (user is null)
-        {
-            continue;
-        }
-
-        if (!await userManager.IsInRoleAsync(user, adminRoleName))
-        {
-            await userManager.AddToRoleAsync(user, adminRoleName);
-        }
-    }
-
-    var importer = scope.ServiceProvider.GetRequiredService<EcoJsonImportService>();
-    await importer.ImportFromEcoJsonAsync();
 }
 
 // Configure the HTTP request pipeline.
@@ -194,16 +344,46 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseSerilogRequestLogging(options =>
+{
+    options.EnrichDiagnosticContext = (diagnosticContext, httpContext) =>
+    {
+        diagnosticContext.Set("TraceId", httpContext.TraceIdentifier);
+        diagnosticContext.Set("RequestPath", httpContext.Request.Path.ToString());
+
+        var userId = httpContext.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (!string.IsNullOrWhiteSpace(userId))
+        {
+            diagnosticContext.Set("UserId", userId);
+        }
+    };
+});
+app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 app.UseHttpsRedirection();
 app.UseCors("AllowReact");
 app.UseRateLimiter();
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseHangfireDashboard("/hangfire", new DashboardOptions
+if (!disableBackgroundServices)
 {
-    Authorization = [new HangfireAdminAuthorizationFilter()]
-});
+    app.UseHangfireDashboard("/hangfire", new DashboardOptions
+    {
+        Authorization = [new HangfireAdminAuthorizationFilter()]
+    });
+}
 app.MapControllers();
+app.MapHealthChecks("/health/live", new HealthCheckOptions
+{
+    Predicate = check => check.Tags.Contains("live")
+});
+app.MapHealthChecks("/health/ready", new HealthCheckOptions
+{
+    Predicate = check => check.Tags.Contains("ready")
+});
+app.MapHealthChecks("/health", new HealthCheckOptions
+{
+    Predicate = check => check.Tags.Contains("ready")
+});
 
 var summaries = new[]
 {
@@ -230,3 +410,5 @@ record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
 {
     public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
 }
+
+public partial class Program;

@@ -1,9 +1,12 @@
-using EcoTrails.Api.Data;
+using EcoTrails.Api.Contracts;
 using EcoTrails.Api.Models;
+using EcoTrails.Api.Repositories;
 using EcoTrails.Api.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace EcoTrails.Api.Controllers
 {
@@ -11,16 +14,22 @@ namespace EcoTrails.Api.Controllers
     [ApiController]
     public class TrailsController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly ITrailRepository _trailRepository;
         private readonly OpenRouteService _openRouteService;
+        private readonly IMemoryCache _cache;
 
-        public TrailsController(AppDbContext context, OpenRouteService openRouteService)
+        private static readonly TimeSpan TrailsCacheDuration = TimeSpan.FromMinutes(10);
+        private const string TrailsCacheVersionKey = "trails-cache-version";
+
+        public TrailsController(ITrailRepository trailRepository, OpenRouteService openRouteService, IMemoryCache cache)
         {
-            _context = context;
+            _trailRepository = trailRepository;
             _openRouteService = openRouteService;
+            _cache = cache;
         }
 
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status304NotModified)]
         public async Task<ActionResult<PagedResponse<Trail>>> GetTrails(
             [FromQuery] string? search,
             [FromQuery] int? difficulty,
@@ -34,75 +43,157 @@ namespace EcoTrails.Api.Controllers
             [FromQuery] int page = 1,
             [FromQuery] int pageSize = 10)
         {
-            page = Math.Max(page, 1);
-            pageSize = Math.Clamp(pageSize, 1, 100);
+            var cacheVersion = GetCacheVersion();
+            var cacheKey = BuildPagedTrailsCacheKey(
+                "full",
+                cacheVersion,
+                search,
+                difficulty,
+                onlyWithCoords,
+                minDuration,
+                maxDuration,
+                minElevation,
+                maxElevation,
+                sortBy,
+                sortDirection,
+                page,
+                pageSize);
 
-            var query = _context.Trails.AsNoTracking().AsQueryable();
-
-            if (!string.IsNullOrWhiteSpace(search))
+            var etag = BuildEtag(cacheKey);
+            if (RequestHasMatchingEtag(etag))
             {
-                query = query.Where(trail =>
-                    trail.Name.Contains(search) ||
-                    trail.Location.Contains(search));
+                ApplyPublicCacheHeaders(etag, exposeTotalCount: false);
+                return StatusCode(StatusCodes.Status304NotModified);
             }
 
-            if (difficulty.HasValue)
+            PagedResponse<Trail> result;
+            if (!_cache.TryGetValue(cacheKey, out PagedResponse<Trail>? cachedResult) || cachedResult is null)
             {
-                query = query.Where(trail => trail.Difficulty == difficulty.Value);
+                result = await _trailRepository.GetPagedTrailsAsync(new TrailQueryParameters
+                {
+                    Search = search,
+                    Difficulty = difficulty,
+                    OnlyWithCoords = onlyWithCoords,
+                    MinDuration = minDuration,
+                    MaxDuration = maxDuration,
+                    MinElevation = minElevation,
+                    MaxElevation = maxElevation,
+                    SortBy = sortBy,
+                    SortDirection = sortDirection,
+                    Page = page,
+                    PageSize = pageSize
+                });
+
+                _cache.Set(cacheKey, result, new MemoryCacheEntryOptions
+                {
+                    AbsoluteExpirationRelativeToNow = TrailsCacheDuration
+                });
+            }
+            else
+            {
+                result = cachedResult;
             }
 
-            if (onlyWithCoords)
+            Response.Headers["X-Total-Count"] = result.TotalCount.ToString();
+            ApplyPublicCacheHeaders(etag, exposeTotalCount: true);
+
+            return Ok(result);
+        }
+
+        [HttpGet("summary")]
+        [ProducesResponseType(StatusCodes.Status304NotModified)]
+        public async Task<ActionResult<PagedResponse<TrailIndexViewModel>>> GetTrailsSummary(
+            [FromQuery] string? search,
+            [FromQuery] int? difficulty,
+            [FromQuery] bool onlyWithCoords = false,
+            [FromQuery] double? minDuration = null,
+            [FromQuery] double? maxDuration = null,
+            [FromQuery] int? minElevation = null,
+            [FromQuery] int? maxElevation = null,
+            [FromQuery] string? sortBy = null,
+            [FromQuery] string? sortDirection = null,
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 10)
+        {
+            var cacheVersion = GetCacheVersion();
+            var cacheKey = BuildPagedTrailsCacheKey(
+                "summary",
+                cacheVersion,
+                search,
+                difficulty,
+                onlyWithCoords,
+                minDuration,
+                maxDuration,
+                minElevation,
+                maxElevation,
+                sortBy,
+                sortDirection,
+                page,
+                pageSize);
+
+            var etag = BuildEtag(cacheKey);
+            if (RequestHasMatchingEtag(etag))
             {
-                query = query.Where(trail => trail.Latitude.HasValue && trail.Longitude.HasValue);
+                ApplyPublicCacheHeaders(etag, exposeTotalCount: false);
+                return StatusCode(StatusCodes.Status304NotModified);
             }
 
-            if (minDuration.HasValue)
+            PagedResponse<TrailIndexViewModel> response;
+            if (!_cache.TryGetValue(cacheKey, out PagedResponse<TrailIndexViewModel>? cachedResponse) || cachedResponse is null)
             {
-                query = query.Where(trail => trail.DurationInHours >= minDuration.Value);
+                var trails = await _trailRepository.GetPagedTrailsAsync(new TrailQueryParameters
+                {
+                    Search = search,
+                    Difficulty = difficulty,
+                    OnlyWithCoords = onlyWithCoords,
+                    MinDuration = minDuration,
+                    MaxDuration = maxDuration,
+                    MinElevation = minElevation,
+                    MaxElevation = maxElevation,
+                    SortBy = sortBy,
+                    SortDirection = sortDirection,
+                    Page = page,
+                    PageSize = pageSize
+                });
+
+                var viewModel = trails.Items.Select(trail => new TrailIndexViewModel
+                {
+                    Id = trail.Id,
+                    Title = trail.Name,
+                    Difficulty = trail.DifficultyLevel.ToString(),
+                    Region = trail.Region,
+                    ShortDescription = BuildShortDescription(trail.Description)
+                });
+
+                response = new PagedResponse<TrailIndexViewModel>
+                {
+                    Items = viewModel,
+                    TotalCount = trails.TotalCount,
+                    Page = trails.Page,
+                    PageSize = trails.PageSize
+                };
+
+                _cache.Set(cacheKey, response, new MemoryCacheEntryOptions
+                {
+                    AbsoluteExpirationRelativeToNow = TrailsCacheDuration
+                });
+            }
+            else
+            {
+                response = cachedResponse;
             }
 
-            if (maxDuration.HasValue)
-            {
-                query = query.Where(trail => trail.DurationInHours <= maxDuration.Value);
-            }
-
-            if (minElevation.HasValue)
-            {
-                query = query.Where(trail => trail.ElevationGain >= minElevation.Value);
-            }
-
-            if (maxElevation.HasValue)
-            {
-                query = query.Where(trail => trail.ElevationGain <= maxElevation.Value);
-            }
-
-            var totalCount = await query.CountAsync();
-
-            var orderedQuery = ApplySorting(query, sortBy, sortDirection);
-
-            var trails = await orderedQuery
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
-                .ToListAsync();
-
-            Response.Headers["X-Total-Count"] = totalCount.ToString();
-            Response.Headers["Access-Control-Expose-Headers"] = "X-Total-Count";
-
-            return Ok(new PagedResponse<Trail>
-            {
-                Items = trails,
-                TotalCount = totalCount,
-                Page = page,
-                PageSize = pageSize
-            });
+            ApplyPublicCacheHeaders(etag, exposeTotalCount: false);
+            return Ok(response);
         }
 
         [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<Trail>> PostTrail(Trail trail)
         {
-            _context.Trails.Add(trail);
-            await _context.SaveChangesAsync();
+            await _trailRepository.AddTrailAsync(trail);
+            await _trailRepository.SaveChangesAsync();
+            BumpCacheVersion();
 
             return CreatedAtAction(nameof(GetTrails), new { id = trail.Id }, trail);
         }
@@ -120,65 +211,20 @@ namespace EcoTrails.Api.Controllers
             [FromQuery] string? sortDirection = null,
             [FromQuery] string? ids = null)
         {
-            var query = _context.Trails.AsNoTracking().AsQueryable();
-
-            var hasIdsFilter = !string.IsNullOrWhiteSpace(ids);
-            if (hasIdsFilter)
-            {
-                var idList = ids!
-                    .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
-                    .Select(value => int.TryParse(value, out var parsedId) ? parsedId : 0)
-                    .Where(parsedId => parsedId > 0)
-                    .Distinct()
-                    .ToList();
-
-                if (idList.Count == 0)
+            var items = await _trailRepository.ExportTrailsAsync(
+                new TrailQueryParameters
                 {
-                    return Ok(Array.Empty<Trail>());
-                }
-
-                query = query.Where(trail => idList.Contains(trail.Id));
-            }
-
-            if (!string.IsNullOrWhiteSpace(search))
-            {
-                query = query.Where(trail =>
-                    trail.Name.Contains(search) ||
-                    trail.Location.Contains(search));
-            }
-
-            if (difficulty.HasValue)
-            {
-                query = query.Where(trail => trail.Difficulty == difficulty.Value);
-            }
-
-            if (onlyWithCoords)
-            {
-                query = query.Where(trail => trail.Latitude.HasValue && trail.Longitude.HasValue);
-            }
-
-            if (minDuration.HasValue)
-            {
-                query = query.Where(trail => trail.DurationInHours >= minDuration.Value);
-            }
-
-            if (maxDuration.HasValue)
-            {
-                query = query.Where(trail => trail.DurationInHours <= maxDuration.Value);
-            }
-
-            if (minElevation.HasValue)
-            {
-                query = query.Where(trail => trail.ElevationGain >= minElevation.Value);
-            }
-
-            if (maxElevation.HasValue)
-            {
-                query = query.Where(trail => trail.ElevationGain <= maxElevation.Value);
-            }
-
-            var items = await ApplySorting(query, sortBy, sortDirection)
-                .ToListAsync();
+                    Search = search,
+                    Difficulty = difficulty,
+                    OnlyWithCoords = onlyWithCoords,
+                    MinDuration = minDuration,
+                    MaxDuration = maxDuration,
+                    MinElevation = minElevation,
+                    MaxElevation = maxElevation,
+                    SortBy = sortBy,
+                    SortDirection = sortDirection
+                },
+                ids);
 
             return Ok(items);
         }
@@ -186,7 +232,7 @@ namespace EcoTrails.Api.Controllers
         [HttpGet("{id:int}")]
         public async Task<ActionResult<Trail>> GetTrail(int id)
         {
-            var trail = await _context.Trails.AsNoTracking().FirstOrDefaultAsync(item => item.Id == id);
+            var trail = await _trailRepository.GetTrailByIdAsync(id);
             if (trail is null)
             {
                 return NotFound();
@@ -198,7 +244,7 @@ namespace EcoTrails.Api.Controllers
         [HttpGet("{id:int}/route")]
         public async Task<ActionResult<object>> GetTrailRoute(int id, CancellationToken cancellationToken)
         {
-            var trail = await _context.Trails.AsNoTracking().FirstOrDefaultAsync(item => item.Id == id, cancellationToken);
+            var trail = await _trailRepository.GetTrailByIdAsync(id, cancellationToken: cancellationToken);
             if (trail is null)
             {
                 return NotFound();
@@ -238,6 +284,22 @@ namespace EcoTrails.Api.Controllers
             });
         }
 
+        private static string BuildShortDescription(string description)
+        {
+            if (string.IsNullOrWhiteSpace(description))
+            {
+                return string.Empty;
+            }
+
+            const int maxLength = 100;
+            if (description.Length <= maxLength)
+            {
+                return description;
+            }
+
+            return $"{description[..maxLength].TrimEnd()}...";
+        }
+
         private static (double EndLatitude, double EndLongitude) EstimateEndPoint(Trail trail)
         {
             var startLatitude = trail.Latitude ?? 0;
@@ -253,22 +315,99 @@ namespace EcoTrails.Api.Controllers
                 Math.Round(startLongitude + lngOffset, 6));
         }
 
-        private static IQueryable<Trail> ApplySorting(
-            IQueryable<Trail> query,
-            string? sortBy,
-            string? sortDirection)
+        private int GetCacheVersion()
         {
-            var isDesc = string.Equals(sortDirection, "desc", StringComparison.OrdinalIgnoreCase);
-            var normalizedSortBy = sortBy?.Trim().ToLowerInvariant();
-
-            return normalizedSortBy switch
+            if (!_cache.TryGetValue(TrailsCacheVersionKey, out int version))
             {
-                "name" => isDesc ? query.OrderByDescending(trail => trail.Name) : query.OrderBy(trail => trail.Name),
-                "difficulty" => isDesc ? query.OrderByDescending(trail => trail.Difficulty) : query.OrderBy(trail => trail.Difficulty),
-                "duration" => isDesc ? query.OrderByDescending(trail => trail.DurationInHours) : query.OrderBy(trail => trail.DurationInHours),
-                "elevation" => isDesc ? query.OrderByDescending(trail => trail.ElevationGain) : query.OrderBy(trail => trail.ElevationGain),
-                _ => query.OrderBy(trail => trail.Id),
-            };
+                version = 1;
+                _cache.Set(TrailsCacheVersionKey, version, new MemoryCacheEntryOptions
+                {
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(12)
+                });
+            }
+
+            return version;
         }
+
+        private void BumpCacheVersion()
+        {
+            var nextVersion = GetCacheVersion() + 1;
+            _cache.Set(TrailsCacheVersionKey, nextVersion, new MemoryCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(12)
+            });
+        }
+
+        private static string BuildPagedTrailsCacheKey(
+            string scope,
+            int version,
+            string? search,
+            int? difficulty,
+            bool onlyWithCoords,
+            double? minDuration,
+            double? maxDuration,
+            int? minElevation,
+            int? maxElevation,
+            string? sortBy,
+            string? sortDirection,
+            int page,
+            int pageSize)
+        {
+            return string.Join('|',
+                "trails",
+                scope,
+                $"v{version}",
+                search?.Trim().ToLowerInvariant() ?? string.Empty,
+                difficulty?.ToString() ?? string.Empty,
+                onlyWithCoords ? "1" : "0",
+                minDuration?.ToString(System.Globalization.CultureInfo.InvariantCulture) ?? string.Empty,
+                maxDuration?.ToString(System.Globalization.CultureInfo.InvariantCulture) ?? string.Empty,
+                minElevation?.ToString() ?? string.Empty,
+                maxElevation?.ToString() ?? string.Empty,
+                sortBy?.Trim().ToLowerInvariant() ?? string.Empty,
+                sortDirection?.Trim().ToLowerInvariant() ?? string.Empty,
+                page.ToString(),
+                pageSize.ToString());
+        }
+
+        private static string BuildEtag(string cacheKey)
+        {
+            var hash = SHA256.HashData(Encoding.UTF8.GetBytes(cacheKey));
+            return $"\"{Convert.ToHexString(hash)}\"";
+        }
+
+        private bool RequestHasMatchingEtag(string etag)
+        {
+            if (!Request.Headers.TryGetValue("If-None-Match", out var values))
+            {
+                return false;
+            }
+
+            foreach (var value in values)
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    continue;
+                }
+
+                var tags = value.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+                if (tags.Any(tag => string.Equals(tag, etag, StringComparison.Ordinal)))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private void ApplyPublicCacheHeaders(string etag, bool exposeTotalCount)
+        {
+            Response.Headers["Cache-Control"] = "public,max-age=60";
+            Response.Headers["ETag"] = etag;
+            Response.Headers["Access-Control-Expose-Headers"] = exposeTotalCount
+                ? "X-Total-Count,ETag"
+                : "ETag";
+        }
+
     }
 }

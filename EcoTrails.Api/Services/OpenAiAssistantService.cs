@@ -3,6 +3,7 @@ using System.Text.Json;
 using EcoTrails.Api.Contracts;
 using EcoTrails.Api.Data;
 using EcoTrails.Api.Models;
+using EcoTrails.Api.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
@@ -33,17 +34,26 @@ public class OpenAiAssistantService : IOpenAiAssistantService
     private readonly AppDbContext _dbContext;
     private readonly ILogger<OpenAiAssistantService> _logger;
     private readonly IVectorService _vectorService;
+    private readonly IAssistantSessionReadRepository _assistantSessionReadRepository;
+    private readonly IAssistantSessionWriteRepository _assistantSessionWriteRepository;
+    private readonly IAssistantMessageRepository _assistantMessageRepository;
 
     public OpenAiAssistantService(
         HttpClient httpClient,
         IOptions<OpenAiOptions> options,
         AppDbContext dbContext,
+        IAssistantSessionReadRepository assistantSessionReadRepository,
+        IAssistantSessionWriteRepository assistantSessionWriteRepository,
+        IAssistantMessageRepository assistantMessageRepository,
         IVectorService vectorService,
         ILogger<OpenAiAssistantService> logger)
     {
         _httpClient = httpClient;
         _options = options.Value;
         _dbContext = dbContext;
+        _assistantSessionReadRepository = assistantSessionReadRepository;
+        _assistantSessionWriteRepository = assistantSessionWriteRepository;
+        _assistantMessageRepository = assistantMessageRepository;
         _vectorService = vectorService;
         _logger = logger;
     }
@@ -196,17 +206,8 @@ public class OpenAiAssistantService : IOpenAiAssistantService
         }
 
         var session = await GetOrCreateSessionAsync(request.SessionId, request.Prompt, currentUserId, cancellationToken);
-        var persistedHistory = await _dbContext.AssistantChatEntries
-            .AsNoTracking()
-            .Where(item => item.SessionInternalId == session.Id)
-            .OrderBy(item => item.CreatedAt)
-            .Take(20)
-            .Select(item => new AssistantChatMessage
-            {
-                Role = item.Role,
-                Content = item.Content
-            })
-            .ToListAsync(cancellationToken);
+        var persistedHistory = await _assistantMessageRepository
+            .GetRecentMessagesAsync(session.Id, 20, cancellationToken);
 
         var model = string.IsNullOrWhiteSpace(_options.Model) ? "gpt-3.5-turbo" : _options.Model;
         var prompt = request.Prompt.Trim();
@@ -272,30 +273,14 @@ public class OpenAiAssistantService : IOpenAiAssistantService
             .GetString();
 
         var assistantText = reply?.Trim() ?? string.Empty;
+        var updatedTitle = session.Title == "Нова сесия" ? BuildSessionTitle(prompt) : null;
 
-        _dbContext.AssistantChatEntries.Add(new AssistantChatEntry
-        {
-            SessionInternalId = session.Id,
-            Role = "user",
-            Content = prompt,
-            CreatedAt = DateTime.UtcNow
-        });
-
-        _dbContext.AssistantChatEntries.Add(new AssistantChatEntry
-        {
-            SessionInternalId = session.Id,
-            Role = "assistant",
-            Content = assistantText,
-            CreatedAt = DateTime.UtcNow
-        });
-
-        session.LastActivityAt = DateTime.UtcNow;
-        if (session.Title == "Нова сесия")
-        {
-            session.Title = BuildSessionTitle(prompt);
-        }
-
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        await _assistantMessageRepository.SaveConversationTurnAsync(
+            session,
+            prompt,
+            assistantText,
+            updatedTitle,
+            cancellationToken);
 
         return new AssistantChatResponse
         {
@@ -318,18 +303,7 @@ public class OpenAiAssistantService : IOpenAiAssistantService
     {
         var title = string.IsNullOrWhiteSpace(request.Title) ? "Нова сесия" : request.Title.Trim();
         var now = DateTime.UtcNow;
-
-        var session = new AssistantChatSession
-        {
-            SessionId = Guid.NewGuid().ToString("N"),
-            AppUserId = string.IsNullOrWhiteSpace(currentUserId) ? null : currentUserId,
-            Title = title,
-            CreatedAt = now,
-            LastActivityAt = now
-        };
-
-        _dbContext.AssistantChatSessions.Add(session);
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        var session = await _assistantSessionWriteRepository.CreateSessionAsync(title, currentUserId, now, cancellationToken);
 
         return new AssistantSessionResponse
         {
@@ -347,23 +321,7 @@ public class OpenAiAssistantService : IOpenAiAssistantService
         int limit,
         CancellationToken cancellationToken)
     {
-        var normalizedLimit = Math.Clamp(limit, 1, 30);
-
-        return await _dbContext.AssistantChatSessions
-            .AsNoTracking()
-            .Where(item => item.AppUserId == userId)
-            .OrderByDescending(item => item.LastActivityAt)
-            .Take(normalizedLimit)
-            .Select(item => new AssistantSessionResponse
-            {
-                SessionId = item.SessionId,
-                Title = item.Title,
-                CreatedAt = item.CreatedAt,
-                LastActivityAt = item.LastActivityAt,
-                MessageCount = item.Messages.Count,
-                IsOwnedByUser = true
-            })
-            .ToListAsync(cancellationToken);
+        return await _assistantSessionReadRepository.GetUserSessionsAsync(userId, limit, cancellationToken);
     }
 
     public async Task<List<AssistantSessionMessageResponse>> GetSessionMessagesAsync(
@@ -372,42 +330,11 @@ public class OpenAiAssistantService : IOpenAiAssistantService
         int limit,
         CancellationToken cancellationToken)
     {
-        var normalizedSessionId = sessionId.Trim();
-        if (string.IsNullOrWhiteSpace(normalizedSessionId))
-        {
-            return [];
-        }
-
-        var normalizedLimit = Math.Clamp(limit, 1, 200);
-
-        var session = await _dbContext.AssistantChatSessions
-            .AsNoTracking()
-            .FirstOrDefaultAsync(item => item.SessionId == normalizedSessionId, cancellationToken);
-
-        if (session is null)
-        {
-            return [];
-        }
-
-        if (!CanAccessSession(session, currentUserId))
-        {
-            return [];
-        }
-
-        return await _dbContext.AssistantChatEntries
-            .AsNoTracking()
-            .Where(item => item.SessionInternalId == session.Id)
-            .OrderByDescending(item => item.CreatedAt)
-            .Take(normalizedLimit)
-            .OrderBy(item => item.CreatedAt)
-            .Select(item => new AssistantSessionMessageResponse
-            {
-                Id = item.Id,
-                Role = item.Role,
-                Content = item.Content,
-                CreatedAt = item.CreatedAt
-            })
-            .ToListAsync(cancellationToken);
+        return await _assistantSessionReadRepository.GetSessionMessagesAsync(
+            sessionId,
+            currentUserId,
+            limit,
+            cancellationToken);
     }
 
     public async Task<bool> DeleteSessionAsync(
@@ -416,27 +343,15 @@ public class OpenAiAssistantService : IOpenAiAssistantService
         CancellationToken cancellationToken)
     {
         var normalizedSessionId = sessionId.Trim();
-        if (string.IsNullOrWhiteSpace(normalizedSessionId))
+        if (string.IsNullOrWhiteSpace(normalizedSessionId) || string.IsNullOrWhiteSpace(currentUserId))
         {
             return false;
         }
 
-        var session = await _dbContext.AssistantChatSessions
-            .FirstOrDefaultAsync(item => item.SessionId == normalizedSessionId, cancellationToken);
-
-        if (session is null)
-        {
-            return false;
-        }
-
-        if (!IsOwnedByCurrentUser(session, currentUserId))
-        {
-            return false;
-        }
-
-        _dbContext.AssistantChatSessions.Remove(session);
-        await _dbContext.SaveChangesAsync(cancellationToken);
-        return true;
+        return await _assistantSessionWriteRepository.DeleteSessionIfOwnedByUserAsync(
+            normalizedSessionId,
+            currentUserId,
+            cancellationToken);
     }
 
     public async Task<AssistantEnrichResponse> EnrichTrailsAsync(AssistantEnrichRequest request, CancellationToken cancellationToken)
@@ -1174,8 +1089,8 @@ public class OpenAiAssistantService : IOpenAiAssistantService
         var normalizedSessionId = sessionId?.Trim();
         if (!string.IsNullOrWhiteSpace(normalizedSessionId))
         {
-            var existingSession = await _dbContext.AssistantChatSessions
-                .FirstOrDefaultAsync(item => item.SessionId == normalizedSessionId, cancellationToken);
+            var existingSession = await _assistantSessionWriteRepository
+                .GetSessionByPublicIdAsync(normalizedSessionId, cancellationToken);
 
             if (existingSession is not null)
             {
@@ -1186,37 +1101,22 @@ public class OpenAiAssistantService : IOpenAiAssistantService
 
                 if (string.IsNullOrWhiteSpace(existingSession.AppUserId) && !string.IsNullOrWhiteSpace(currentUserId))
                 {
-                    existingSession.AppUserId = currentUserId;
-                    await _dbContext.SaveChangesAsync(cancellationToken);
+                    await _assistantSessionWriteRepository
+                        .AttachSessionToUserAsync(existingSession, currentUserId, cancellationToken);
                 }
 
                 return existingSession;
             }
         }
 
-        var now = DateTime.UtcNow;
-        var newSession = new AssistantChatSession
-        {
-            SessionId = Guid.NewGuid().ToString("N"),
-            AppUserId = string.IsNullOrWhiteSpace(currentUserId) ? null : currentUserId,
-            Title = BuildSessionTitle(prompt),
-            CreatedAt = now,
-            LastActivityAt = now
-        };
-
-        _dbContext.AssistantChatSessions.Add(newSession);
-        await _dbContext.SaveChangesAsync(cancellationToken);
-        return newSession;
+        return await _assistantSessionWriteRepository.CreateSessionAsync(
+            BuildSessionTitle(prompt),
+            currentUserId,
+            DateTime.UtcNow,
+            cancellationToken);
     }
 
     private static bool CanAccessSession(AssistantChatSession session, string? currentUserId)
-    {
-        return !string.IsNullOrWhiteSpace(currentUserId)
-            && !string.IsNullOrWhiteSpace(session.AppUserId)
-            && string.Equals(session.AppUserId, currentUserId, StringComparison.Ordinal);
-    }
-
-    private static bool IsOwnedByCurrentUser(AssistantChatSession session, string? currentUserId)
     {
         return !string.IsNullOrWhiteSpace(currentUserId)
             && !string.IsNullOrWhiteSpace(session.AppUserId)

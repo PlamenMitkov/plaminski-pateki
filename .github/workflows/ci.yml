@@ -45,6 +45,9 @@ jobs:
       - name: Build backend
         run: dotnet build EcoProject.sln --configuration Release --no-restore
 
+      - name: Run automated tests
+        run: dotnet test EcoProject.sln --configuration Release --no-build --verbosity minimal
+
       - name: Install frontend dependencies
         working-directory: EcoTrails.Client
         run: npm ci
@@ -76,8 +79,7 @@ jobs:
             ./scripts/smoke-admin-e2e.ps1 -SkipBuild
           }
 
-  docker-publish:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+  docker-build:
     needs: build-and-smoke
     runs-on: ubuntu-latest
 
@@ -93,6 +95,7 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Login to GHCR
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
@@ -113,7 +116,8 @@ jobs:
         with:
           context: ./EcoTrails.Api
           file: ./EcoTrails.Api/Dockerfile
-          push: true
+          push: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+          load: ${{ !(github.event_name == 'push' && github.ref == 'refs/heads/main') }}
           tags: ${{ steps.meta_api.outputs.tags }}
           labels: ${{ steps.meta_api.outputs.labels }}
 
@@ -131,6 +135,79 @@ jobs:
         with:
           context: ./EcoTrails.Client
           file: ./EcoTrails.Client/Dockerfile
-          push: true
+          push: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+          load: ${{ !(github.event_name == 'push' && github.ref == 'refs/heads/main') }}
           tags: ${{ steps.meta_client.outputs.tags }}
           labels: ${{ steps.meta_client.outputs.labels }}
+
+  deploy-health-gate:
+    needs: docker-build
+    if: (github.event_name == 'push' && github.ref == 'refs/heads/main') || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Validate deployment health via JSON status
+        env:
+          DEPLOY_API_HEALTH_URL: ${{ secrets.DEPLOY_API_HEALTH_URL }}
+          DEPLOY_CLIENT_HEALTH_URL: ${{ secrets.DEPLOY_CLIENT_HEALTH_URL }}
+        run: |
+          if [ -z "${DEPLOY_API_HEALTH_URL}" ]; then
+            echo "DEPLOY_API_HEALTH_URL secret is not set; skipping deploy health gate."
+            {
+              echo "### Deployment Health Gate"
+              echo ""
+              echo "Skipped: \`DEPLOY_API_HEALTH_URL\` secret is not configured."
+            } >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+
+          json_output="$(bash ./scripts/deploy-prod.sh status .env.production.example docker-compose.prod.yml "" "" "${DEPLOY_API_HEALTH_URL}" true "${DEPLOY_CLIENT_HEALTH_URL}" || true)"
+
+          if [ -z "${json_output}" ]; then
+            echo "No JSON output from status check."
+            exit 1
+          fi
+
+          echo "Status JSON: ${json_output}"
+          summary_line="$(echo "${json_output}" | jq -r '"Health summary -> overall=\(.overallOk // false), api=\(.apiHealth.ok // false) [\(.apiHealth.statusCode // 0)], clientEnabled=\(.clientHealth.enabled // false), client=\(.clientHealth.ok // false) [\(.clientHealth.statusCode // 0)]"')"
+          echo "${summary_line}"
+
+          overall_ok="$(echo "${json_output}" | jq -r '.overallOk // false')"
+          api_ok="$(echo "${json_output}" | jq -r '.apiHealth.ok // false')"
+          api_status="$(echo "${json_output}" | jq -r '.apiHealth.statusCode // 0')"
+          client_enabled="$(echo "${json_output}" | jq -r '.clientHealth.enabled // false')"
+          client_ok="$(echo "${json_output}" | jq -r '.clientHealth.ok // false')"
+          client_status="$(echo "${json_output}" | jq -r '.clientHealth.statusCode // 0')"
+
+          {
+            echo "### Deployment Health Gate"
+            echo ""
+            echo "| Signal | Value |"
+            echo "|---|---|"
+            echo "| overallOk | ${overall_ok} |"
+            echo "| api.ok | ${api_ok} |"
+            echo "| api.statusCode | ${api_status} |"
+            echo "| api.url | [${DEPLOY_API_HEALTH_URL}](${DEPLOY_API_HEALTH_URL}) |"
+            echo "| client.enabled | ${client_enabled} |"
+            echo "| client.ok | ${client_ok} |"
+            echo "| client.statusCode | ${client_status} |"
+
+            if [ "${client_enabled}" = "true" ] && [ -n "${DEPLOY_CLIENT_HEALTH_URL}" ]; then
+              echo "| client.url | [${DEPLOY_CLIENT_HEALTH_URL}](${DEPLOY_CLIENT_HEALTH_URL}) |"
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          if [ "${overall_ok}" != "true" ] || [ "${api_ok}" != "true" ]; then
+            echo "Deployment health gate failed: overallOk=${overall_ok}, apiOk=${api_ok}"
+            exit 1
+          fi
+
+          if [ "${client_enabled}" = "true" ] && [ "${client_ok}" != "true" ]; then
+            echo "Frontend health gate failed: clientEnabled=${client_enabled}, clientOk=${client_ok}"
+            exit 1
+          fi
+
+          echo "Deployment health gate passed."

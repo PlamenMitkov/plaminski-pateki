@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="sunset" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1a2255"/>
+      <stop offset="45%" stop-color="#5c3a72"/>
+      <stop offset="70%" stop-color="#c46a5c"/>
+      <stop offset="100%" stop-color="#27445f"/>
+    </linearGradient>
+    <radialGradient id="sun" cx="0.68" cy="0.33" r="0.16">
+      <stop offset="0%" stop-color="#ffd8a3" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#ffd8a3" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="hill" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#3f4a68"/>
+      <stop offset="100%" stop-color="#1f2638"/>
+    </linearGradient>
+    <linearGradient id="water" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#3b6f88" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#12283a" stop-opacity="0.95"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1920" height="1080" fill="url(#sunset)"/>
+  <rect width="1920" height="1080" fill="url(#sun)"/>
+
+  <path d="M0 690 L240 550 L470 650 L740 500 L980 640 L1240 520 L1500 640 L1760 560 L1920 620 L1920 1080 L0 1080 Z" fill="url(#hill)"/>
+  <rect y="650" width="1920" height="430" fill="url(#water)"/>
+
+  <g stroke="#8ad2ff" stroke-opacity="0.28" stroke-width="3" fill="none">
+    <path d="M0 760 C180 740, 320 780, 510 760 C700 740, 840 780, 1030 760 C1220 740, 1360 780, 1550 760 C1710 742, 1820 775, 1920 760"/>
+    <path d="M0 820 C170 804, 330 838, 520 820 C710 802, 860 840, 1040 820 C1230 804, 1380 840, 1560 820 C1720 804, 1820 836, 1920 820"/>
+    <path d="M0 890 C180 874, 340 905, 520 890 C700 875, 870 906, 1050 890 C1230 874, 1390 905, 1570 890 C1730 876, 1830 905, 1920 890"/>
+  </g>
+
+  <g fill="#112f2d" opacity="0.85">
+    <ellipse cx="180" cy="660" rx="70" ry="18"/>
+    <ellipse cx="420" cy="675" rx="90" ry="20"/>
+    <ellipse cx="770" cy="665" rx="110" ry="22"/>
+    <ellipse cx="1210" cy="672" rx="100" ry="20"/>
+    <ellipse cx="1610" cy="668" rx="120" ry="24"/>
+  </g>
+</svg>
