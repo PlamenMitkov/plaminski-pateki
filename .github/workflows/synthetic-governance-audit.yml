@@ -1,0 +1,104 @@
+name: Synthetic Governance Audit
+
+on:
+  schedule:
+    - cron: '0 5 * * *'
+  workflow_dispatch:
+    inputs:
+      maxHighSeverity:
+        description: Max allowed high-severity findings before failing
+        required: false
+        default: '0'
+      maxMediumSeverity:
+        description: Max allowed medium-severity findings before failing
+        required: false
+        default: '-1'
+      maxLowSeverity:
+        description: Max allowed low-severity findings before failing
+        required: false
+        default: '-1'
+
+permissions:
+  contents: read
+
+jobs:
+  synthetic-governance-audit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run synthetic governance audit runner
+        shell: pwsh
+        run: |
+          ./scripts/data-quality/run-synthetic-governance-audit.ps1 -InputPath ./eco.json
+
+      - name: Add audit summary to step summary
+        shell: pwsh
+        run: |
+          $summaryPath = "./scripts/data-quality/reports/synthetic-governance-summary-latest.json"
+          if (-not (Test-Path -Path $summaryPath)) {
+            throw "Missing summary file: $summaryPath"
+          }
+
+          $summary = Get-Content -Path $summaryPath -Raw -Encoding UTF8 | ConvertFrom-Json
+          @"
+          ### Synthetic Governance Audit
+
+          | Metric | Value |
+          |---|---|
+          | total_findings | $($summary.total_findings) |
+          | high_severity_findings | $($summary.high_severity_findings) |
+          | medium_severity_findings | $($summary.medium_severity_findings) |
+          | low_severity_findings | $($summary.low_severity_findings) |
+          | generated_at_utc | $($summary.generated_at_utc) |
+          | latest_csv | $($summary.latest_csv) |
+          "@ | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
+
+      - name: Enforce severity thresholds
+        shell: pwsh
+        env:
+          MAX_HIGH: ${{ github.event.inputs.maxHighSeverity || '0' }}
+          MAX_MEDIUM: ${{ github.event.inputs.maxMediumSeverity || '-1' }}
+          MAX_LOW: ${{ github.event.inputs.maxLowSeverity || '-1' }}
+        run: |
+          $summaryPath = "./scripts/data-quality/reports/synthetic-governance-summary-latest.json"
+          if (-not (Test-Path -Path $summaryPath)) {
+            throw "Missing summary file: $summaryPath"
+          }
+
+          $summary = Get-Content -Path $summaryPath -Raw -Encoding UTF8 | ConvertFrom-Json
+          $maxHigh = [int]$env:MAX_HIGH
+          $maxMedium = [int]$env:MAX_MEDIUM
+          $maxLow = [int]$env:MAX_LOW
+
+          $errors = @()
+          if ($summary.high_severity_findings -gt $maxHigh) {
+            $errors += "high_severity_findings=$($summary.high_severity_findings) exceeds maxHighSeverity=$maxHigh"
+          }
+          if ($maxMedium -ge 0 -and $summary.medium_severity_findings -gt $maxMedium) {
+            $errors += "medium_severity_findings=$($summary.medium_severity_findings) exceeds maxMediumSeverity=$maxMedium"
+          }
+          if ($maxLow -ge 0 -and $summary.low_severity_findings -gt $maxLow) {
+            $errors += "low_severity_findings=$($summary.low_severity_findings) exceeds maxLowSeverity=$maxLow"
+          }
+
+          if ($errors.Count -gt 0) {
+            $errorText = $errors -join "; "
+            Write-Error "Synthetic governance threshold gate failed: $errorText"
+            exit 1
+          }
+
+          Write-Host "Synthetic governance threshold gate passed."
+
+      - name: Upload governance audit artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: synthetic-governance-audit-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            scripts/data-quality/reports/synthetic-governance-findings-latest.csv
+            scripts/data-quality/reports/synthetic-governance-summary-latest.json
+            scripts/data-quality/reports/synthetic-governance-findings-*.csv
+            scripts/data-quality/reports/synthetic-governance-summary-*.json
+          if-no-files-found: error

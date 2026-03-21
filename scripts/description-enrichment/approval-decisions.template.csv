@@ -1,0 +1,3 @@
+id,decision,approved_by,approved_at_utc,note
+152,approve,reviewer.name@org.bg,2026-03-21T09:00:00Z,Trusted source verified manually
+153,reject,reviewer.name@org.bg,2026-03-21T09:05:00Z,Insufficient source evidence

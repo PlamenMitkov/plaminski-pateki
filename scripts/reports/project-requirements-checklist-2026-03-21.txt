@@ -1,0 +1,171 @@
+EcoProject
+Project Requirements Checklist
+Date: 2026-03-21
+Scope: synthetic data quality, cyber security, architecture compliance
+
+Legend
+- DONE: implemented and validated in code/config
+- PARTIAL: started, but not complete for project criteria
+- MISSING: not implemented yet
+
+A. Assistant Architecture And Rollout Safety
+1) Secondary assistant variant as backup (non-breaking)
+Status: DONE
+Evidence:
+- feature flags implemented: AssistantMode, PromptTemplateShadowMode, PromptTemplateFailOpen
+- default mode stays current
+- context_prompt mode can run with fail-open fallback
+
+2) Safe rollout controls (shadow + fail-open)
+Status: DONE
+Evidence:
+- shadow mode support added
+- fallback to current mode on context failure/empty response
+
+3) Build and focused tests after assistant changes
+Status: DONE
+Evidence:
+- assistant-focused and regression tests passed (13/13)
+- no diagnostics in modified files
+
+
+B. Synthetic Data Governance (Core Report Critiques)
+4) Provenance enforcement for generated claims
+Status: DONE
+Evidence:
+- runtime provenance policy added in assistant pipeline
+- verified-source filtering supported via EnforceSourceProvenance and RequireVerifiedSourceForContext
+- trusted domain allow-list and quarantined domain deny-list applied in context selection
+- automated tests added for provenance/trust/quarantine behavior
+
+5) Guardrails against hallucinations in answer generation
+Status: PARTIAL
+Current:
+- relevance precision improved via exact-token matching
+- context_prompt mode provides cleaner structured input path
+- assistant responses now include reliability chips and low-confidence signaling when evidence is weak
+Gap:
+- no complete factual-grounding guardrail pipeline for all assistant outputs
+
+6) Human-in-the-loop approval workflow for synthetic updates
+Status: PARTIAL
+Current:
+- merge gate implemented in scripts/description-enrichment/merge-enriched-descriptions.ps1:
+	- RequireHumanApproval
+	- ApprovalCsvPath
+	- explicit approve/reject/incomplete handling
+- dry-run validation confirms blocking behavior when approval is absent:
+	- blockedMissingApproval=4
+	- updated=0 (no unapproved records applied)
+Gap:
+- no full reviewer UI/workflow yet; approvals are CSV-driven
+
+7) Formal validation metrics for synthetic quality (fidelity/usefulness/confidentiality)
+Status: PARTIAL
+Current:
+- automated governance audit script added: scripts/data-quality/synthetic-governance-audit.ps1
+- repeatable finding export: scripts/data-quality/synthetic-governance-findings.csv
+- latest audit snapshot:
+	- synthetic_rows=306
+	- synthetic_without_sources=7
+	- missing_nearest_town=258
+	- missing_length_km=365
+	- missing_photo_url=296
+Gap:
+- no full statistical utility/privacy suite yet (KS, TSTR/TRTR, confidentiality leakage checks)
+
+
+C. Cyber Security Requirements
+8) Prompt injection defenses for external/user content
+Status: DONE
+Evidence:
+- prompt-injection pattern detector implemented in assistant service
+- suspicious input is sanitized before model call
+- optional block-on-detect policy supported for stricter deployment profiles
+- dedicated automated tests validate detection/sanitization behavior
+
+9) Data poisoning resilience in enrichment pipeline
+Status: PARTIAL
+Current:
+- trust-tier domain allow-list and quarantine deny-list now enforced in assistant provenance context
+- enrichment merge now blocks rows with missing sources_urls by default (unless AllowMissingSources override is set)
+- optional HITL gate blocks unapproved/rejected synthetic updates before apply
+Gap:
+- no full end-to-end anomaly detection and approval workflow before enrichment merge/apply
+
+10) Insecure output handling protections for generated content
+Status: PARTIAL
+Current:
+- migration scripts and manual flows exist
+Gap:
+- no centralized secure-output contract (sanitize, validate schema, review gate) before write to production data
+
+
+D. Data/Platform Integration Requirements From Report
+11) Schema.org integration
+Status: PARTIAL
+Current:
+- JSON-LD integrated on trail details page (TouristAttraction)
+Gap:
+- not expanded across broader pages/entities and not tied to full trail semantic model
+
+12) OpenStreetMap-aligned metadata normalization
+Status: MISSING
+Current:
+- recommended in analysis
+Gap:
+- no full OSM tag normalization model implemented (example: sac_scale, route/access tags)
+
+13) Official open data integration (CKAN/opendata)
+Status: MISSING
+Current:
+- recommended in analysis
+Gap:
+- no implemented API integration pipeline
+
+14) PostGIS-based modern geospatial backend stack
+Status: MISSING
+Current:
+- recommended in analysis
+Gap:
+- architecture still centered around eco.json and app-level model handling
+
+15) Dynamic safety feeds (PSS / real-time alerts)
+Status: MISSING
+Current:
+- recommended in analysis
+Gap:
+- no operational safety feed integration yet
+
+
+Overall Readiness Assessment
+- Assistant reliability and rollout readiness: HIGH
+- Synthetic data governance maturity: MEDIUM
+- Cyber security controls for AI data flow: MEDIUM
+- Full project requirement coverage (as described in critical report): PARTIAL
+
+Estimated completion against report-level requirements:
+- Approximately 62-67% complete
+
+
+Priority Roadmap (Execution Order)
+P1 (must-have for project acceptance)
+- Add human review gate for synthetic data publication
+
+P2 (must-have for scientific/engineering rigor)
+- Implement validation harness for synthetic data metrics
+- Complete end-to-end trust-tier validation + anomaly quarantine before merge/apply
+
+P3 (platform evolution)
+- Normalize trail metadata toward OSM-compatible schema
+- Add CKAN/open data ingestion connectors
+- Plan migration path toward PostGIS + GeoJSON serving layer
+- Integrate dynamic safety data feed (PSS-first)
+
+
+Definition Of Done For Final Acceptance
+A requirement is accepted only when all conditions hold:
+1) Implemented in code/config
+2) Covered by automated or repeatable validation
+3) Documented in report with evidence
+4) Safe default behavior in production
