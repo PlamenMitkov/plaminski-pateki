@@ -7,6 +7,7 @@ import type {
   AssistantTrailContext,
 } from '../../services/assistantService';
 import AdminActionButton from '../AdminActionButton';
+import { AiFeedbackLoop } from './AiFeedbackLoop';
 
 interface AssistantPanelProps {
   assistantPrompt: string;
@@ -34,6 +35,7 @@ interface AssistantPanelProps {
     onOpenAssistantSession: (sessionId: string) => void;
     onRequestDeleteSession: (sessionId: string) => void;
     onQuickAction: (action: AssistantQuickAction) => void;
+    onFeedback?: (messageId: string, isPositive: boolean) => void;
   };
   formatMessageCount: (count: number) => string;
   formatTrailCount: (count: number) => string;
@@ -127,7 +129,7 @@ function AssistantPanel({
         isTyping={isTyping}
       />
 
-      <MessageThread messages={assistantMessages} />
+      <MessageThread messages={assistantMessages} onFeedback={handlers.onFeedback} />
     </div>
   );
 }
@@ -220,14 +222,28 @@ const StatusSection = ({ notice, adminError, chatError, isTyping }: { notice: st
   </>
 );
 
-const MessageThread = ({ messages }: { messages: ChatMessage[] }) => {
+const MessageThread = ({
+  messages,
+  onFeedback,
+}: {
+  messages: ChatMessage[];
+  onFeedback?: (messageId: string, isPositive: boolean) => void;
+}) => {
   if (messages.length === 0) return null;
   return (
     <div className="assistant-thread">
       {messages.map((m) => (
-        <p key={m.id} className={`assistant-reply ${m.role === 'assistant' ? 'assistant-reply-ai' : 'assistant-reply-user'}`}>
-          {m.content}
-        </p>
+        <div key={m.id} className="assistant-message-wrapper" style={{ display: 'flex', flexDirection: 'column' }}>
+          <p className={`assistant-reply ${m.role === 'assistant' ? 'assistant-reply-ai' : 'assistant-reply-user'}`}>
+            {m.content}
+          </p>
+          {m.role === 'assistant' && (
+            <AiFeedbackLoop
+              onFeedback={(isPositive) => onFeedback?.(m.id, isPositive)}
+              isPending={false}
+            />
+          )}
+        </div>
       ))}
     </div>
   );
