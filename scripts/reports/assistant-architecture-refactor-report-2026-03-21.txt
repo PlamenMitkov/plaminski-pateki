@@ -1,0 +1,282 @@
+EcoProject
+Assistant Architecture Refactor Report
+Date: 2026-03-21
+Scope: assistant service modularization + maintainability hardening
+
+Summary
+Implemented a targeted architectural refactor in the assistant layer to reduce coupling in OpenAiAssistantService and isolate security/data-governance/retrieval/enrichment/provider-transport/provider-fallback/weather-context concerns into dedicated services.
+
+What Was Implemented
+1) Prompt safety extracted to dedicated service
+- Added interface: EcoTrails.Api/Services/IAssistantPromptSafetyService.cs
+- Added implementation: EcoTrails.Api/Services/AssistantPromptSafetyService.cs
+- Responsibility:
+  - Detect prompt-injection patterns
+  - Sanitize suspicious prompt text before model call
+
+2) Provenance policy extracted to dedicated service
+- Added interface + result contract: EcoTrails.Api/Services/IAssistantProvenancePolicyService.cs
+- Added implementation: EcoTrails.Api/Services/AssistantProvenancePolicyService.cs
+- Responsibility:
+  - Enforce verified-source policy and trust-tier logic
+  - Apply trusted-domain allow-list and quarantined-domain deny-list
+  - Return filtered context + reliability signal for answer generation
+
+3) Orchestrator kept in OpenAiAssistantService, with delegated policy calls
+- Updated: EcoTrails.Api/Services/OpenAiAssistantService.cs
+- Changes:
+  - Injected IAssistantPromptSafetyService and IAssistantProvenancePolicyService
+  - Replaced direct inline prompt-safety logic with service calls
+  - Replaced inline provenance filtering with policy-service call
+  - Preserved existing private test hooks to keep current test suite stable
+
+4) DI composition updated
+- Updated: EcoTrails.Api/Program.cs
+- Registered:
+  - IAssistantPromptSafetyService -> AssistantPromptSafetyService
+  - IAssistantProvenancePolicyService -> AssistantProvenancePolicyService
+
+5) Tests adapted for new constructor dependencies
+- Updated: EcoTrails.Api.Tests/AssistantSecurityAndProvenanceTests.cs
+- Added concrete dependencies in test setup for the new services.
+
+6) Retrieval and alternatives extracted to dedicated service
+- Added interface: EcoTrails.Api/Services/IAssistantRetrievalService.cs
+- Added implementation: EcoTrails.Api/Services/AssistantRetrievalService.cs
+- Responsibility:
+  - Hybrid retrieval (vector + full-text)
+  - Context trail ranking for assistant chat
+  - Alternative-trail recommendation logic
+
+7) OpenAiAssistantService reduced to orchestration for retrieval path
+- Updated: EcoTrails.Api/Services/OpenAiAssistantService.cs
+- Changes:
+  - Injected IAssistantRetrievalService
+  - Delegated FindRelevantTrailsAsync/GetAlternativeTrailsAsync to retrieval service
+  - Removed obsolete inline retrieval helper methods from OpenAiAssistantService
+
+8) DI composition updated for retrieval service
+- Updated: EcoTrails.Api/Program.cs
+- Registered:
+  - IAssistantRetrievalService -> AssistantRetrievalService
+
+9) Enrichment workflow extracted to dedicated workflow service
+- Added interface + data contract: EcoTrails.Api/Services/IAssistantEnrichmentWorkflowService.cs
+- Added implementation: EcoTrails.Api/Services/AssistantEnrichmentWorkflowService.cs
+- Responsibility:
+  - Execute enrichment loop over selected trails
+  - Apply overwrite policy and persistence updates
+  - Standardize per-trail error handling and throttling delay
+
+10) OpenAiAssistantService delegated enrichment execution
+- Updated: EcoTrails.Api/Services/OpenAiAssistantService.cs
+- Changes:
+  - Injected IAssistantEnrichmentWorkflowService
+  - Replaced inline EnrichTrailsAsync loop with workflow service delegation
+  - Kept AI-provider semantic extraction in OpenAiAssistantService
+
+11) DI composition updated for enrichment workflow service
+- Updated: EcoTrails.Api/Program.cs
+- Registered:
+  - IAssistantEnrichmentWorkflowService -> AssistantEnrichmentWorkflowService
+
+12) Provider transport extracted behind IAiProviderClient
+- Added interface: EcoTrails.Api/Services/IAiProviderClient.cs
+- Added implementation: EcoTrails.Api/Services/AiProviderClient.cs
+- Responsibility:
+  - Execute OpenAI/Gemini HTTP calls
+  - Handle retry policy, transient backoff, and provider-specific error mapping
+  - Keep response parsing in a single transport-focused component
+
+13) OpenAiAssistantService now delegates provider transport
+- Updated: EcoTrails.Api/Services/OpenAiAssistantService.cs
+- Changes:
+  - Injected IAiProviderClient
+  - Replaced inline OpenAI/Gemini transport implementation with client delegation
+  - Retained high-level provider fallback routing in orchestration service
+
+14) DI composition updated for provider client
+- Updated: EcoTrails.Api/Program.cs
+- Registered:
+  - IAiProviderClient -> AiProviderClient (typed HttpClient + metrics handler)
+
+15) Provider fallback policy extracted
+- Added interface: EcoTrails.Api/Services/IAiProviderFallbackPolicy.cs
+- Added implementation: EcoTrails.Api/Services/AiProviderFallbackPolicy.cs
+- Responsibility:
+  - Evaluate fallback from Gemini to OpenAI by configured policy flags
+  - Evaluate secondary OpenAI model fallback on model-not-found errors
+  - Resolve fallback OpenAI model target consistently
+
+16) OpenAiAssistantService now delegates fallback policy decisions
+- Updated: EcoTrails.Api/Services/OpenAiAssistantService.cs
+- Changes:
+  - Injected IAiProviderFallbackPolicy
+  - Removed duplicated private fallback helpers
+  - Uses policy service for fallback gating and fallback-model resolution
+
+17) DI composition updated for fallback policy
+- Updated: EcoTrails.Api/Program.cs
+- Registered:
+  - IAiProviderFallbackPolicy -> AiProviderFallbackPolicy
+
+18) Weather context extracted behind weather service abstraction
+- Added interface: EcoTrails.Api/Services/IAssistantWeatherContextService.cs
+- Added implementation: EcoTrails.Api/Services/AssistantWeatherContextService.cs
+- Responsibility:
+  - Detect weather-intent prompts
+  - Build weather context for assistant responses (geocoding + current weather + preparation advice)
+  - Encapsulate weather API parsing and error handling
+
+19) OpenAiAssistantService now delegates weather behavior
+- Updated: EcoTrails.Api/Services/OpenAiAssistantService.cs
+- Changes:
+  - Injected IAssistantWeatherContextService
+  - Replaced inline weather prompt checks with weather service calls
+  - Replaced inline weather context building with weather service delegation
+
+20) DI composition updated for weather service
+- Updated: EcoTrails.Api/Program.cs
+- Registered:
+  - IAssistantWeatherContextService -> AssistantWeatherContextService (typed HttpClient + metrics handler)
+
+21) Session/chat orchestration extracted to dedicated application service
+- Added interface: EcoTrails.Api/Services/IAssistantSessionOrchestrationService.cs
+- Added implementation: EcoTrails.Api/Services/AssistantSessionOrchestrationService.cs
+- Responsibility:
+  - Get-or-create session flow and title generation for chat prompts
+  - Session access checks for user-owned sessions
+  - Delegation of session CRUD/message-history queries to repository
+
+22) OpenAiAssistantService now delegates session/chat orchestration
+- Updated: EcoTrails.Api/Services/OpenAiAssistantService.cs
+- Changes:
+  - Injected IAssistantSessionOrchestrationService
+  - Replaced inline session creation/access/title helper logic with orchestration service calls
+  - Removed obsolete private session helper methods from OpenAiAssistantService
+
+23) DI composition updated for session orchestration service
+- Updated: EcoTrails.Api/Program.cs
+- Registered:
+  - IAssistantSessionOrchestrationService -> AssistantSessionOrchestrationService
+
+24) Targeted unit tests added for retrieval ranking and fallback policy
+- Added tests: EcoTrails.Api.Tests/AssistantRetrievalServiceTests.cs
+- Added tests: EcoTrails.Api.Tests/AiProviderFallbackPolicyTests.cs
+- Coverage focus:
+  - Retrieval ranking prioritizes exact token matches over substring false positives
+  - Alternative suggestion fallback ranks by coordinate proximity when same-region options are insufficient
+  - Provider fallback policy gates for Gemini->OpenAI and secondary OpenAI fallback behavior
+
+25) Response composition extracted to dedicated service
+- Added interface: EcoTrails.Api/Services/IAssistantResponseCompositionService.cs
+- Added implementation: EcoTrails.Api/Services/AssistantResponseCompositionService.cs
+- Responsibility:
+  - Build assistant knowledge chips from context/reliability/injection signals
+  - Build assistant quick actions (map/weather/prompt-detail actions) from context and alternatives
+
+26) OpenAiAssistantService now delegates response composition
+- Updated: EcoTrails.Api/Services/OpenAiAssistantService.cs
+- Changes:
+  - Injected IAssistantResponseCompositionService
+  - Replaced inline BuildKnowledgeChips/BuildQuickActions helper logic with service delegation
+  - Removed obsolete private response-composition helper methods from OpenAiAssistantService
+
+27) DI composition updated for response composition service
+- Updated: EcoTrails.Api/Program.cs
+- Registered:
+  - IAssistantResponseCompositionService -> AssistantResponseCompositionService
+
+28) Prompt assembly extracted to dedicated service
+- Added interface: EcoTrails.Api/Services/IAssistantPromptAssemblyService.cs
+- Added implementation: EcoTrails.Api/Services/AssistantPromptAssemblyService.cs
+- Responsibility:
+  - Resolve active assistant mode (`current`/`context_prompt`) from options
+  - Build mode-aware system instruction with reliability/injection constraints
+  - Build mode-aware user prompt payload (classic text payload or context JSON payload)
+
+29) OpenAiAssistantService now delegates prompt assembly
+- Updated: EcoTrails.Api/Services/OpenAiAssistantService.cs
+- Changes:
+  - Injected IAssistantPromptAssemblyService
+  - Replaced inline mode/prompt helper calls with prompt-assembly service delegation
+  - Removed obsolete private prompt assembly helper methods from OpenAiAssistantService
+
+30) DI composition updated for prompt assembly service
+- Updated: EcoTrails.Api/Program.cs
+- Registered:
+  - IAssistantPromptAssemblyService -> AssistantPromptAssemblyService
+
+31) Targeted unit tests added for prompt assembly and response composition services
+- Added tests: EcoTrails.Api.Tests/AssistantPromptAssemblyServiceTests.cs
+- Added tests: EcoTrails.Api.Tests/AssistantResponseCompositionServiceTests.cs
+- Coverage focus:
+  - Assistant mode resolution and mode-aware system/user prompt payload generation
+  - Structured JSON payload contract for context_prompt mode
+  - Knowledge-chip composition signals (reliability, injection, risk, gear, alternatives)
+  - Quick-action composition constraints (required actions, deduplication, max action cap, weather-offline action)
+
+32) Targeted unit tests added for OpenAiAssistantService fallback orchestration
+- Added tests: EcoTrails.Api.Tests/OpenAiAssistantServiceFallbackOrchestrationTests.cs
+- Coverage focus:
+  - Gemini request failure with policy-enabled fallback routes to OpenAI provider path
+  - Primary OpenAI model failure with policy-enabled secondary fallback routes to configured fallback model
+
+33) Targeted unit tests added for prompt-mode fail-open orchestration
+- Updated tests: EcoTrails.Api.Tests/OpenAiAssistantServiceFallbackOrchestrationTests.cs
+- Coverage focus:
+  - `context_prompt` request failure falls back to `current` prompt mode when fail-open is enabled
+  - empty `context_prompt` response falls back to `current` prompt mode when fail-open is enabled
+
+34) Targeted unit tests added for prompt-template shadow mode orchestration
+- Updated tests: EcoTrails.Api.Tests/OpenAiAssistantServiceFallbackOrchestrationTests.cs
+- Coverage focus:
+  - when `PromptTemplateShadowMode=true` and configured mode is `context_prompt`, serving path still uses `current` prompt mode
+
+35) Targeted unit tests added for strict context-prompt behavior (fail-open disabled)
+- Updated tests: EcoTrails.Api.Tests/OpenAiAssistantServiceFallbackOrchestrationTests.cs
+- Coverage focus:
+  - when `PromptTemplateFailOpen=false`, context-prompt exception is propagated and no fallback to `current` mode is performed
+
+Validation Evidence
+- Build:
+  - dotnet build EcoTrails.Api/EcoTrails.Api.csproj -> succeeded
+- Tests:
+  - dotnet test EcoTrails.Api.Tests/EcoTrails.Api.Tests.csproj --filter "AssistantSecurityAndProvenanceTests|Assistant"
+  - Result: total 10, failed 0, succeeded 10, skipped 0
+  - dotnet test EcoTrails.Api.Tests/EcoTrails.Api.Tests.csproj --filter "AssistantRetrievalServiceTests|AiProviderFallbackPolicyTests"
+  - Result: total 6, failed 0, succeeded 6, skipped 0
+  - dotnet test EcoTrails.Api.Tests/EcoTrails.Api.Tests.csproj --filter "AssistantPromptAssemblyServiceTests|AssistantResponseCompositionServiceTests"
+  - Result: total 11, failed 0, succeeded 11, skipped 0
+  - dotnet test EcoTrails.Api.Tests/EcoTrails.Api.Tests.csproj --filter "OpenAiAssistantServiceFallbackOrchestrationTests"
+  - Result: total 7, failed 0, succeeded 7, skipped 0
+  - dotnet test EcoTrails.Api.Tests/EcoTrails.Api.Tests.csproj --filter "AssistantSecurityAndProvenanceTests|AssistantRetrievalServiceTests|AiProviderFallbackPolicyTests|Assistant"
+  - Result: total 16, failed 0, succeeded 16, skipped 0
+  - dotnet test EcoTrails.Api.Tests/EcoTrails.Api.Tests.csproj --filter "AssistantSecurityAndProvenanceTests|AssistantRetrievalServiceTests|AiProviderFallbackPolicyTests|AssistantPromptAssemblyServiceTests|AssistantResponseCompositionServiceTests|Assistant"
+  - Result: total 27, failed 0, succeeded 27, skipped 0
+  - dotnet test EcoTrails.Api.Tests/EcoTrails.Api.Tests.csproj --filter "AssistantSecurityAndProvenanceTests|AssistantRetrievalServiceTests|AiProviderFallbackPolicyTests|AssistantPromptAssemblyServiceTests|AssistantResponseCompositionServiceTests|OpenAiAssistantServiceFallbackOrchestrationTests|Assistant"
+  - Result: total 34, failed 0, succeeded 34, skipped 0
+
+Architecture Impact
+- Reduced responsibility concentration in OpenAiAssistantService.
+- Improved separation of concerns between:
+  - orchestration flow
+  - prompt security policy
+  - provenance/trust policy
+  - retrieval and alternative recommendation policy
+  - enrichment workflow execution
+  - provider transport and retry/error handling
+  - provider fallback policy/routing decisions
+  - weather prompt/context logic
+  - session/chat orchestration and access-control flow
+- Increased testability of policy logic as independent components.
+- Lowered change risk for future governance/security iterations.
+
+Known Limitations
+- OpenAiAssistantService remains a central orchestrator with many dependencies, although major concerns are now extracted.
+- Next safe step is splitting high-level chat-response assembly into a dedicated response-composition pipeline service.
+
+Recommended Next Step (Incremental)
+P1:
+- Extract high-level response pipeline sequencing (provider call + post-processing + telemetry) behind a dedicated application workflow service.
+- Add focused unit tests for provider fallback disablement scenarios (Gemini failure with policy deny, OpenAI secondary fallback deny) to validate strict no-fallback behavior when policy gates are closed.

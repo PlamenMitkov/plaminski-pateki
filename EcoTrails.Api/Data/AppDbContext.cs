@@ -14,6 +14,9 @@ namespace EcoTrails.Api.Data
         public DbSet<UserFavoriteTrail> UserFavoriteTrails { get; set; }
         public DbSet<AssistantChatSession> AssistantChatSessions { get; set; }
         public DbSet<AssistantChatEntry> AssistantChatEntries { get; set; }
+        public DbSet<TrailEnrichmentSnapshot> TrailEnrichmentSnapshots { get; set; }
+        public DbSet<CommunityTrailPost> CommunityTrailPosts { get; set; }
+        public DbSet<CommunityTrailPostImage> CommunityTrailPostImages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -57,6 +60,59 @@ namespace EcoTrails.Api.Data
                 .HasOne(item => item.Session)
                 .WithMany(session => session.Messages)
                 .HasForeignKey(item => item.SessionInternalId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<TrailEnrichmentSnapshot>()
+                .HasIndex(item => new { item.TrailId, item.GeneratedAtUtc });
+
+            modelBuilder.Entity<TrailEnrichmentSnapshot>()
+                .HasOne(item => item.Trail)
+                .WithMany(trail => trail.EnrichmentSnapshots)
+                .HasForeignKey(item => item.TrailId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<TrailEnrichmentSnapshot>()
+                .Property(item => item.PayloadJson)
+                .HasColumnType("nvarchar(max)");
+
+            modelBuilder.Entity<CommunityTrailPost>()
+                .HasIndex(item => new { item.AppUserId, item.CreatedAtUtc });
+
+            modelBuilder.Entity<CommunityTrailPost>()
+                .Property(item => item.Title)
+                .HasMaxLength(180);
+
+            modelBuilder.Entity<CommunityTrailPost>()
+                .Property(item => item.Content)
+                .HasMaxLength(6000);
+
+            modelBuilder.Entity<CommunityTrailPost>()
+                .HasOne(item => item.User)
+                .WithMany(user => user.CommunityPosts)
+                .HasForeignKey(item => item.AppUserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<CommunityTrailPost>()
+                .HasOne(item => item.Trail)
+                .WithMany(trail => trail.CommunityPosts)
+                .HasForeignKey(item => item.TrailId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<CommunityTrailPostImage>()
+                .HasIndex(item => item.CommunityTrailPostId);
+
+            modelBuilder.Entity<CommunityTrailPostImage>()
+                .Property(item => item.ImageUrl)
+                .HasMaxLength(600);
+
+            modelBuilder.Entity<CommunityTrailPostImage>()
+                .Property(item => item.StoragePath)
+                .HasMaxLength(600);
+
+            modelBuilder.Entity<CommunityTrailPostImage>()
+                .HasOne(item => item.Post)
+                .WithMany(post => post.Images)
+                .HasForeignKey(item => item.CommunityTrailPostId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Trail>()

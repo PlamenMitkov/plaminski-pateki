@@ -70,6 +70,104 @@ public class AuthController : ControllerBase
     }
 
     [Authorize]
+    [HttpPut("profile")]
+    public async Task<ActionResult<AuthMeResponse>> UpdateProfile(UpdateProfileRequest request)
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)
+            ?? User.FindFirstValue(ClaimTypes.Name)
+            ?? User.FindFirstValue("sub");
+
+        if (string.IsNullOrWhiteSpace(userId))
+        {
+            return Unauthorized();
+        }
+
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user is null)
+        {
+            return Unauthorized();
+        }
+
+        var normalizedEmail = request.Email.Trim();
+        var normalizedUserName = string.IsNullOrWhiteSpace(request.UserName)
+            ? (user.UserName ?? normalizedEmail)
+            : request.UserName.Trim();
+        var normalizedPhone = string.IsNullOrWhiteSpace(request.PhoneNumber)
+            ? null
+            : request.PhoneNumber.Trim();
+
+        if (normalizedUserName.Length < 3 || normalizedUserName.Length > 64)
+        {
+            return BadRequest("Потребителското име трябва да е между 3 и 64 символа.");
+        }
+
+        var existingByEmail = await _userManager.FindByEmailAsync(normalizedEmail);
+        if (existingByEmail is not null && !string.Equals(existingByEmail.Id, user.Id, StringComparison.Ordinal))
+        {
+            return Conflict("Потребител с този имейл вече съществува.");
+        }
+
+        var existingByUserName = await _userManager.FindByNameAsync(normalizedUserName);
+        if (existingByUserName is not null && !string.Equals(existingByUserName.Id, user.Id, StringComparison.Ordinal))
+        {
+            return Conflict("Потребителското име вече е заето.");
+        }
+
+        user.Email = normalizedEmail;
+        user.UserName = normalizedUserName;
+        user.PhoneNumber = normalizedPhone;
+
+        var updateResult = await _userManager.UpdateAsync(user);
+        if (!updateResult.Succeeded)
+        {
+            return BadRequest(updateResult.Errors.Select(error => error.Description));
+        }
+
+        var roles = await _userManager.GetRolesAsync(user);
+        return Ok(new AuthMeResponse(
+            user.Id,
+            user.Email ?? string.Empty,
+            roles.ToList(),
+            user.UserName ?? string.Empty,
+            user.PhoneNumber));
+    }
+
+    [Authorize]
+    [HttpPost("change-password")]
+    public async Task<ActionResult<AuthResponse>> ChangePassword(ChangePasswordRequest request)
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)
+            ?? User.FindFirstValue(ClaimTypes.Name)
+            ?? User.FindFirstValue("sub");
+
+        if (string.IsNullOrWhiteSpace(userId))
+        {
+            return Unauthorized();
+        }
+
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user is null)
+        {
+            return Unauthorized();
+        }
+
+        if (string.Equals(request.CurrentPassword, request.NewPassword, StringComparison.Ordinal))
+        {
+            return BadRequest("Новата парола трябва да е различна от текущата.");
+        }
+
+        var result = await _userManager.ChangePasswordAsync(user, request.CurrentPassword, request.NewPassword);
+        if (!result.Succeeded)
+        {
+            return BadRequest(result.Errors.Select(error => error.Description));
+        }
+
+        var roles = await _userManager.GetRolesAsync(user);
+        var token = _jwtTokenService.CreateToken(user, roles);
+        return Ok(new AuthResponse(token, user.Id, user.Email ?? string.Empty));
+    }
+
+    [Authorize]
     [HttpGet("me")]
     public async Task<ActionResult<AuthMeResponse>> Me()
     {
@@ -89,6 +187,11 @@ public class AuthController : ControllerBase
         }
 
         var roles = await _userManager.GetRolesAsync(user);
-        return Ok(new AuthMeResponse(user.Id, user.Email ?? string.Empty, roles.ToList()));
+        return Ok(new AuthMeResponse(
+            user.Id,
+            user.Email ?? string.Empty,
+            roles.ToList(),
+            user.UserName ?? string.Empty,
+            user.PhoneNumber));
     }
 }

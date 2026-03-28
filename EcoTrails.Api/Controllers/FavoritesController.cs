@@ -9,14 +9,8 @@ namespace EcoTrails.Api.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 [Authorize]
-public class FavoritesController : ControllerBase
+public class FavoritesController(IFavoritesRepository favoritesRepository) : ControllerBase
 {
-    private readonly IFavoritesRepository _favoritesRepository;
-
-    public FavoritesController(IFavoritesRepository favoritesRepository)
-    {
-        _favoritesRepository = favoritesRepository;
-    }
 
     [HttpGet]
     public async Task<ActionResult<IEnumerable<int>>> GetFavorites(CancellationToken cancellationToken)
@@ -27,7 +21,7 @@ public class FavoritesController : ControllerBase
             return Unauthorized();
         }
 
-        var trailIds = await _favoritesRepository.GetFavoriteTrailIdsAsync(userId, cancellationToken);
+        var trailIds = await favoritesRepository.GetFavoriteTrailIdsAsync(userId, cancellationToken);
 
         return Ok(trailIds);
     }
@@ -41,9 +35,9 @@ public class FavoritesController : ControllerBase
             return Unauthorized();
         }
 
-        var validTrailIds = await _favoritesRepository.SyncFavoritesAsync(
+        var validTrailIds = await favoritesRepository.SyncFavoritesAsync(
             userId,
-            request.TrailIds ?? [],
+            request.TrailIds,
             cancellationToken);
 
         return Ok(validTrailIds);

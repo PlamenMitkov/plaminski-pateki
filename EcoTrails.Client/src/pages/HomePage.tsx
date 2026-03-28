@@ -1,6 +1,5 @@
-import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
-import { Mountain, Heart, List, Map, MessageCircle, Trash2 } from 'lucide-react';
-import { Parser } from '@json2csv/plainjs';
+import { lazy, Suspense, useCallback, useEffect, useMemo, useState } from 'react';
+import { Mountain, Heart, List, Map as MapIcon, MessageCircle, Trash2 } from 'lucide-react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import {
   Bar,
@@ -35,6 +34,7 @@ const LazyAssistantPanel = lazy(() => import('../components/home/AssistantPanel'
 const LazyMapWidget = lazy(() => import('../components/home/MapWidget'));
 
 const ASSISTANT_SESSION_STORAGE_KEY = 'ecotrails:assistantSessionId';
+const ASSISTANT_ACTIONS_STORAGE_KEY = 'ecotrails:assistantQuickActionsBySession';
 const FORBIDDEN_NOTICE_KEY = 'ecotrails:forbiddenNotice';
 
 type HomeTab = 'list' | 'map' | 'favorites' | 'assistant';
@@ -105,6 +105,164 @@ function formatFilteredTrailCount(count: number): string {
 
 function formatRouteCount(count: number): string {
   return count === 1 ? '1 маршрут' : `${count} маршрута`;
+}
+
+function buildTrailRouteNotes(trail: Trail): string[] {
+  const notes: string[] = [];
+
+  if (trail.difficulty <= 2) {
+    notes.push('Маршрутът е подходящ за начинаещи и семейства с умерено темпо.');
+  } else if (trail.difficulty >= 4) {
+    notes.push('Маршрутът е техничен: планирай ранно тръгване и резерв от време.');
+  } else {
+    notes.push('Маршрутът е със средна трудност и е подходящ за еднодневен преход.');
+  }
+
+  if (trail.durationInHours >= 6) {
+    notes.push('Препоръчителни са челник, храна за целия ден и допълнителен слой дрехи.');
+  } else if (trail.durationInHours <= 2) {
+    notes.push('Подходящ за кратък полудневен излет с лека екипировка.');
+  }
+
+  if (trail.elevationGain >= 900) {
+    notes.push('Денивелацията е висока: следи хидратацията и темпото при изкачване.');
+  } else if (trail.elevationGain <= 250) {
+    notes.push('Ниска денивелация: маршрутът е подходящ и за по-спокойно темпо.');
+  }
+
+  if (trail.latitude !== null && trail.longitude !== null) {
+    notes.push('GPS координатите са налични и могат да се ползват за офлайн навигация.');
+  } else {
+    notes.push('Липсват точни координати: добави алтернативно описание на достъпа.');
+  }
+
+  return notes;
+}
+
+type TrailForecast = {
+  trailId: number;
+  trailName: string;
+  location: string;
+  coordinates: {
+    latitude: number;
+    longitude: number;
+  };
+  source: string;
+  fetchedAt: string;
+  days: Array<{
+    date: string;
+    weatherCode: number | null;
+    minTempC: number | null;
+    maxTempC: number | null;
+    precipitationProbabilityMax: number | null;
+    windSpeedMax: number | null;
+  }>;
+};
+
+type BackendOfflineEnrichmentResponse = {
+  generatedAt: string;
+  requestedTrailCount: number;
+  enrichedTrailCount: number;
+  cachedTrailCount: number;
+  sourcePreviewCount: number;
+  sourcePreviewFailures: number;
+  weatherAlerts?: {
+    sourceName: string;
+    sourceUrl: string;
+    fetchedAt: string;
+    isOfficialSource: boolean;
+    alerts: string[];
+  };
+  trails: Array<{
+    trailId: number;
+    trailName: string;
+    location: string;
+    cachedAt: string;
+    sourceUrl?: string;
+    sourcePreview?: {
+      title?: string;
+      description?: string;
+      fetchedAt: string;
+    };
+    transport: {
+      publicTransport?: string;
+      parkingAvailable?: boolean;
+    };
+    accessibility: {
+      wheelchairAccessible?: boolean;
+      strollerFriendly?: boolean;
+      bicycleAllowed?: boolean;
+    };
+    safetyWarnings: string[];
+    nearbyAmenities: string[];
+    equipmentNeeded: string[];
+    suitabilityTags: string[];
+    bestMonths: string[];
+    winterAccessible?: boolean;
+    weatherDependent?: boolean;
+    webcamLinks: string[];
+    accessNotes: string[];
+  }>;
+};
+
+async function fetchTrailForecast(trail: Trail): Promise<TrailForecast | null> {
+  if (trail.latitude === null || trail.longitude === null) {
+    return null;
+  }
+
+  const query = new URLSearchParams({
+    latitude: String(trail.latitude),
+    longitude: String(trail.longitude),
+    daily:
+      'weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,wind_speed_10m_max',
+    forecast_days: '3',
+    timezone: 'auto',
+  });
+
+  const response = await fetch(`https://api.open-meteo.com/v1/forecast?${query.toString()}`);
+  if (!response.ok) {
+    throw new Error(`Open-Meteo error: ${response.status}`);
+  }
+
+  const payload = (await response.json()) as {
+    daily?: {
+      time?: string[];
+      weather_code?: number[];
+      temperature_2m_max?: number[];
+      temperature_2m_min?: number[];
+      precipitation_probability_max?: number[];
+      wind_speed_10m_max?: number[];
+    };
+  };
+
+  const dates = payload.daily?.time ?? [];
+  const codes = payload.daily?.weather_code ?? [];
+  const maxTemps = payload.daily?.temperature_2m_max ?? [];
+  const minTemps = payload.daily?.temperature_2m_min ?? [];
+  const precipitation = payload.daily?.precipitation_probability_max ?? [];
+  const wind = payload.daily?.wind_speed_10m_max ?? [];
+
+  const days = dates.map((date, index) => ({
+    date,
+    weatherCode: codes[index] ?? null,
+    minTempC: minTemps[index] ?? null,
+    maxTempC: maxTemps[index] ?? null,
+    precipitationProbabilityMax: precipitation[index] ?? null,
+    windSpeedMax: wind[index] ?? null,
+  }));
+
+  return {
+    trailId: trail.id,
+    trailName: trail.name,
+    location: trail.location,
+    coordinates: {
+      latitude: trail.latitude,
+      longitude: trail.longitude,
+    },
+    source: 'Open-Meteo',
+    fetchedAt: new Date().toISOString(),
+    days,
+  };
 }
 
 function HomePage() {
@@ -200,6 +358,7 @@ function HomePage() {
     clearChat,
     setSessionId,
     setMessages,
+    setQuickActions,
   } = useAssistant();
 
   const assistantSessionId = sessionId ?? '';
@@ -264,6 +423,42 @@ function HomePage() {
       void refreshMyAssistantSessions();
     }
   }, [assistantSessionId, authUser]);
+
+  useEffect(() => {
+    if (!assistantSessionId || assistantActions.length === 0) {
+      return;
+    }
+
+    try {
+      const raw = localStorage.getItem(ASSISTANT_ACTIONS_STORAGE_KEY);
+      const parsed = raw ? (JSON.parse(raw) as Record<string, AssistantQuickAction[]>) : {};
+      parsed[assistantSessionId] = assistantActions;
+      localStorage.setItem(ASSISTANT_ACTIONS_STORAGE_KEY, JSON.stringify(parsed));
+    } catch (storageError) {
+      console.warn('Неуспешно кеширане на assistant quick actions:', storageError);
+    }
+  }, [assistantActions, assistantSessionId]);
+
+  useEffect(() => {
+    if (!assistantSessionId || assistantActions.length > 0) {
+      return;
+    }
+
+    try {
+      const raw = localStorage.getItem(ASSISTANT_ACTIONS_STORAGE_KEY);
+      if (!raw) {
+        return;
+      }
+
+      const parsed = JSON.parse(raw) as Record<string, AssistantQuickAction[]>;
+      const restored = parsed[assistantSessionId];
+      if (Array.isArray(restored) && restored.length > 0) {
+        setQuickActions(restored);
+      }
+    } catch (storageError) {
+      console.warn('Неуспешно възстановяване на assistant quick actions:', storageError);
+    }
+  }, [assistantActions.length, assistantSessionId, setQuickActions]);
 
   const refreshMyAssistantSessions = async () => {
     if (!authUser) {
@@ -343,6 +538,71 @@ function HomePage() {
 
   const mapTrailsToShow =
     showOnlySelectedOnMap && selectedMapTrail ? [selectedMapTrail] : mapFilteredTrails;
+
+  const selectedFavoriteTrails = useMemo(
+    () => mapFilteredTrails.filter((trail) => isFavorite(trail.id)),
+    [isFavorite, mapFilteredTrails],
+  );
+
+  const forecastCandidateTrails = useMemo(() => {
+    const withCoordinates = mapFilteredTrails.filter(
+      (trail) => trail.latitude !== null && trail.longitude !== null,
+    );
+
+    const prioritized: Trail[] = [];
+    const seen = new Set<number>();
+    const pushUnique = (trail: Trail | null | undefined) => {
+      if (!trail || seen.has(trail.id)) {
+        return;
+      }
+
+      seen.add(trail.id);
+      prioritized.push(trail);
+    };
+
+    pushUnique(selectedMapTrail);
+    selectedFavoriteTrails.forEach(pushUnique);
+    withCoordinates.forEach(pushUnique);
+
+    return prioritized.slice(0, 10);
+  }, [mapFilteredTrails, selectedFavoriteTrails, selectedMapTrail]);
+
+  const getWeatherLocationCandidate = useCallback((): string => {
+    if (selectedMapTrail?.location?.trim()) {
+      return selectedMapTrail.location.trim();
+    }
+
+    if (search.trim()) {
+      return search.trim();
+    }
+
+    const firstVisibleTrail = trails[0]?.location?.trim();
+    if (firstVisibleTrail) {
+      return firstVisibleTrail;
+    }
+
+    return 'България';
+  }, [search, selectedMapTrail, trails]);
+
+  const pinnedAssistantActions = useMemo<AssistantQuickAction[]>(() => {
+    const weatherLocation = getWeatherLocationCandidate();
+    return [
+      {
+        id: 'weather-now',
+        label: weatherLocation
+          ? `Време сега около ${weatherLocation}`
+          : 'Време сега (добави локация)',
+        value: weatherLocation,
+      },
+      {
+        id: 'weather-now',
+        label: weatherLocation
+          ? `Подготовка за преход около ${weatherLocation}`
+          : 'Подготовка според времето',
+        value: weatherLocation,
+      },
+    ];
+  }, [getWeatherLocationCandidate]);
 
   useEffect(() => {
     const nextParams = new URLSearchParams();
@@ -484,10 +744,6 @@ function HomePage() {
       return;
     }
 
-    if (trails.length === 0) {
-      return;
-    }
-
     try {
       await sendMessage(effectivePrompt, {
         filterSummary: buildAssistantFilterSummary(),
@@ -590,9 +846,21 @@ function HomePage() {
     }
 
     if (action.id === 'weather-now') {
-      const weatherPrompt = `Какво е времето сега около ${action.value} и каква е подходяща подготовка за пътеката?`;
+      const targetLocation = action.value?.trim() || getWeatherLocationCandidate();
+      const weatherPrompt = `Какво е времето сега около ${targetLocation} и каква е подходяща подготовка за пътеката?`;
       setAssistantPrompt(weatherPrompt);
       void generateAssistantReply(weatherPrompt);
+      return;
+    }
+
+    if (action.id === 'ask-prompt') {
+      const followUpPrompt = action.value?.trim();
+      if (!followUpPrompt) {
+        return;
+      }
+
+      setAssistantPrompt(followUpPrompt);
+      void generateAssistantReply(followUpPrompt);
       return;
     }
 
@@ -626,46 +894,152 @@ function HomePage() {
     }
   };
 
-  const exportCsv = async () => {
+  const exportOfflinePackage = async () => {
     try {
       setIsExporting(true);
 
-      const ids = shouldShowOnlyFavorites ? favoriteIds.join(',') : undefined;
+      const enrichmentTrailIds = mapFilteredTrails.slice(0, 200).map((trail) => trail.id);
+      const enrichmentErrors: string[] = [];
+      let backendEnrichment: BackendOfflineEnrichmentResponse | null = null;
 
-      const response = await apiClient.get<Trail[]>('/trails/export', {
-        params: {
-          ...filterParams,
-          ids,
+      if (enrichmentTrailIds.length > 0) {
+        try {
+          const enrichmentResponse = await apiClient.get<BackendOfflineEnrichmentResponse>(
+            '/trails/offline-enrichment',
+            {
+              params: {
+                ids: enrichmentTrailIds.join(','),
+              },
+            },
+          );
+
+          backendEnrichment = enrichmentResponse.data;
+        } catch (enrichmentError) {
+          console.error('Грешка при backend enrichment за офлайн пакет:', enrichmentError);
+          enrichmentErrors.push('Backend enrichment не е наличен за този експорт.');
+        }
+      }
+
+      const forecastResults = await Promise.allSettled(
+        forecastCandidateTrails.map((trail) => fetchTrailForecast(trail)),
+      );
+
+      const forecasts: TrailForecast[] = [];
+      const forecastErrors: string[] = [];
+
+      forecastResults.forEach((result, index) => {
+        const trail = forecastCandidateTrails[index];
+        if (result.status === 'fulfilled') {
+          if (result.value) {
+            forecasts.push(result.value);
+          }
+          return;
+        }
+
+        forecastErrors.push(`${trail.name}: ${String(result.reason)}`);
+      });
+
+      const routeNotes = mapFilteredTrails.map((trail) => ({
+        trailId: trail.id,
+        trailName: trail.name,
+        notes: buildTrailRouteNotes(trail),
+      }));
+
+      const favoriteTrailsById = new Map<number, Trail>();
+      selectedFavoriteTrails.forEach((trail) => {
+        favoriteTrailsById.set(trail.id, trail);
+      });
+      favoriteTrailsForStats.forEach((trail) => {
+        if (!favoriteTrailsById.has(trail.id)) {
+          favoriteTrailsById.set(trail.id, trail);
+        }
+      });
+
+      const selectedFavoriteTrailIds = Array.from(favoriteTrailsById.keys());
+      const selectedFavoriteTrailList = Array.from(favoriteTrailsById.values());
+
+      const offlinePackage = {
+        exportedAt: new Date().toISOString(),
+        exportType: 'offline-info-package',
+        app: 'EcoTrails.Client',
+        dataSources: {
+          trails: 'EcoTrails API /trails/export',
+          backendEnrichment: 'EcoTrails API /trails/offline-enrichment (24h cache + scraping)',
+          weatherForecast: 'Open-Meteo forecast API',
         },
-      });
+        filters: {
+          search,
+          difficulty,
+          onlyWithCoords,
+          onlyFavorites: shouldShowOnlyFavorites,
+          sortBy,
+          sortDirection,
+        },
+        mapView: {
+          center: mapCenter,
+          zoom: mapZoom,
+          selectedTrailId: selectedMapTrailId,
+        },
+        summary: {
+          totalFilteredTrails: mapFilteredTrails.length,
+          exportedTrails: mapFilteredTrails.length,
+          selectedFavoriteTrailCount: selectedFavoriteTrailIds.length,
+          routeNotesCount: routeNotes.length,
+          backendEnrichmentTrailCount: backendEnrichment?.enrichedTrailCount ?? 0,
+          backendEnrichmentCachedTrailCount: backendEnrichment?.cachedTrailCount ?? 0,
+          backendEnrichmentPreviewFailures: backendEnrichment?.sourcePreviewFailures ?? 0,
+          backendLiveAlertCount: backendEnrichment?.weatherAlerts?.alerts.length ?? 0,
+          weatherForecastCount: forecasts.length,
+          weatherForecastErrors: forecastErrors.length,
+          enrichmentErrors: enrichmentErrors.length,
+        },
+        selectedFavorites: {
+          favoriteIds,
+          selectedFavoriteTrailIds,
+          trails: selectedFavoriteTrailList,
+        },
+        routeNotes,
+        backendEnrichment,
+        weatherForecast: {
+          generatedAt: new Date().toISOString(),
+          forecastDays: 3,
+          coverage: {
+            requestedTrails: forecastCandidateTrails.length,
+            successfulTrails: forecasts.length,
+            failedTrails: forecastErrors.length,
+          },
+          failures: forecastErrors,
+          trails: forecasts,
+        },
+        warnings: {
+          enrichmentErrors,
+          forecastErrors,
+        },
+        assistantContext: {
+          activeSessionId: assistantSessionId || null,
+          latestMessages: assistantMessages.slice(-8).map((message) => ({
+            role: message.role,
+            content: message.content,
+            timestamp: message.timestamp.toISOString(),
+          })),
+        },
+        trails: mapFilteredTrails,
+      };
 
-      const parser = new Parser({
-        fields: [
-          'id',
-          'name',
-          'location',
-          'difficulty',
-          'durationInHours',
-          'elevationGain',
-          'latitude',
-          'longitude',
-          'description',
-        ],
+      const blob = new Blob([JSON.stringify(offlinePackage, null, 2)], {
+        type: 'application/json;charset=utf-8;',
       });
-
-      const csv = parser.parse(response.data);
-      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = 'ecotrails-export.csv';
+      link.download = `ecotrails-offline-${new Date().toISOString().slice(0, 10)}.json`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
     } catch (exportError) {
-      console.error('Грешка при експорт на CSV:', exportError);
-      setError('Неуспешен експорт на CSV.');
+      console.error('Грешка при експорт на офлайн пакет:', exportError);
+      setError('Неуспешен експорт на офлайн пакет.');
     } finally {
       setIsExporting(false);
     }
@@ -730,7 +1104,7 @@ function HomePage() {
   }
 
   return (
-    <div className="app-container">
+    <div className="app-container home-page">
       <h1 className="app-title">
         <Mountain size={32} />
         Екопътеки България
@@ -823,14 +1197,14 @@ function HomePage() {
           onClick={() => openTab('list')}
         >
           <List size={16} />
-          Списък
+          Пътеки
         </button>
         <button
           type="button"
           className={`tab-btn ${activeTab === 'map' ? 'active-tab' : ''}`}
           onClick={() => openTab('map')}
         >
-          <Map size={16} />
+          <MapIcon size={16} />
           Карта
         </button>
         <button
@@ -856,10 +1230,6 @@ function HomePage() {
         difficulty={difficulty}
         sortBy={sortBy}
         sortDirection={sortDirection}
-        minDurationInput={minDurationInput}
-        maxDurationInput={maxDurationInput}
-        minElevationInput={minElevationInput}
-        maxElevationInput={maxElevationInput}
         onlyWithCoords={onlyWithCoords}
         shouldShowOnlyFavorites={shouldShowOnlyFavorites}
         isExporting={isExporting}
@@ -878,22 +1248,6 @@ function HomePage() {
           setPage(1);
           setSortDirection(value);
         }}
-        onMinDurationChange={(value) => {
-          setPage(1);
-          setMinDurationInput(value);
-        }}
-        onMaxDurationChange={(value) => {
-          setPage(1);
-          setMaxDurationInput(value);
-        }}
-        onMinElevationChange={(value) => {
-          setPage(1);
-          setMinElevationInput(value);
-        }}
-        onMaxElevationChange={(value) => {
-          setPage(1);
-          setMaxElevationInput(value);
-        }}
         onClearFilters={clearFilters}
         onToggleOnlyWithCoords={() => {
           setPage(1);
@@ -903,7 +1257,7 @@ function HomePage() {
           setPage(1);
           setShowOnlyFavorites((current) => !current);
         }}
-        onExportCsv={() => void exportCsv()}
+        onExportOfflinePackage={() => void exportOfflinePackage()}
       />
 
       {accessNotice && <p className="status-text error">{accessNotice}</p>}
@@ -911,7 +1265,7 @@ function HomePage() {
       {isLoading && <p className="status-text">Зареждане...</p>}
       {!error && (
         <p className="status-text">
-          Списък: страница {page} от {totalPages} (Общо {formatTrailCount(totalCount)}) · Карта:{' '}
+          Пътеки: страница {page} от {totalPages} (Общо {formatTrailCount(totalCount)}) · Карта:{' '}
           {isMapLoading ? 'зареждане...' : formatFilteredTrailCount(mapFilteredTrails.length)}
         </p>
       )}
@@ -948,6 +1302,7 @@ function HomePage() {
             assistantUserSessions={assistantUserSessions}
             assistantSessionId={assistantSessionId}
             assistantChips={assistantChips}
+            pinnedAssistantActions={pinnedAssistantActions}
             assistantActions={assistantActions}
             assistantUsedTrails={assistantUsedTrails}
             assistantMessages={assistantMessages}
@@ -1012,7 +1367,7 @@ function HomePage() {
                 <p>
                   <strong>Денивелация:</strong> {trail.elevationGain} м
                 </p>
-                <p>{trail.description}</p>
+                <p className="trail-description">{trail.description}</p>
                 <button
                   type="button"
                   className={`secondary-btn favorite-btn ${isFavorite(trail.id) ? 'active-btn' : ''}`}

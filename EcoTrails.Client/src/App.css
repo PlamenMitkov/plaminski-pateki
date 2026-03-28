@@ -27,15 +27,21 @@
 }
 
 .tab-btn {
-  border: 1px solid #d1d5db;
+  border: 1px solid rgba(148, 163, 184, 0.65);
   border-radius: 999px;
-  background: #fff;
+  background: rgba(248, 250, 252, 0.92);
+  color: #0f172a;
   padding: 8px 14px;
   display: inline-flex;
   align-items: center;
   gap: 6px;
   cursor: pointer;
   font-weight: 600;
+}
+
+.tab-btn:hover {
+  background: #ffffff;
+  border-color: #94a3b8;
 }
 
 .active-tab {
@@ -90,7 +96,9 @@
 }
 
 .trail-card {
-  border: 1px solid #ccc;
+  border: 1px solid rgba(148, 163, 184, 0.6);
+  background: rgba(7, 18, 38, 0.56);
+  color: #eaf2ff;
   padding: 15px;
   border-radius: 8px;
   text-align: left;
@@ -98,6 +106,20 @@
 
 .trail-card h2 {
   margin-top: 0;
+  color: #f8fbff;
+}
+
+.trail-card strong {
+  color: #ffffff;
+}
+
+.trail-description {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(148, 163, 184, 0.3);
+  font-style: italic;
+  line-height: 1.6;
+  color: #cbd5e1;
 }
 
 .trail-link {
@@ -150,6 +172,217 @@
 
 .favorite-btn {
   margin-top: 8px;
+}
+
+.home-page {
+  color: #e6eefc;
+}
+
+.home-page .app-title {
+  color: #f8fbff;
+}
+
+.home-page .status-text,
+.home-page .route-legend,
+.home-page .auth-user,
+.app-container > .status-text,
+.app-container .route-legend {
+  color: #f8fbff !important;
+}
+
+.home-page .status-text,
+.app-container > .status-text {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: rgba(15, 23, 42, 0.72);
+  border: 1px solid rgba(186, 205, 232, 0.65);
+}
+
+.home-page .trails-grid {
+  gap: 18px;
+}
+
+.home-page .trail-card,
+.app-container .trails-grid .trail-card {
+  background: rgba(8, 20, 44, 0.9) !important;
+  border-color: rgba(186, 205, 232, 0.7) !important;
+  color: #f8fbff !important;
+  box-shadow: 0 14px 30px rgba(3, 7, 18, 0.34);
+}
+
+.home-page .trail-card h2,
+.home-page .trail-card strong,
+.home-page .trail-card p,
+.app-container .trails-grid .trail-card h2,
+.app-container .trails-grid .trail-card strong,
+.app-container .trails-grid .trail-card p {
+  color: #f8fbff !important;
+}
+
+.home-page .trail-card p,
+.app-container .trails-grid .trail-card p {
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.45);
+}
+
+.home-page .trail-link,
+.app-container .trails-grid .trail-link {
+  color: #bfdbfe !important;
+}
+
+.home-page .trail-link:hover {
+  color: #dbeafe !important;
+}
+
+.home-page .assistant-card,
+.home-page .profile-assistant-card {
+  background: rgba(255, 255, 255, 0.97);
+  border-color: rgba(148, 163, 184, 0.72);
+  color: #0f172a !important;
+}
+
+.home-page .assistant-card h3,
+.home-page .assistant-card p,
+.home-page .assistant-card .assistant-meta,
+.home-page .assistant-inline-sessions .assistant-meta,
+.home-page .profile-assistant-card h3,
+.home-page .profile-assistant-card .status-text,
+.home-page .assistant-session-open,
+.home-page .assistant-session-item span,
+.home-page .assistant-session-item small {
+  color: #0f172a !important;
+}
+
+.home-page .assistant-pinned-actions {
+  background: rgba(241, 245, 249, 0.96);
+  border-color: #94a3b8;
+}
+
+.about-page {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 36px 24px 56px;
+  color: #f8fbff;
+}
+
+.about-hero {
+  background: linear-gradient(130deg, rgba(11, 28, 53, 0.92), rgba(19, 46, 66, 0.88));
+  border: 1px solid rgba(191, 219, 254, 0.45);
+  border-radius: 18px;
+  padding: 24px;
+  box-shadow: 0 18px 35px rgba(3, 7, 18, 0.35);
+}
+
+.about-kicker {
+  margin: 0;
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #93c5fd;
+}
+
+.about-hero h1 {
+  margin: 8px 0 12px;
+  font-size: 40px;
+  line-height: 1.08;
+}
+
+.about-lead {
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.7;
+  color: #dbeafe;
+}
+
+.about-grid {
+  margin-top: 18px;
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.about-card {
+  background: rgba(8, 20, 44, 0.9);
+  border: 1px solid rgba(186, 205, 232, 0.62);
+  border-radius: 14px;
+  padding: 18px;
+}
+
+.about-card h2 {
+  margin: 0 0 8px;
+  font-size: 20px;
+}
+
+.about-card p {
+  margin: 0;
+  line-height: 1.65;
+  color: #e2e8f0;
+}
+
+.about-note {
+  margin-top: 18px;
+  background: rgba(15, 23, 42, 0.84);
+  border: 1px solid rgba(148, 163, 184, 0.65);
+  border-radius: 14px;
+  padding: 18px;
+}
+
+.about-note h2 {
+  margin: 0 0 8px;
+}
+
+.about-note p {
+  margin: 0;
+  color: #cbd5e1;
+  line-height: 1.65;
+}
+
+@media (max-width: 900px) {
+  .about-page {
+    padding: 20px 14px 34px;
+  }
+
+  .about-hero h1 {
+    font-size: 31px;
+  }
+
+  .about-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.home-page .trail-link:hover {
+  color: #bfdbfe;
+}
+
+.trail-details-page {
+  color: #e6eefc;
+}
+
+.trail-details-page .app-title {
+  color: #f8fbff;
+}
+
+.trail-details-page .trail-link {
+  color: #93c5fd;
+}
+
+.trail-details-page .status-text {
+  color: #dbeafe;
+}
+
+.trail-details-page .route-legend {
+  color: #e2e8f0;
+}
+
+.trail-details-page .trail-card {
+  background: rgba(7, 18, 38, 0.48);
+  border-color: rgba(148, 163, 184, 0.55);
+  color: #eaf2ff;
+}
+
+.trail-details-page .trail-card strong {
+  color: #ffffff;
 }
 
 .custom-marker-cluster {
@@ -336,6 +569,16 @@
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+}
+
+.assistant-pinned-actions {
+  position: sticky;
+  top: 10px;
+  z-index: 2;
+  padding: 6px;
+  border-radius: 10px;
+  background: rgba(241, 245, 249, 0.92);
+  border: 1px solid #cbd5e1;
 }
 
 .assistant-meta {
@@ -540,4 +783,142 @@
 
 .auth-submit {
   justify-content: center;
+}
+
+.profile-hub-card {
+  max-width: 980px;
+  gap: 18px;
+}
+
+.profile-hub-page {
+  padding-top: 20px;
+  padding-bottom: 30px;
+}
+
+.profile-hub-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.profile-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 12px;
+}
+
+.profile-card {
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  padding: 14px;
+  background: #f8fafc;
+}
+
+.profile-card h3 {
+  margin-top: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.profile-role-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 8px 0 12px;
+}
+
+.profile-actions-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.profile-actions-row + .profile-actions-row {
+  margin-top: 8px;
+}
+
+.profile-post-toolbar {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.profile-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 8px;
+}
+
+.profile-stats-grid .chart-card {
+  padding: 10px;
+}
+
+.profile-stats-grid .chart-card h4 {
+  margin: 0;
+  font-size: 14px;
+}
+
+.profile-stats-grid .chart-card p {
+  margin: 6px 0 0;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.profile-post-form,
+.profile-post-list,
+.profile-admin-quality {
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  padding: 14px;
+  background: #f8fafc;
+}
+
+.profile-post-form textarea.auth-input {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.profile-post-item {
+  border-top: 1px solid #e2e8f0;
+  padding-top: 10px;
+  margin-top: 10px;
+}
+
+.profile-post-item h4 {
+  margin: 0 0 4px;
+}
+
+.post-image-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 8px;
+}
+
+.post-image-grid img {
+  width: 100%;
+  height: 110px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+}
+
+.auth-admin-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 760px) {
+  .profile-post-toolbar {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-hub-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
 }

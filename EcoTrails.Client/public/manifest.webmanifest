@@ -1,0 +1,16 @@
+{
+  "name": "EcoTrails Bulgaria",
+  "short_name": "EcoTrails",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0d1b2a",
+  "theme_color": "#1b4332",
+  "description": "Офлайн достъп до екопътеки, маршрути и помощни данни за преходи.",
+  "icons": [
+    {
+      "src": "/vite.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    }
+  ]
+}

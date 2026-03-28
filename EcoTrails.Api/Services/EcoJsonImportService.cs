@@ -65,18 +65,33 @@ public class EcoJsonImportService
             }
 
             var description = GetString(trailElement, "description");
+            var shortSummary = GetString(trailElement, "short_summary");
             var nearestTown = GetNestedString(trailElement, "location", "nearest_town");
             var region = GetNestedString(trailElement, "location", "region");
             var location = !string.IsNullOrWhiteSpace(nearestTown)
                 ? nearestTown
                 : (!string.IsNullOrWhiteSpace(region) ? region : "Неуточнено");
             var normalizedRegion = !string.IsNullOrWhiteSpace(region) ? region : location;
+            var resolvedDescription = ResolveDescription(description, shortSummary, name, location);
 
             var difficultyText = GetNestedString(trailElement, "trail_details", "difficulty");
             var durationText = GetNestedString(trailElement, "trail_details", "duration");
+            var equipmentNeeded = GetStringArray(trailElement, "equipment_needed");
+            var suitability = GetStringArray(trailElement, "suitability");
+            var nearbyAmenities = GetStringArray(trailElement, "nearby_amenities");
+            var maxAltitudeText = GetNestedString(trailElement, "trail_details", "max_altitude_m");
+            var lengthKmText = GetNestedString(trailElement, "trail_details", "length_km");
             var latitude = GetNestedDouble(trailElement, "location", "coordinates", "latitude");
             var longitude = GetNestedDouble(trailElement, "location", "coordinates", "longitude");
             var mappedDifficulty = MapDifficulty(difficultyText);
+            var mappedMaxAltitude = ParseNullableInt(maxAltitudeText);
+            var mappedElevationGain = ParseElevationGain(lengthKmText, mappedDifficulty);
+            var mappedWaterSources = InferWaterSources(nearbyAmenities);
+            var mappedSuitableForKids = suitability.Any(item =>
+                item.Contains("family_with_kids", StringComparison.OrdinalIgnoreCase));
+            var mappedRequiredGear = equipmentNeeded.Count > 0
+                ? JsonSerializer.Serialize(equipmentNeeded)
+                : "[\"туристически обувки\",\"вода\"]";
 
             var key = BuildKey(name, location);
             if (existingByKey.TryGetValue(key, out var existingTrail))
@@ -101,6 +116,45 @@ public class EcoJsonImportService
                     changed = true;
                 }
 
+                if (!IsMissingDescription(resolvedDescription) &&
+                    (IsMissingDescription(existingTrail.Description) ||
+                     resolvedDescription.Length > existingTrail.Description.Length + 20))
+                {
+                    existingTrail.Description = resolvedDescription;
+                    changed = true;
+                }
+
+                if (existingTrail.ElevationGain <= 0 && mappedElevationGain > 0)
+                {
+                    existingTrail.ElevationGain = mappedElevationGain;
+                    changed = true;
+                }
+
+                if (!existingTrail.WaterSources && mappedWaterSources)
+                {
+                    existingTrail.WaterSources = true;
+                    changed = true;
+                }
+
+                if (!existingTrail.SuitableForKids && mappedSuitableForKids)
+                {
+                    existingTrail.SuitableForKids = true;
+                    changed = true;
+                }
+
+                if (existingTrail.MaxAltitude is null && mappedMaxAltitude.HasValue)
+                {
+                    existingTrail.MaxAltitude = mappedMaxAltitude.Value;
+                    changed = true;
+                }
+
+                if ((string.IsNullOrWhiteSpace(existingTrail.RequiredGear) || existingTrail.RequiredGear == "[]") &&
+                    mappedRequiredGear != "[]")
+                {
+                    existingTrail.RequiredGear = mappedRequiredGear;
+                    changed = true;
+                }
+
                 if (changed)
                 {
                     updatedItems++;
@@ -112,21 +166,23 @@ public class EcoJsonImportService
             var newTrail = new Trail
             {
                 Name = name,
-                Description = string.IsNullOrWhiteSpace(description) ? "Няма описание." : description,
+                Description = resolvedDescription,
                 Location = location,
                 Region = normalizedRegion,
                 Difficulty = mappedDifficulty,
                 DifficultyLevel = MapDifficultyLevel(mappedDifficulty),
                 WaterSources = false,
-                MaxAltitude = null,
-                SuitableForKids = mappedDifficulty <= 2,
-                RequiredGear = "[\"туристически обувки\",\"вода\"]",
+                MaxAltitude = mappedMaxAltitude,
+                SuitableForKids = mappedSuitableForKids || mappedDifficulty <= 2,
+                RequiredGear = mappedRequiredGear,
                 DurationInHours = ParseDurationInHours(durationText),
-                ElevationGain = 0,
+                ElevationGain = mappedElevationGain,
                 Latitude = latitude,
                 Longitude = longitude,
                 CreatedAt = DateTime.UtcNow
             };
+
+            newTrail.WaterSources = mappedWaterSources;
 
             itemsToAdd.Add(newTrail);
             existingByKey[key] = newTrail;
@@ -176,6 +232,22 @@ public class EcoJsonImportService
         return current.ValueKind == JsonValueKind.String ? current.GetString() ?? string.Empty : string.Empty;
     }
 
+    private static List<string> GetStringArray(JsonElement element, string propertyName)
+    {
+        if (!element.TryGetProperty(propertyName, out var property) || property.ValueKind != JsonValueKind.Array)
+        {
+            return [];
+        }
+
+        return property
+            .EnumerateArray()
+            .Where(item => item.ValueKind == JsonValueKind.String)
+            .Select(item => item.GetString())
+            .Where(value => !string.IsNullOrWhiteSpace(value))
+            .Select(value => value!.Trim())
+            .ToList();
+    }
+
     private static double? GetNestedDouble(JsonElement element, params string[] path)
     {
         var value = GetNestedString(element, path);
@@ -208,6 +280,122 @@ public class EcoJsonImportService
         if (normalized.Contains("тежка") || normalized.Contains("екстрем")) return 5;
 
         return 3;
+    }
+
+    private static string ResolveDescription(string description, string shortSummary, string name, string location)
+    {
+        if (!string.IsNullOrWhiteSpace(description))
+        {
+            return description.Trim();
+        }
+
+        if (!string.IsNullOrWhiteSpace(shortSummary))
+        {
+            return shortSummary.Trim();
+        }
+
+        if (!string.IsNullOrWhiteSpace(location) && !string.Equals(location, "Неуточнено", StringComparison.OrdinalIgnoreCase))
+        {
+            return $"Екопътека \"{name.Trim()}\" в района на {location.Trim()}. Описание предстои да бъде допълнено.";
+        }
+
+        return $"Екопътека \"{name.Trim()}\". Описание предстои да бъде допълнено.";
+    }
+
+    private static bool IsMissingDescription(string? description)
+    {
+        if (string.IsNullOrWhiteSpace(description))
+        {
+            return true;
+        }
+
+        var normalized = description.Trim();
+        return normalized.Equals("Няма описание.", StringComparison.OrdinalIgnoreCase)
+            || normalized.Equals("Няма описание", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static bool InferWaterSources(IReadOnlyList<string> nearbyAmenities)
+    {
+        return nearbyAmenities.Any(item =>
+            item.Contains("вода", StringComparison.OrdinalIgnoreCase) ||
+            item.Contains("извор", StringComparison.OrdinalIgnoreCase));
+    }
+
+    private static int? ParseNullableInt(string rawValue)
+    {
+        if (string.IsNullOrWhiteSpace(rawValue))
+        {
+            return null;
+        }
+
+        var numbers = NumberRegex
+            .Matches(rawValue)
+            .Select(match => int.TryParse(match.Value, out var value) ? value : 0)
+            .Where(value => value > 0)
+            .ToList();
+
+        if (numbers.Count == 0)
+        {
+            return null;
+        }
+
+        return numbers.Max();
+    }
+
+    private static int ParseElevationGain(string lengthKmText, int difficulty)
+    {
+        if (string.IsNullOrWhiteSpace(lengthKmText))
+        {
+            return difficulty switch
+            {
+                <= 2 => 180,
+                >= 4 => 650,
+                _ => 350,
+            };
+        }
+
+        var normalized = lengthKmText.Trim().ToLowerInvariant();
+        if (normalized.Contains("не е посоч") || normalized.Contains("варира") || normalized == "")
+        {
+            return difficulty switch
+            {
+                <= 2 => 180,
+                >= 4 => 650,
+                _ => 350,
+            };
+        }
+
+        var numbers = NumberRegex
+            .Matches(normalized)
+            .Select(match => double.TryParse(match.Value.Replace(',', '.'), NumberStyles.Float, CultureInfo.InvariantCulture, out var parsed)
+                ? parsed
+                : 0)
+            .Where(value => value > 0)
+            .ToList();
+
+        if (numbers.Count == 0)
+        {
+            return difficulty switch
+            {
+                <= 2 => 180,
+                >= 4 => 650,
+                _ => 350,
+            };
+        }
+
+        var distanceKm = numbers.Count >= 2 && normalized.Contains('-')
+            ? (numbers[0] + numbers[1]) / 2.0
+            : numbers[0];
+
+        var difficultyMultiplier = difficulty switch
+        {
+            <= 2 => 35,
+            >= 4 => 75,
+            _ => 55,
+        };
+
+        var estimated = (int)Math.Round(distanceKm * difficultyMultiplier, MidpointRounding.AwayFromZero);
+        return Math.Clamp(estimated, 80, 1600);
     }
 
     private static TrailDifficultyLevel MapDifficultyLevel(int difficulty)

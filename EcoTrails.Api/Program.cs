@@ -65,11 +65,21 @@ else
 builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("Jwt"));
 builder.Services.Configure<OpenRouteServiceOptions>(builder.Configuration.GetSection("OpenRouteService"));
 builder.Services.Configure<OpenAiOptions>(builder.Configuration.GetSection("OpenAI"));
+builder.Services.Configure<AdminPanelOptions>(builder.Configuration.GetSection("AdminPanel"));
+builder.Services.AddScoped<ITrailProposalReviewService, TrailProposalReviewService>();
 builder.Services.AddScoped<ITrailRepository, TrailRepository>();
 builder.Services.AddScoped<IFavoritesRepository, FavoritesRepository>();
 builder.Services.AddScoped<IAssistantSessionReadRepository, AssistantSessionReadRepository>();
 builder.Services.AddScoped<IAssistantSessionWriteRepository, AssistantSessionWriteRepository>();
 builder.Services.AddScoped<IAssistantMessageRepository, AssistantMessageRepository>();
+builder.Services.AddScoped<IAssistantSessionOrchestrationService, AssistantSessionOrchestrationService>();
+builder.Services.AddScoped<IAssistantPromptSafetyService, AssistantPromptSafetyService>();
+builder.Services.AddScoped<IAssistantPromptAssemblyService, AssistantPromptAssemblyService>();
+builder.Services.AddScoped<IAssistantProvenancePolicyService, AssistantProvenancePolicyService>();
+builder.Services.AddScoped<IAssistantRetrievalService, AssistantRetrievalService>();
+builder.Services.AddScoped<IAssistantEnrichmentWorkflowService, AssistantEnrichmentWorkflowService>();
+builder.Services.AddScoped<IAssistantResponseCompositionService, AssistantResponseCompositionService>();
+builder.Services.AddScoped<ITrailOfflineEnrichmentService, TrailOfflineEnrichmentService>();
 builder.Services.AddScoped<JwtTokenService>();
 builder.Services.AddHttpClient<OpenRouteService>(httpClient =>
 {
@@ -77,12 +87,42 @@ builder.Services.AddHttpClient<OpenRouteService>(httpClient =>
 })
     .AddHttpMessageHandler(serviceProvider =>
         new OutboundHttpMetricsHandler(serviceProvider.GetRequiredService<IMeterFactory>(), "openroute"));
-builder.Services.AddHttpClient<IOpenAiAssistantService, OpenAiAssistantService>(httpClient =>
+builder.Services.AddHttpClient<IOpenAiProvider, OpenAiProvider>(httpClient =>
 {
+    var options = builder.Configuration.GetSection("OpenAI").Get<OpenAiOptions>();
+    httpClient.BaseAddress = new Uri(options?.BaseUrl ?? "https://api.openai.com/v1/");
     httpClient.Timeout = TimeSpan.FromSeconds(25);
 })
-    .AddHttpMessageHandler(serviceProvider =>
-        new OutboundHttpMetricsHandler(serviceProvider.GetRequiredService<IMeterFactory>(), "openai-assistant"));
+.AddStandardResilienceHandler()
+.Configure(options =>
+{
+    options.Retry.MaxRetryAttempts = 3;
+    options.Retry.Delay = TimeSpan.FromSeconds(2);
+    options.AttemptTimeout.Timeout = TimeSpan.FromSeconds(20);
+});
+
+builder.Services.AddHttpClient<IGeminiProvider, GeminiProvider>(httpClient =>
+{
+    var options = builder.Configuration.GetSection("OpenAI").Get<OpenAiOptions>();
+    httpClient.BaseAddress = new Uri(options?.GeminiBaseUrl ?? "https://generativelanguage.googleapis.com/v1beta/");
+    httpClient.Timeout = TimeSpan.FromSeconds(25);
+})
+.AddStandardResilienceHandler()
+.Configure(options =>
+{
+    options.Retry.MaxRetryAttempts = 3;
+    options.Retry.Delay = TimeSpan.FromSeconds(2);
+    options.AttemptTimeout.Timeout = TimeSpan.FromSeconds(20);
+});
+
+builder.Services.AddScoped<IOpenAiAssistantService, AssistantService>();
+builder.Services.AddScoped<IAiProviderFallbackPolicy, AiProviderFallbackPolicy>();
+builder.Services.AddHttpClient<IAssistantWeatherContextService, AssistantWeatherContextService>(httpClient =>
+{
+    httpClient.Timeout = TimeSpan.FromSeconds(12);
+})
+.AddHttpMessageHandler(serviceProvider =>
+    new OutboundHttpMetricsHandler(serviceProvider.GetRequiredService<IMeterFactory>(), "assistant-weather"));
 builder.Services.AddHttpClient<IVectorService, OpenAiVectorService>(httpClient =>
 {
     httpClient.Timeout = TimeSpan.FromSeconds(20);
@@ -360,6 +400,7 @@ app.UseSerilogRequestLogging(options =>
 });
 app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 app.UseHttpsRedirection();
+app.UseStaticFiles();
 app.UseCors("AllowReact");
 app.UseRateLimiter();
 app.UseAuthentication();
@@ -370,6 +411,11 @@ if (!disableBackgroundServices)
     {
         Authorization = [new HangfireAdminAuthorizationFilter()]
     });
+
+    RecurringJob.AddOrUpdate<ITrailOfflineEnrichmentService>(
+        "trail-offline-enrichment-daily",
+        service => service.WarmDailyCacheAsync(),
+        Cron.Daily);
 }
 app.MapControllers();
 app.MapHealthChecks("/health/live", new HealthCheckOptions

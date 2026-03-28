@@ -11,6 +11,8 @@ export interface AuthUser {
 
 export interface AuthSessionInfo extends AuthUser {
   roles: string[];
+  userName?: string;
+  phoneNumber?: string;
 }
 
 interface AuthResponse {
@@ -149,4 +151,58 @@ export function isCurrentUserAdmin(): boolean {
   }
 
   return session.roles.some((role) => role.toLowerCase() === 'admin');
+}
+
+export interface UpdateProfileResponse extends AuthSessionInfo {
+  userName?: string;
+  phoneNumber?: string;
+}
+
+export interface UpdateProfileRequest {
+  email?: string;
+  userName?: string;
+  phoneNumber?: string;
+}
+
+export async function updateProfile(request: UpdateProfileRequest): Promise<UpdateProfileResponse> {
+  const response = await apiClient.put<UpdateProfileResponse>('/auth/profile', request);
+  
+  // Update stored user and session info
+  if (response.data.email && response.data.userId) {
+    localStorage.setItem(
+      USER_STORAGE_KEY,
+      JSON.stringify({ userId: response.data.userId, email: response.data.email }),
+    );
+  }
+  
+  if (response.data.userId && response.data.email) {
+    saveSession({
+      userId: response.data.userId,
+      email: response.data.email,
+      roles: response.data.roles || [],
+    });
+  }
+  
+  return response.data;
+}
+
+export interface ChangePasswordRequest {
+  currentPassword: string;
+  newPassword: string;
+}
+
+export interface ChangePasswordResponse {
+  token: string;
+}
+
+export async function changePassword(request: ChangePasswordRequest): Promise<void> {
+  const response = await apiClient.post<ChangePasswordResponse>('/auth/change-password', request);
+  
+  // Save new token
+  if (response.data.token) {
+    localStorage.setItem(TOKEN_STORAGE_KEY, response.data.token);
+  }
+  
+  // Revalidate session with new token
+  await validateAuthSession();
 }

@@ -17,6 +17,7 @@ interface AssistantPanelProps {
   assistantUserSessions: AssistantSessionResponse[];
   assistantSessionId: string;
   assistantChips: AssistantKnowledgeChip[];
+  pinnedAssistantActions: AssistantQuickAction[];
   assistantActions: AssistantQuickAction[];
   assistantUsedTrails: AssistantTrailContext[];
   assistantMessages: ChatMessage[];
@@ -47,6 +48,7 @@ function AssistantPanel({
   assistantUserSessions,
   assistantSessionId,
   assistantChips,
+  pinnedAssistantActions,
   assistantActions,
   assistantUsedTrails,
   assistantMessages,
@@ -61,36 +63,28 @@ function AssistantPanel({
     <div className="assistant-card">
       <h3>Планински асистент</h3>
       <p>
-        Използва текущите филтри, резултатите от страницата и любимите ти пътеки, за да ти даде
-        бърза препоръка.
+        Използва текущите филтри, резултатите от страницата и любимите ти пътеки за персонализирани препоръки.
       </p>
+
+      {/* Input Section */}
       <input
         value={assistantPrompt}
         onChange={(event) => handlers.onPromptChange(event.target.value)}
-        onKeyDown={(event) => {
-          if (event.key === 'Enter') {
-            event.preventDefault();
-            handlers.onGenerateReply();
-          }
-        }}
+        onKeyDown={(event) => event.key === 'Enter' && (event.preventDefault(), handlers.onGenerateReply())}
         className="search-input assistant-input"
         placeholder="Напр. препоръчай ми кратка пътека около София"
       />
+
       <div className="assistant-actions">
         <button
           type="button"
           className="primary-btn"
           onClick={handlers.onGenerateReply}
-          disabled={isTyping || assistantPrompt.trim().length === 0}
+          disabled={isTyping || !assistantPrompt.trim()}
         >
           {isTyping ? 'Генериране...' : 'Генерирай препоръка'}
         </button>
-        <button
-          type="button"
-          className="secondary-btn"
-          onClick={handlers.onStartNewSession}
-          disabled={isTyping}
-        >
+        <button type="button" className="secondary-btn" onClick={handlers.onStartNewSession} disabled={isTyping}>
           Нова сесия
         </button>
         <button type="button" className="secondary-btn" onClick={handlers.onOpenMapTab}>
@@ -107,87 +101,136 @@ function AssistantPanel({
           {isAssistantEnriching ? 'Обогатяване...' : 'Обогати AI данни (Admin)'}
         </AdminActionButton>
       </div>
-      {authUserEmail && (
-        <div className="assistant-inline-sessions">
-          <p className="assistant-meta">Сесии в профила</p>
-          <div className="assistant-session-list">
-            {assistantUserSessions.map((session) => (
-              <div
-                key={`assistant-${session.sessionId}`}
-                className={`assistant-session-item ${
-                  assistantSessionId === session.sessionId ? 'assistant-session-item-active' : ''
-                }`}
-              >
-                <button
-                  type="button"
-                  className="assistant-session-open"
-                  onClick={() => handlers.onOpenAssistantSession(session.sessionId)}
-                >
-                  <span>{session.title}</span>
-                  <small>{formatMessageCount(session.messageCount)}</small>
-                </button>
-                <button
-                  type="button"
-                  className="assistant-session-delete"
-                  onClick={() => handlers.onRequestDeleteSession(session.sessionId)}
-                  title="Изтрий сесия"
-                >
-                  <Trash2 size={14} />
-                </button>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
 
-      {assistantChips.length > 0 && (
-        <div className="assistant-chips">
-          {assistantChips.map((chip, index) => (
-            <span key={`${chip.label}-${index}`} className={`assistant-chip assistant-chip-${chip.type}`}>
-              {chip.label}
-            </span>
-          ))}
-        </div>
-      )}
+      <SessionList
+        authUserEmail={authUserEmail}
+        sessions={assistantUserSessions}
+        currentSessionId={assistantSessionId}
+        onOpen={handlers.onOpenAssistantSession}
+        onDelete={handlers.onRequestDeleteSession}
+        formatMessageCount={formatMessageCount}
+      />
 
-      {assistantActions.length > 0 && (
-        <div className="assistant-quick-actions">
-          {assistantActions.map((action) => (
-            <button
-              key={`${action.id}-${action.value}`}
-              type="button"
-              className="secondary-btn"
-              onClick={() => handlers.onQuickAction(action)}
-            >
-              {action.label}
-            </button>
-          ))}
-        </div>
-      )}
+      <KnowledgeChips chips={assistantChips} />
+
+      <QuickActions actions={[...pinnedAssistantActions, ...assistantActions]} onAction={handlers.onQuickAction} />
 
       {assistantUsedTrails.length > 0 && (
         <p className="assistant-meta">Контекст: {formatTrailCount(assistantUsedTrails.length)} от базата данни.</p>
       )}
       {assistantSessionId && <p className="assistant-meta">Сесия: {assistantSessionId.slice(0, 12)}...</p>}
 
-      {assistantAdminNotice && <p className="status-text">{assistantAdminNotice}</p>}
-      {assistantAdminError && <p className="status-text error">{assistantAdminError}</p>}
-      {chatError && <p className="status-text error">{chatError}</p>}
-      {isTyping && <p className="status-text">Асистентът пише...</p>}
-      {assistantMessages.length > 0 && (
-        <div className="assistant-thread">
-          {assistantMessages.map((message) => (
-            <p
-              key={message.id}
-              className={`assistant-reply ${message.role === 'assistant' ? 'assistant-reply-ai' : 'assistant-reply-user'}`}
-            >
-              {message.content}
-            </p>
-          ))}
-        </div>
-      )}
+      <StatusSection
+        notice={assistantAdminNotice}
+        adminError={assistantAdminError}
+        chatError={chatError}
+        isTyping={isTyping}
+      />
+
+      <MessageThread messages={assistantMessages} />
     </div>
   );
 }
+
+// Atomic Pure Components
+
+const SessionList = ({
+  authUserEmail,
+  sessions,
+  currentSessionId,
+  onOpen,
+  onDelete,
+  formatMessageCount,
+}: {
+  authUserEmail: string | null;
+  sessions: AssistantSessionResponse[];
+  currentSessionId: string;
+  onOpen: (sid: string) => void;
+  onDelete: (sid: string) => void;
+  formatMessageCount: (c: number) => string;
+}) => {
+  if (!authUserEmail || sessions.length === 0) return null;
+
+  return (
+    <div className="assistant-inline-sessions">
+      <p className="assistant-meta">Сесии в профила</p>
+      <div className="assistant-session-list">
+        {sessions.map((session) => (
+          <div
+            key={session.sessionId}
+            className={`assistant-session-item ${currentSessionId === session.sessionId ? 'assistant-session-item-active' : ''}`}
+          >
+            <button type="button" className="assistant-session-open" onClick={() => onOpen(session.sessionId)}>
+              <span>{session.title}</span>
+              <small>{formatMessageCount(session.messageCount)}</small>
+            </button>
+            <button
+              type="button"
+              className="assistant-session-delete"
+              onClick={() => onDelete(session.sessionId)}
+              title="Изтрий сесия"
+            >
+              <Trash2 size={14} />
+            </button>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const KnowledgeChips = ({ chips }: { chips: AssistantKnowledgeChip[] }) => {
+  if (chips.length === 0) return null;
+  return (
+    <div className="assistant-chips">
+      {chips.map((chip, i) => (
+        <span key={`${chip.label}-${i}`} className={`assistant-chip assistant-chip-${chip.type}`}>
+          {chip.label}
+        </span>
+      ))}
+    </div>
+  );
+};
+
+const QuickActions = ({
+  actions,
+  onAction,
+}: {
+  actions: AssistantQuickAction[];
+  onAction: (a: AssistantQuickAction) => void;
+}) => {
+  if (actions.length === 0) return null;
+  return (
+    <div className="assistant-quick-actions">
+      {actions.map((action) => (
+        <button key={`${action.id}-${action.value}`} type="button" className="secondary-btn" onClick={() => onAction(action)}>
+          {action.label}
+        </button>
+      ))}
+    </div>
+  );
+};
+
+const StatusSection = ({ notice, adminError, chatError, isTyping }: { notice: string; adminError: string; chatError: string | null; isTyping: boolean }) => (
+  <>
+    {notice && <p className="status-text">{notice}</p>}
+    {adminError && <p className="status-text error">{adminError}</p>}
+    {chatError && <p className="status-text error">{chatError}</p>}
+    {isTyping && <p className="status-text">Асистентът пише...</p>}
+  </>
+);
+
+const MessageThread = ({ messages }: { messages: ChatMessage[] }) => {
+  if (messages.length === 0) return null;
+  return (
+    <div className="assistant-thread">
+      {messages.map((m) => (
+        <p key={m.id} className={`assistant-reply ${m.role === 'assistant' ? 'assistant-reply-ai' : 'assistant-reply-user'}`}>
+          {m.content}
+        </p>
+      ))}
+    </div>
+  );
+};
 
 export default AssistantPanel;

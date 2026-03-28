@@ -10,5 +10,19 @@ public record LoginRequest(
 	[Required, EmailAddress, MaxLength(256)] string Email,
 	[Required, MinLength(6), MaxLength(128)] string Password);
 
+public record UpdateProfileRequest(
+	[Required, EmailAddress, MaxLength(256)] string Email,
+	[MaxLength(64)] string? UserName,
+	[Phone, MaxLength(32)] string? PhoneNumber);
+
+public record ChangePasswordRequest(
+	[Required, MinLength(6), MaxLength(128)] string CurrentPassword,
+	[Required, MinLength(6), MaxLength(128)] string NewPassword);
+
 public record AuthResponse(string Token, string UserId, string Email);
-public record AuthMeResponse(string UserId, string Email, List<string> Roles);
+public record AuthMeResponse(
+	string UserId,
+	string Email,
+	List<string> Roles,
+	string UserName = "",
+	string? PhoneNumber = null);

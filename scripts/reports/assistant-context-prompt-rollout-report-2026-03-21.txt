@@ -1,0 +1,146 @@
+EcoProject
+Assistant Context-Prompt Rollout Report
+Generated: 2026-03-21
+
+1. Purpose
+
+This report documents the implementation and validation of the new context-prompt assistant mode.
+The goal is to introduce a second prompt strategy as a backup path without breaking current production behavior.
+
+
+2. Scope
+
+Included:
+- feature-flagged assistant mode selection
+- context_prompt user payload path
+- shadow mode support for safe rollout
+- fail-open behavior to current mode
+- configuration updates and validation evidence
+
+Excluded:
+- historical data-enrichment workflow
+- previous assistant relevance/schema.org changes already covered in prior report
+
+
+3. Design Goals
+
+- Keep current behavior as default and stable baseline.
+- Add a second mode that can be enabled gradually.
+- Allow context mode testing in shadow configuration.
+- Preserve response availability if context mode fails.
+
+
+4. Implementation Summary
+
+4.1 New assistant options
+
+Added in OpenAI options:
+- AssistantMode (default: current)
+- PromptTemplateShadowMode (default: false)
+- PromptTemplateFailOpen (default: true)
+
+Meaning:
+- AssistantMode selects active mode (current or context_prompt).
+- PromptTemplateShadowMode allows context mode to be configured while serving current mode.
+- PromptTemplateFailOpen forces fallback to current-mode prompting if context mode fails or returns empty.
+
+
+4.2 Mode-aware prompt orchestration
+
+GenerateReplyAsync now:
+- resolves configured mode and effective mode
+- builds system instruction by mode
+- builds user prompt by mode
+- executes model request with selected prompt strategy
+- applies fail-open fallback path for context_prompt when enabled
+
+
+4.3 Context payload path
+
+For context_prompt mode, a structured JSON user payload builder was added.
+This payload carries normalized conversation and domain context in a deterministic shape to reduce prompt ambiguity.
+
+
+4.4 Non-breaking behavior
+
+The default configuration remains:
+- AssistantMode = current
+- PromptTemplateShadowMode = false
+- PromptTemplateFailOpen = true
+
+This guarantees existing production behavior unless explicitly changed.
+
+
+5. Files Changed
+
+- EcoTrails.Api/Services/OpenAiAssistantService.cs
+  - extended OpenAiOptions with new rollout flags
+  - added mode resolution and mode-specific prompt builders
+  - added context payload builder and fail-open fallback logic
+
+- EcoTrails.Api/appsettings.json
+  - added AssistantMode, PromptTemplateShadowMode, PromptTemplateFailOpen
+
+- EcoTrails.Api/appsettings.Development.json
+  - added AssistantMode, PromptTemplateShadowMode, PromptTemplateFailOpen
+
+
+6. Behavior Matrix
+
+- current + shadow=false:
+  - existing prompt path only
+
+- context_prompt + shadow=false + fail_open=true:
+  - context prompt path first
+  - fallback to current prompt path on exception or empty response
+
+- context_prompt + shadow=true:
+  - current prompt path remains serving path
+  - context mode can remain configured for controlled rollout preparation
+
+- context_prompt + fail_open=false:
+  - strict context mode; failures are not auto-recovered by current mode
+
+
+7. Validation Evidence
+
+7.1 Build
+- Project: EcoTrails.Api
+- Result: build succeeded
+
+7.2 Focused tests
+- Scope: assistant and matcher related tests
+- Result: 9 total, 0 failed, 9 passed, 0 skipped
+
+7.3 Editor diagnostics
+- No errors in modified files:
+  - EcoTrails.Api/Services/OpenAiAssistantService.cs
+  - EcoTrails.Api/appsettings.json
+  - EcoTrails.Api/appsettings.Development.json
+
+
+8. Risk Assessment
+
+Mitigated risks:
+- production regression risk reduced by default current mode
+- availability risk reduced by fail-open fallback
+- rollout risk reduced by explicit feature flags and shadow option
+
+Remaining risks:
+- additional unit tests can further harden branch coverage for mode resolution and fail-open branches
+- strict context_prompt mode (fail_open=false) should be enabled only after staged confidence checks
+
+
+9. Rollout Recommendation
+
+Stage 1: Keep defaults (current mode).
+Stage 2: Enable context_prompt in non-critical environment with fail_open=true.
+Stage 3: Observe quality/latency/fallback rate and compare against current mode.
+Stage 4: Decide whether to keep dual-mode or promote context_prompt as primary.
+
+
+10. Conclusion
+
+Context-prompt engineering has been implemented as a second, feature-flagged assistant variant.
+Current production behavior is preserved by default.
+The new mode can be activated safely, tested gradually, and automatically recovered to current mode when fail-open is enabled.

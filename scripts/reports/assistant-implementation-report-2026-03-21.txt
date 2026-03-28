@@ -1,0 +1,149 @@
+EcoProject
+Assistant Implementation Report
+Generated: 2026-03-21
+
+1. Purpose
+
+This report documents the completed assistant and application-level improvements delivered after the data-enrichment phase.
+It is intentionally separate from the previous dataset quality report and focuses on:
+- assistant behavior correctness
+- model fallback resilience
+- structured web metadata integration
+- implementation validation status
+
+
+2. Scope Of This Report
+
+Included:
+- assistant search ambiguity fix
+- provider/model fallback enhancements
+- schema.org integration in trail details UI
+- test and build validation for the new changes
+
+Excluded:
+- prior eco.json content enrichment details
+- prior CSV cleanup and merge workflow
+- legacy data quality metrics already covered in previous reports
+
+
+3. Delivered Changes
+
+3.1 Exact-token anti-ambiguity matching
+
+Problem addressed:
+- Previous assistant scoring relied on substring matching in several text fields.
+- This could create false positives, for example matching token "рила" inside the word "открила".
+
+Implementation:
+- Added a dedicated text matcher helper using exact token extraction and matching.
+- Updated assistant scoring to use whole-token checks instead of raw substring checks.
+
+Outcome:
+- Reduced ambiguous lexical matches.
+- Improved relevance precision for Bulgarian trail queries with overlapping morphemes.
+
+
+3.2 Assistant provider fallback hardening (Gemini -> OpenAI)
+
+Problem addressed:
+- Existing fallback behavior was too narrow and primarily focused on Gemini 429 cases.
+- It did not fully cover model unavailability or broader service-failure scenarios.
+
+Implementation:
+- Expanded fallback conditions to include unavailable model/service paths.
+- Added support for secondary OpenAI fallback model configuration.
+- Exposed relevant options in configuration for predictable runtime behavior.
+
+Outcome:
+- Assistant remains available when primary model path is unavailable.
+- Reduced outage risk tied to single-provider/model failure modes.
+
+
+3.3 schema.org JSON-LD in trail details page
+
+Problem addressed:
+- Trail details page had no explicit structured metadata for search engines and machine-readable indexing.
+
+Implementation:
+- Added JSON-LD generation and injection in the trail details view.
+- Used schema.org TouristAttraction representation with geo coordinates and trail-related properties.
+
+Outcome:
+- Better structured discoverability footprint.
+- Stronger semantic representation of trail entities for external crawlers and assistants.
+
+
+4. Files Added/Modified In This Phase
+
+Backend:
+- EcoTrails.Api/Services/TrailSearchTextMatcher.cs (new)
+- EcoTrails.Api/Services/OpenAiAssistantService.cs (updated)
+- EcoTrails.Api/appsettings.json (updated)
+- EcoTrails.Api/appsettings.Development.json (updated)
+
+Tests:
+- EcoTrails.Api.Tests/TrailSearchTextMatcherTests.cs (new)
+
+Frontend:
+- EcoTrails.Client/src/pages/TrailDetails.tsx (updated)
+
+
+5. Validation Evidence
+
+5.1 Backend tests
+- Command run:
+  dotnet test .\EcoTrails.Api.Tests\EcoTrails.Api.Tests.csproj --filter TrailSearchTextMatcherTests
+- Result:
+  total: 3, failed: 0, succeeded: 3, skipped: 0
+
+5.2 Frontend build
+- Command run:
+  npm run build (in EcoTrails.Client)
+- Result:
+  build completed successfully (TypeScript + Vite)
+
+5.3 Diagnostics
+- No editor/compiler diagnostics were reported in modified target files during validation checks.
+
+
+6. Architectural Significance
+
+These changes shift the assistant from a basic retrieval/scoring pattern toward a safer context-aware model:
+- lexical precision guardrail (exact token matching)
+- provider resilience through broader fallback design
+- machine-readable external representation (schema.org)
+
+In practical terms:
+- better answer relevance
+- fewer false-positive route hits
+- reduced dependency on single model availability
+- improved interoperability with external indexing systems
+
+
+7. Residual Risks And Open Items
+
+- The new matcher tests are passing, but broader end-to-end assistant scenario tests can further increase confidence.
+- Prompt-template mode (secondary assistant mode) is designed conceptually but not yet fully activated as a separate runtime path.
+- Additional source-confidence policies can be enforced at response stage for facts without provenance.
+
+
+8. Recommended Next Steps
+
+1) Introduce feature-flagged secondary assistant mode (template/context-engineering path) in shadow mode.
+2) Run side-by-side comparison metrics versus current mode:
+   - relevance quality
+   - fallback frequency
+   - latency
+   - user acceptance.
+3) Add response-level policy checks for provenance-sensitive claims.
+4) Expand schema.org coverage to additional relevant pages where appropriate.
+
+
+9. Conclusion
+
+The implementation phase is complete for the requested improvements:
+- schema.org integration is in place
+- anti-ambiguity filter is implemented and validated
+- OpenAI fallback path is hardened for unavailability scenarios
+
+This provides a stable base for launching a second, non-breaking assistant mode as backup while preserving the current production behavior.

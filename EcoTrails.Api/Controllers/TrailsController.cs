@@ -1,10 +1,12 @@
 using EcoTrails.Api.Contracts;
+using EcoTrails.Api.Data;
 using EcoTrails.Api.Models;
 using EcoTrails.Api.Repositories;
 using EcoTrails.Api.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -16,15 +18,24 @@ namespace EcoTrails.Api.Controllers
     {
         private readonly ITrailRepository _trailRepository;
         private readonly OpenRouteService _openRouteService;
+        private readonly ITrailOfflineEnrichmentService _trailOfflineEnrichmentService;
+        private readonly AppDbContext _dbContext;
         private readonly IMemoryCache _cache;
 
         private static readonly TimeSpan TrailsCacheDuration = TimeSpan.FromMinutes(10);
         private const string TrailsCacheVersionKey = "trails-cache-version";
 
-        public TrailsController(ITrailRepository trailRepository, OpenRouteService openRouteService, IMemoryCache cache)
+        public TrailsController(
+            ITrailRepository trailRepository,
+            OpenRouteService openRouteService,
+            ITrailOfflineEnrichmentService trailOfflineEnrichmentService,
+            AppDbContext dbContext,
+            IMemoryCache cache)
         {
             _trailRepository = trailRepository;
             _openRouteService = openRouteService;
+            _trailOfflineEnrichmentService = trailOfflineEnrichmentService;
+            _dbContext = dbContext;
             _cache = cache;
         }
 
@@ -281,6 +292,85 @@ namespace EcoTrails.Api.Controllers
                 IsEstimatedEnd = true,
                 IsExternalRoute = externalRoute is not null,
                 Coordinates = coordinates
+            });
+        }
+
+        [HttpGet("offline-enrichment")]
+        public async Task<ActionResult<TrailOfflineEnrichmentResponse>> GetOfflineEnrichment(
+            [FromQuery] string? ids,
+            CancellationToken cancellationToken)
+        {
+            if (string.IsNullOrWhiteSpace(ids))
+            {
+                return BadRequest("Query parameter 'ids' is required.");
+            }
+
+            var idList = ids
+                .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+                .Select(value => int.TryParse(value, out var parsedId) ? parsedId : 0)
+                .Where(parsedId => parsedId > 0)
+                .Distinct()
+                .Take(250)
+                .ToArray();
+
+            if (idList.Length == 0)
+            {
+                return BadRequest("Query parameter 'ids' must contain at least one valid trail id.");
+            }
+
+            var trails = await _trailRepository.ExportTrailsAsync(
+                new TrailQueryParameters(),
+                string.Join(',', idList),
+                cancellationToken);
+
+            var enrichment = await _trailOfflineEnrichmentService.GetOfflineEnrichmentAsync(trails, cancellationToken);
+            return Ok(enrichment);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet("admin/data-quality")]
+        public async Task<ActionResult<TrailDataQualityResponse>> GetDataQuality(CancellationToken cancellationToken)
+        {
+            var trails = await _dbContext.Trails.AsNoTracking().ToListAsync(cancellationToken);
+            var staleCutoff = DateTime.UtcNow.AddHours(-24);
+            var staleSourcePreviewCount = 0;
+            try
+            {
+                staleSourcePreviewCount = await _dbContext.TrailEnrichmentSnapshots
+                    .AsNoTracking()
+                    .Where(item => item.SourcePreviewFetchedAtUtc == null || item.SourcePreviewFetchedAtUtc < staleCutoff)
+                    .Select(item => item.TrailId)
+                    .Distinct()
+                    .CountAsync(cancellationToken);
+            }
+            catch
+            {
+                staleSourcePreviewCount = trails.Count;
+            }
+
+            var response = new TrailDataQualityResponse
+            {
+                TotalTrails = trails.Count,
+                MissingCoordinates = trails.Count(item => !item.Latitude.HasValue || !item.Longitude.HasValue),
+                MissingLengthHints = trails.Count(item => item.DurationInHours <= 0),
+                MissingElevationGain = trails.Count(item => item.ElevationGain <= 0),
+                MissingDescription = trails.Count(item => string.IsNullOrWhiteSpace(item.Description)),
+                StaleSourcePreviews = staleSourcePreviewCount,
+                GeneratedAtUtc = DateTime.UtcNow,
+            };
+
+            return Ok(response);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost("admin/re-enrich")]
+        public async Task<ActionResult<object>> TriggerReEnrichment()
+        {
+            await _trailOfflineEnrichmentService.WarmDailyCacheAsync();
+            return Ok(new
+            {
+                Status = "started",
+                Message = "Manual re-enrichment completed for warmup batch."
             });
         }
 

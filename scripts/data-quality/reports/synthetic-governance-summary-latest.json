@@ -1,0 +1,9 @@
+{
+  "total_findings": 926,
+  "high_severity_findings": 7,
+  "medium_severity_findings": 623,
+  "low_severity_findings": 296,
+  "generated_at_utc": "2026-03-21T09:19:34.6016961Z",
+  "snapshot_csv": "scripts\\data-quality\\reports\\synthetic-governance-findings-20260321-111934.csv",
+  "latest_csv": "scripts\\data-quality\\reports\\synthetic-governance-findings-latest.csv"
+}

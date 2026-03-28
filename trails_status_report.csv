@@ -1,0 +1,552 @@
+ID,Name,CurrentDescLength,ConfidenceInFiles,Status
+1,"Екопътека ""Ерантис"" – Киреево",322,medium,Already Good
+2,"Екопътека ""Етър-Соколски манастир""",95,high,Ready to Enrich
+3,"Екопътека ""Збегове"" – Белоградчик",657,high,Ready to Enrich
+4,"Екопътека Заслон ""Опасен зъб"" – Тетевен",581,high,Ready to Enrich
+5,"Екопътека до ""Първия войнишки паметник"" - с. Алдомировци",276,high,Ready to Enrich
+6,"Водопад ""Лястовичи вир""",906,none,Already Good
+7,Местност за пикник Орешак,91,none,No Data Found
+8,Местност Бялата чешма – Самуилово,278,high,Ready to Enrich
+9,Хайдушки водопади (екопътека),313,high,Ready to Enrich
+10,E4 Етап 10: Вихрен - Банско,45,none,No Data Found
+11,E4 Етап 11: Банско - Славянка планина,50,none,No Data Found
+12,E4 Етап 12: Славянка връх - Мелник,42,none,No Data Found
+13,E4 Етап 8: Мусала - Пирин национален парк,44,none,No Data Found
+14,E4 Етап 9: Пирин - връх Вихрен,44,none,No Data Found
+15,Долина на река Благоевградска Бистрица,83,high,Ready to Enrich
+16,"Екопътека ""Белица - Кръстова гора""",27,high,Ready to Enrich
+17,"Екопътека ""Властелинът на планините""",200,none,No Data Found
+18,"Екопътека ""Влахи""",208,none,No Data Found
+19,"Екопътека ""Кръстът"" – Благоевград",314,high,Ready to Enrich
+20,"Екопътека ""Мелник - Роженски манастир""",218,none,No Data Found
+21,"Екопътека ""Пътеката на дивата коза""",227,high,Ready to Enrich
+22,"Екопътека ""Римски мост""",587,high,Ready to Enrich
+23,"Екопътека ""Тай3ните на водата"" и водопад ""Срамежливеца""",292,high,Ready to Enrich
+24,"Скално образование ""Камината"" – Бов",287,medium,Review Needed (Medium Conf)
+25,E3 Етап 10: Шипка - Емине връх,39,none,No Data Found
+26,"Екопътека ""Пещера и изворите на р. Младежка""",459,none,Already Good
+27,"Екопътека ""По следите на миналото"" – Приморско",229,none,No Data Found
+28,"Екопътека ""По следите на римляните"" – Приморско",540,none,Already Good
+29,"Екопътека ""Пътят на ясния месец""",131,none,No Data Found
+30,Дивите кактуси на Синеморец,352,none,Already Good
+31,Red Dot Trail - Витоша,49,high,Ready to Enrich
+32,Боров камък - Враца,31,high,Ready to Enrich
+33,Триградско ждрело - Смолян,40,none,No Data Found
+34,"Екопътека ""Хотнишки водопад""",330,medium,Already Good
+35,Екопътека до Преображенския манастир,680,none,Already Good
+36,Еменски каньон,283,high,Ready to Enrich
+37,Негованска екопътека – Емен,655,none,Already Good
+38,Хотнишка екопътека,251,none,No Data Found
+39,"Христовски водопад ""Руховци"" (екопътека)",174,high,Ready to Enrich
+40,Еко стадион Пишмана,317,medium,Already Good
+41,"Екопътека ""Планиница""",657,none,Already Good
+42,Местност Божурица – Видин,279,none,No Data Found
+43,"""Пътеката на здравето"" – Кладница",166,none,No Data Found
+44,Нископланинска обиколна пътека (НОП) Витоша,625,high,Ready to Enrich
+45,"Панорамна алея ""Галунка""",344,none,Already Good
+46,Подход от кв. Бояна,316,high,Ready to Enrich
+47,Подход от кв. Драгалевци,362,high,Ready to Enrich
+48,Подход от кв. Княжево,294,high,Ready to Enrich
+49,Подход от м. Златни мостове,238,high,Ready to Enrich
+50,Подход от м. Ярема,363,high,Ready to Enrich
+51,Подход от с. Бистрица,368,high,Ready to Enrich
+52,Подход от с. Боснек,300,high,Ready to Enrich
+53,Подход от с. Владая,277,none,No Data Found
+54,Подход от с. Железница,265,high,Ready to Enrich
+55,Подход от с. Кладница,232,high,Ready to Enrich
+56,Подход от с. Рударци,224,none,No Data Found
+57,Подход от с. Чуйпетлово,267,none,No Data Found
+58,Подход от с. Ярлово,250,none,No Data Found
+59,"Пътека ""Сила и живот""",190,high,Ready to Enrich
+60,Среднопланинска обиколна пътека (СОП),163,none,No Data Found
+61,Торфищна информационна алея,215,none,No Data Found
+62,Врацата,46,none,No Data Found
+63,"Екопътека ""Тектонски грабен Калето""",281,medium,Review Needed (Medium Conf)
+64,Врачанска екопътека,293,high,Ready to Enrich
+65,Горска пътека на приказките,377,high,Ready to Enrich
+66,"Водопад ""Боров Камък"", Врачанска екопътека",1642,none,Already Good
+67,Врачанска екопътека – Згориград,332,none,Already Good
+68,Исторически маршрут „Антична и средновековна Вратица”,273,none,No Data Found
+69,Исторически маршрут „По стъпките на Ботевата чета”,210,none,No Data Found
+70,Местност КАРИЕРАТА – къмпинг над с. Згориград,424,none,Already Good
+71,Наследствена пътека с. Очин дол,390,high,Ready to Enrich
+72,Познавателен маршрут „Белоглавият лешояд в ПП Врачански Балкан”,190,none,No Data Found
+73,Познавателен маршрут „Враца – пещера Леденика”,164,none,No Data Found
+74,Познавателен маршрут „Карст и биологично разнообразие”,144,none,No Data Found
+75,Познавателен маршрут „Планинарство за начинаещи”,135,none,No Data Found
+76,Спортно-туристически маршрут „Горска пътека на здравето“,170,none,No Data Found
+77,"Екопътека ""Иванчова поляна""",372,high,Ready to Enrich
+78,E3 Етап 4: Витиня - Кардиново,47,none,No Data Found
+79,E3 Етап 5: Кардиново - Тетевен,44,none,No Data Found
+80,E3 Етап 6: Тетевен - Чулово,31,none,No Data Found
+81,E3 Етап 7: Чулово - Боян,39,none,No Data Found
+82,E3 Етап 8: Боян - Розова долина,48,none,No Data Found
+83,E3 Етап 9: Розова долина - Шипка,48,none,No Data Found
+84,E8 Этап 8: Костенец - Чепино,34,medium,Review Needed (Medium Conf)
+85,"Екопъ3тека ""Римският път""",544,high,Ready to Enrich
+86,"Екопътека ""Витата стена""",199,none,No Data Found
+87,"Екопътека ""Градище-Кметовци""",1220,none,Already Good
+88,"Екопътека ""Градище-пазителката на прохода""",323,none,Already Good
+89,"Екопътека ""Люляци–Дебел дял""",628,none,Already Good
+90,"Екопътека ""Могила""",915,none,Already Good
+91,"Екопътека ""Узана""",253,none,No Data Found
+92,"Екопътека Трявна - АИР ""Боженци""",421,none,Already Good
+93,Тетевенска баба,56,high,Ready to Enrich
+94,Дряновска екопътека,397,none,Already Good
+95,Екопътека Via Ferrata,374,none,Already Good
+96,"Екопътека ""Камъка"" - Горна Оряховица",335,none,Already Good
+97,Алея на туриста до м. Струилица – Девин,529,high,Ready to Enrich
+98,"Екопътека ""Равня""",565,none,Already Good
+99,Ботаническа алея за незрящи,350,none,Already Good
+100,"Екопътека и Скален феномен ""Марков камък"" – Елена",767,none,Already Good
+101,"Екопътека ""Екот от камбанен звън"" – Рибарица",381,high,Ready to Enrich
+102,"Екопътека ""Горица""",243,high,Ready to Enrich
+103,"Екопътека ""Горица"" (Овчарченски водопад)",243,high,Ready to Enrich
+104,Копренска екопътека,389,medium,Already Good
+105,"Водопади ""Дуплево"", ""Скакалото"" и ""Костен камък"" - с.Орехово",366,high,Ready to Enrich
+106,Екопътека до Киселчовски водопад,427,high,Ready to Enrich
+107,Вазова екопътека,1447,high,Ready to Enrich
+108,"Водопад ""Вазова скакля"", Вазова екопътека",975,none,Already Good
+109,"Туристическа пътека ""Под Камико""",355,none,Already Good
+110,"Тракийски слънца и екопътека ""Дрънчи дупка""",256,none,No Data Found
+111,"Екопътека ""Божения""",185,none,No Data Found
+112,"Екопътека ""Пътят на Сърцето""",179,none,No Data Found
+113,E4 Етап 3: Перелик - Рила манастир,43,none,No Data Found
+114,E4 Етап 4: Рила манастир - Седемте Рилски езера,47,none,No Data Found
+115,E4 Етап 5: Озеро - връх Маричини езера,44,none,No Data Found
+116,E8 Етап 1: Рила манастир - Врелото,48,none,No Data Found
+117,E8 Етап 2: Врелото - Рилска пустиня,42,none,No Data Found
+118,E8 Етап 3: Рилска пустиня - Урдини езера,45,none,No Data Found
+119,E8 Етап 4: Урдини езера - връх Стобски пирамиди,44,none,No Data Found
+120,E3 Етап 2: Петрохан - Лакатник,58,none,No Data Found
+121,E3 Етап 3: Лакатник - Витиня,56,none,No Data Found
+122,"Екопътека ""Гложене - Гложенски манастир - пещера Моровица""",505,none,Already Good
+123,"Екопътека ""Нагоре към Слънцето""",803,none,Already Good
+124,"Екопътека ""Опасният зъб""",580,none,Already Good
+125,"Екопътека ""По стъпките на балканджиите"" – Априлци",758,none,Already Good
+126,"Екопътека ""Под пръските на водопада""",180,none,No Data Found
+127,"Екопътека ""През очите на времето - история и природа""",136,none,No Data Found
+128,"Екопътека ""Станина дупка""",570,none,Already Good
+129,Екопътека – Ведерник,186,none,No Data Found
+130,Крушунска екопътека,337,none,Already Good
+131,Местност за отдих Мийковци,618,none,Already Good
+132,Местност за пикник с. Малко Чочовени,186,none,No Data Found
+133,Геопътека Задънен дол,381,none,Already Good
+134,Екопътека Искър-Панега,426,none,Already Good
+135,"Екопътека ""Белите скали"" – Лютиброд",227,none,No Data Found
+136,E3 Етап 1: Ком връх - Петрохан,81,none,No Data Found
+137,"Екопътека ""Хайдушки водопади""",312,none,Already Good
+138,"Водопад ""Бабско пръскало""",912,none,Already Good
+139,"Екопътека ""Калето"" - Обзор",494,none,Already Good
+140,Геокомплекс Зарапово,495,none,Already Good
+141,"Екопътека ""Беглика""",376,none,Already Good
+142,Алея на Боснешкия карст,468,none,Already Good
+143,"Екопътека ""Поглед към девет планини""",173,none,No Data Found
+144,Ждрелото на река Ерма,230,none,No Data Found
+145,Православен мемориален кръст „Памет и вяра”,178,none,No Data Found
+146,"Пътека за крепост ""Беаднос""",257,none,No Data Found
+147,Високопланинска обиколна пътека (ВОП),612,none,Already Good
+148,"Екопътека ""Никопол Римски път - Скална църква""",353,none,Already Good
+149,"Екопътека ""Попската скала""",136,none,No Data Found
+150,"Екопътека ""Черне3лка""",285,none,No Data Found
+151,"""Зелената пътека"" - Бачковски манастир",228,high,Ready to Enrich
+152,Агушеви конаци,55,high,Ready to Enrich
+153,Академика,50,high,Ready to Enrich
+154,Аладжа манастир,56,high,Ready to Enrich
+155,Албутински манастир,60,high,Ready to Enrich
+156,Алеко,46,none,No Data Found
+157,Алея на билките,56,none,No Data Found
+158,Али ботуш,50,none,No Data Found
+159,Ардинци,48,none,No Data Found
+160,Аркутино,49,none,No Data Found
+161,Атанасовско езеро,58,none,No Data Found
+162,Баба Вида,50,none,No Data Found
+163,Бабин пласт,52,none,No Data Found
+164,Бабини Видини кули,59,none,No Data Found
+165,Бабско пръскало,56,none,No Data Found
+166,Байкушевата мура,57,none,No Data Found
+167,Балчик,47,none,No Data Found
+168,Батак,46,none,No Data Found
+169,Беглик таш,51,none,No Data Found
+170,Беглика,48,none,No Data Found
+171,Беглика рали,53,none,No Data Found
+172,Беклемето,50,none,No Data Found
+173,Беласица,49,none,No Data Found
+174,Бели Искър,51,none,No Data Found
+175,Белинташ,49,none,No Data Found
+176,Белмекен,49,none,No Data Found
+177,Белоградчишки скали,60,none,No Data Found
+178,Биосферен резерват,59,none,No Data Found
+179,Бистрица,49,none,No Data Found
+180,Бистришко бранище,58,none,No Data Found
+181,Бодрост,48,none,No Data Found
+182,Божевски водопад,57,none,No Data Found
+183,Божият мост,52,none,No Data Found
+184,Болата,47,none,No Data Found
+185,Ботев връх,51,none,No Data Found
+186,Бродилово,50,none,No Data Found
+187,Бузлуджа,49,none,No Data Found
+188,Буйновско ждрело,57,none,No Data Found
+189,Буная,46,none,No Data Found
+190,Българи,48,high,Ready to Enrich
+191,Бяла река,50,high,Ready to Enrich
+192,В царството на зелениката,66,high,Ready to Enrich
+193,Варовитец,50,high,Ready to Enrich
+194,Велека,47,high,Ready to Enrich
+195,Видимско пръскало,58,high,Ready to Enrich
+196,Вкаменената сватба,59,none,No Data Found
+197,Врабча,47,none,No Data Found
+198,Вратцата,49,none,No Data Found
+199,Врелото,48,none,No Data Found
+200,Вълчи камък,52,none,No Data Found
+201,Геопарк Искър-Панега,61,none,No Data Found
+202,Гложенски манастир,59,none,No Data Found
+203,Голяма Сюткя,53,none,No Data Found
+204,Горица,47,none,No Data Found
+205,Горна земя,51,none,No Data Found
+206,Градище,48,none,No Data Found
+207,Граматиково,52,none,No Data Found
+208,Двете реки,51,none,No Data Found
+209,Деветашка пещера,57,none,No Data Found
+210,Дерменка,49,none,No Data Found
+211,Долмените,50,none,No Data Found
+212,Доспат,47,none,No Data Found
+213,Драгоманско блато,58,none,No Data Found
+214,Дуранкулак,51,none,No Data Found
+215,Дървото на живота,58,none,No Data Found
+216,Дяволски мост,54,none,No Data Found
+217,Дяволското гърло,57,none,No Data Found
+218,"Екопътека ""Комин дере"" – Лъки",648,none,Already Good
+219,"Екопътека ""Манастира""",314,none,Already Good
+220,"Екопътека ""По пътя на героите""",295,none,No Data Found
+221,"Екопътека ""Равнища""",600,none,Already Good
+222,"Екопътека ""Стара Река"" – Стеврек",992,none,Already Good
+223,"Екопътека ""Стражка могила""",318,none,Already Good
+224,"Екопътека ""с. Белица-Пещерата""",474,none,Already Good
+225,"Екопътека ""с.Белица - Кръстова гора""",438,none,Already Good
+226,Енина,46,none,No Data Found
+227,Етрополски водопад,59,none,No Data Found
+228,Жеравна,48,none,No Data Found
+229,Златна Панега,54,none,No Data Found
+230,Златни пясъци,54,none,No Data Found
+231,Златните мостове,57,none,No Data Found
+232,Златолист,50,none,No Data Found
+233,Ивановски скални църкви,64,none,No Data Found
+234,Изворите на Младежка,61,none,No Data Found
+235,Изворите на река Въча,62,none,No Data Found
+236,Индипаска,50,none,No Data Found
+237,Искър-Панега,53,none,No Data Found
+238,Кадемлийско пръскало,61,none,No Data Found
+239,Казанджи дере,54,none,No Data Found
+240,Калиакра,49,none,No Data Found
+241,Каменни гъби,53,none,No Data Found
+242,Камчийски пясъци,57,none,No Data Found
+243,Камчия,47,none,No Data Found
+244,Каньона на водопадите,62,none,No Data Found
+245,Каньонът на река Герзовица,67,none,No Data Found
+247,Караджов камък,55,none,No Data Found
+248,Карандила,50,none,No Data Found
+249,Картала,48,none,No Data Found
+250,Кечика Кая,51,none,No Data Found
+251,Кикиш,46,none,No Data Found
+252,Кирилова поляна,56,none,No Data Found
+253,Киселчово,50,none,No Data Found
+254,Княжевска пътека,57,none,No Data Found
+255,Кобилино бранище,57,none,No Data Found
+256,Кожух планина,54,none,No Data Found
+257,Козя стена,51,none,No Data Found
+258,Комините,49,none,No Data Found
+259,Копитото – Момина скала,64,none,No Data Found
+260,Копрен,47,none,No Data Found
+261,Кости,46,none,No Data Found
+262,Костина,48,none,No Data Found
+263,Котел,46,none,No Data Found
+264,Крушунски водопади,59,none,No Data Found
+265,Кръстова гора,54,none,No Data Found
+266,Кървавата скала,56,none,No Data Found
+267,Лакатнишки скали,57,none,No Data Found
+268,Леденика,49,none,No Data Found
+269,Лешнишки водопад,57,none,No Data Found
+270,Лисиците,49,none,No Data Found
+271,Лозенски манастир,58,none,No Data Found
+272,Ломски каньон,54,none,No Data Found
+273,Лъвската глава,55,none,No Data Found
+274,Мадарски конник,56,none,No Data Found
+275,Мазалат,48,none,No Data Found
+276,Малко Търново,54,none,No Data Found
+277,Мальовица,50,none,No Data Found
+278,Марциганица,52,none,No Data Found
+279,Маслен нос,51,none,No Data Found
+280,Меандри на Арда,56,none,No Data Found
+281,Меаните,48,none,No Data Found
+282,Медвен,47,none,No Data Found
+283,Мелнишки пирамиди,58,none,No Data Found
+284,Мечи стъпки,52,none,No Data Found
+285,Минерални бани,55,none,No Data Found
+286,Мишкова нива,53,none,No Data Found
+287,Момчил юнак,52,none,No Data Found
+288,Момчилова крепост,58,none,No Data Found
+289,Невястата,50,none,No Data Found
+290,Обесен камък,53,none,No Data Found
+291,Окопна манастир,56,none,No Data Found
+292,Ореляк,47,none,No Data Found
+293,Орлови скали,53,none,No Data Found
+294,Орлово око,51,none,No Data Found
+295,Парилско седло,55,none,No Data Found
+296,Пеещи скали,52,none,No Data Found
+297,Перперикон,51,none,No Data Found
+298,Петрова нива,53,none,No Data Found
+299,Пещера Песнопой,56,none,No Data Found
+300,Поглед към девет планини,65,none,No Data Found
+301,Пода,45,none,No Data Found
+302,Поломие,48,none,No Data Found
+303,Поляната,49,none,No Data Found
+304,Поморие,48,none,No Data Found
+305,Понтийски път,54,none,No Data Found
+306,Попови ливади,54,none,No Data Found
+307,Правешка екопътека,59,none,No Data Found
+308,Пътека,47,none,No Data Found
+309,Райското пръскало,58,none,No Data Found
+310,Резово,47,none,No Data Found
+311,Рибарица,49,none,No Data Found
+312,Рибни езера,52,none,No Data Found
+313,Рилски манастир,56,none,No Data Found
+314,Ритлите,48,none,No Data Found
+315,Роженски манастир,58,none,No Data Found
+316,Ропотамо,49,none,No Data Found
+317,Рупите,47,none,No Data Found
+318,Русалка,48,none,No Data Found
+319,Самуилова крепост,58,none,No Data Found
+320,Сандански,50,none,No Data Found
+321,Света Петка,52,none,No Data Found
+322,Светлина,49,none,No Data Found
+323,Седемте рилски езера,61,none,No Data Found
+324,Силистар,49,none,No Data Found
+325,Симеоновски езера,58,none,No Data Found
+326,Сините камъни,54,none,No Data Found
+327,Синия вир,50,none,No Data Found
+328,Скакавица,50,none,No Data Found
+329,Скакля,47,none,No Data Found
+330,Скални манастири,57,none,No Data Found
+331,Скални църкви,54,none,No Data Found
+332,Славянка,49,none,No Data Found
+333,Соколна,48,none,No Data Found
+334,Соколски манастир,58,none,No Data Found
+335,Стената,48,none,No Data Found
+336,Стобски пирамиди,57,none,No Data Found
+337,Странджански дъб,57,none,No Data Found
+338,Струилица – Калето – Лъката,68,none,No Data Found
+339,Сухото езеро,53,none,No Data Found
+340,Сърница,48,none,No Data Found
+341,Табашката пещера,57,none,No Data Found
+342,Татул,46,none,No Data Found
+343,Торфено бранище,56,none,No Data Found
+344,Трански ждрело,55,none,No Data Found
+345,Триглав,48,none,No Data Found
+346,Триградско ждрело,58,none,No Data Found
+347,Трите чуки,51,none,No Data Found
+348,Тъжа,45,none,No Data Found
+349,Тъмната гора,53,none,No Data Found
+350,Узунбуджак,51,none,No Data Found
+351,Урдини езера,53,none,No Data Found
+352,Хайдушка песен,55,none,No Data Found
+353,Хайдушка поляна,56,none,No Data Found
+354,Хайдушки поляни,56,none,No Data Found
+355,Хайдушки чуки,54,none,No Data Found
+356,Халката,48,none,No Data Found
+357,Царството на зелениката,64,none,No Data Found
+358,Централен Балкан,57,none,No Data Found
+359,Цигов чарк,51,none,No Data Found
+360,Чаирски езера,54,none,No Data Found
+361,Черепишки манастир,59,none,No Data Found
+362,Чернелка,49,none,No Data Found
+363,Черни връх,51,none,No Data Found
+364,Чипровски водопад,58,none,No Data Found
+365,Чифлик,47,none,No Data Found
+366,Чудните мостове,56,none,No Data Found
+367,Чуйпетлово,51,none,No Data Found
+368,Шабла,46,none,No Data Found
+369,Шейтан дере,52,none,No Data Found
+370,Шипка,46,none,No Data Found
+371,Шипково,48,none,No Data Found
+372,Широка поляна,54,none,No Data Found
+373,Шуменско плато,55,none,No Data Found
+374,Юмрукчал,49,none,No Data Found
+375,Юндола,47,none,No Data Found
+376,Ябланица,49,none,No Data Found
+377,Ябланишко ждрело,57,none,No Data Found
+378,Ягодинска пещера,57,none,No Data Found
+379,Яйлата,47,none,No Data Found
+380,"до Кирилова поляна
+259. \* Екопътека",77,none,No Data Found
+381,"до Муратово езеро
+247. \* Екопътека",76,none,No Data Found
+382,"до Стрелча (Минерални извори)
+295. \* Екопътека",88,none,No Data Found
+383,"до Тевно езеро
+253. \* Екопътека",73,none,No Data Found
+384,"до водопад Женското пръскало
+277. \* Екопътека",87,none,No Data Found
+385,"до връх Богдан
+293. \* Екопътека",73,none,No Data Found
+386,"до връх Вежен
+289. \* Екопътека",72,none,No Data Found
+387,"до връх Вихрен (класически маршрут)
+245. \* Екопътека",94,none,No Data Found
+388,"до връх Могила
+214. \* Екопътека",73,none,No Data Found
+389,"до връх Половрак
+344. \* Екопътека",75,none,No Data Found
+390,до крепостта,53,none,No Data Found
+391,до пещера,50,none,No Data Found
+392,"към в. Свобода
+228. \* Екопътека",73,none,No Data Found
+393,"към водопад Кадемлийско пръскало
+269. \* Екопътека",91,none,No Data Found
+394,"към х. Безводно
+230. \* Екопътека",74,none,No Data Found
+395,"към хижа Рай (от Паниците)
+283. \* Екопътека",85,none,No Data Found
+396,"към хижа Рибни езера
+249. \* Екопътека",79,none,No Data Found
+397,"към хижа Синаница
+241. \* Екопътека",76,none,No Data Found
+398,"на Дунавските рибари
+326. \* Екопътека",79,none,No Data Found
+399,"на Рилската иглика
+237. \* Екопътека",77,none,No Data Found
+400,"на Свободата (Шипка)
+279. \* Екопътека",79,none,No Data Found
+401,"на Чучулигите
+271. \* Екопътека",72,none,No Data Found
+402,"на балканската дива коза
+243. \* Екопътека",83,none,No Data Found
+403,"на билките (Бродилово)
+302. \* Екопътека",81,none,No Data Found
+404,на здравето,52,none,No Data Found
+405,"на миньора (Росен)
+308. \* Екопътека",77,none,No Data Found
+406,"на партизаните (историческа)
+222. \* Екопътека",87,none,No Data Found
+407,Екопътека Бяла река (Калоферска),162,none,No Data Found
+408,"Туристическа пътека ""По поречието на р.Бебреш при с.Своде""",166,none,No Data Found
+409,Разходка до Голак,197,none,No Data Found
+410,"""Пътека на приказките"" – Паничище",167,none,No Data Found
+411,Екопътека до местност Самоковището,560,none,Already Good
+412,"Екопътека и Водопади ""Бохемия"" – Рила",708,none,Already Good
+413,"Пътека ""Към царството на еделвайса""",226,none,No Data Found
+414,Пътека на глухаря,194,none,No Data Found
+415,Пътека на рилската иглика,168,none,No Data Found
+416,Пътеката на Дивата коза,252,none,No Data Found
+417,Самодивска пътека,249,none,No Data Found
+418,Хайдушка пътека с.Годлево – връх Равник,325,none,Already Good
+419,Веломаршрут село Смилян - село Чеплят,1454,none,Already Good
+420,Връх Драгойна,366,none,Already Good
+421,"Екопътека ""Драгиева чешма"" – Чавдар",677,none,Already Good
+422,"Екопътека ""Лисичево - Чурал""",568,none,Already Good
+423,"Екопътека ""Лява река - Предела""",624,none,Already Good
+424,Екопътека „Каньонът на водопадите“,550,none,Already Good
+425,Екопътека „Торнал е Тодьо“ – с. Момчиловци,229,none,No Data Found
+426,Изворите на река Въча – Меандрите на Буйновска река,343,none,Already Good
+427,Калдъръмената пътека – Рожен,207,none,No Data Found
+428,Канинската екопътека – Гърмен,344,none,Already Good
+429,Маршрут гр. Батак – х. Техеран – вр. Баташки снежник,479,none,Already Good
+430,Маршрут крепост Козник – м. Главата,412,none,Already Good
+431,Маршрут с. Орехово – Дяволска дупка,346,none,Already Good
+432,Маршрут с. Пловдивци – с. Мочура – Циганско градище – с. Пловдивци,305,none,Already Good
+433,Маршрут с. Рибница – крепост Козник,224,none,No Data Found
+434,Маршрут язовирна стена Доспат – СОМАТ,281,none,No Data Found
+435,Местност Съдилището – Мочура,298,none,No Data Found
+436,"Пещера ""Голубовица 2"" с Виа Ферата",397,none,Already Good
+437,Познавателен маршрут „Музей на гората”,197,none,No Data Found
+438,Природен феномен „Гергева скала”,180,none,No Data Found
+439,Смилян – с. Змиево – местност Аламушница – с. Смилян,197,none,No Data Found
+440,Трансгранична родопска екопътека Хвойна – Ставруполи,207,none,No Data Found
+441,"Екопътека ""Кечи Кая"" - Рибница",357,none,Already Good
+442,"Екопътека ""Бъзовец""",281,none,No Data Found
+443,Русенски Лом,50,none,No Data Found
+444,"Ивановски скален манастир ""Свети Архангел Михаил""",323,none,Already Good
+445,"Екопътека ""Лаго""",352,none,Already Good
+446,"Екопътека ""Знамето"" – с. Младен",363,none,Already Good
+447,"Екопътека ""Бели Искър""",214,none,No Data Found
+448,"Водопад ""Мангъро""",299,none,No Data Found
+449,"Резерват ""Сребърна""",256,none,No Data Found
+450,Местност Карандила – Сливен,250,none,No Data Found
+451,Местност Тютюнлюка – Сливен,261,none,No Data Found
+452,"""Синия вир"" – Сливен",267,none,No Data Found
+453,Хайдушка пътека гр.Сливен – Карандила – Кушбунар,214,none,No Data Found
+454,E8 Етап 9: Чепино - триградско ждрело,44,none,No Data Found
+455,E8 Этап 10: Триградско ждрело - Смолян,44,none,No Data Found
+456,"Водопад ""Орфей"" и каньона на водопадите - Смолян",416,none,Already Good
+457,"Дяволската пътека (Борино)
+11. \* Екопътека",83,none,No Data Found
+458,"Екопътека ""Каньона на водопадите"" - Смолян",400,none,Already Good
+459,"Екопътека ""Невястата""",616,none,Already Good
+460,"Екопътека ""Св Неделя""",428,none,Already Good
+461,"Екопътека ""Свети дух""",559,none,Already Good
+462,"Екопътека ""Сърница Ай""",761,none,Already Good
+463,"Екопътека ""Трите Смолянски езера""",213,none,No Data Found
+464,"Екопътека ""Храстево""",357,none,Already Good
+465,"Екопътека ""Царичина""",27,none,No Data Found
+466,Загражденска екопътека,281,none,No Data Found
+467,Римски мост – Любча,243,none,No Data Found
+468,Скален масив Невястата (Турлука),327,none,Already Good
+469,Смолянски езера,55,none,No Data Found
+470,"Южнородопска или ""Дяволска"" екопътека",283,none,No Data Found
+471,"на занаятите (Златоград)
+216. \* Екопътека",82,none,No Data Found
+472,"на здравето (Девин)
+203. \* Екопътека",77,none,No Data Found
+473,Дяволския мост и водопада,427,none,Already Good
+474,"Екопътека ""12-та застава""",300,none,No Data Found
+475,"Екопътека ""Барутин - вр. Чуката - Касъка""",362,none,Already Good
+476,"Екопътека ""Паметник Арабаконак до из3вора на река Бебреш""",528,none,Already Good
+477,"Екопътека ""Параклис"" – с. Врабево",298,none,No Data Found
+478,"Екопътека ""Под Камико""",244,none,No Data Found
+479,"Екопътека ""Седмовратица""",744,none,Already Good
+480,"Екопътека ""Тракийски могили""",305,none,Already Good
+481,Екопътека Червени камък - с. Челопеч,205,none,No Data Found
+482,"Екопътека с. Мърчаево - местност ""Церова поляна""",234,none,No Data Found
+483,Директни изкачвания на Черни връх,412,none,Already Good
+484,Екопътека Бележката,243,none,No Data Found
+485,"Туристическа екопътека ""Тульово""",167,none,No Data Found
+486,E4 Етап 1: Витоша - Княжево - Жиголово,57,none,No Data Found
+487,E4 Етап 2: Жиголово - Перелик,32,none,No Data Found
+488,E4 Етап 6: Маричини езера - Боровец,41,none,No Data Found
+489,E4 Етап 7: Боровец - връх Мусала,42,none,No Data Found
+490,E8 Етап 5: Стоб - Пасарел,48,none,No Data Found
+491,E8 Етап 7: Лозен - Костенец,39,none,No Data Found
+492,E8 Этап 6: Пасарел - връх Лозен,39,none,No Data Found
+493,Боянски водопад,54,none,No Data Found
+494,Боянско езеро,52,none,No Data Found
+495,Драгалевци – Черни връх,62,none,No Data Found
+496,"Екопътека ""Лозенската планина""",882,none,Already Good
+497,Кладница – Селимица,58,none,No Data Found
+498,Към Самоков,50,none,No Data Found
+499,Спортно-информационна алея за хора с увреждания на опорно-двигателния апарат,167,none,No Data Found
+500,"към езеро Окото (Пирин)
+239. \* Екопътека",80,none,No Data Found
+501,"Екопътека ""Пъ3тека на здравето""",209,none,No Data Found
+502,"Екопътека ""Пътека през вековете""",180,none,No Data Found
+503,"Резерват ""Камещица"" – ждрело ""Боазът""",261,none,No Data Found
+504,"Екопътека ""Бяла река"" край Калофер",255,none,No Data Found
+505,"Екопътека до Водопад ""Скока""",432,none,Already Good
+506,"Калоферски мегалити ""Драмовете""",278,none,No Data Found
+507,Каменишки водопади,266,none,No Data Found
+508,Пейката на любовта,395,none,Already Good
+509,Странджанска горска пътека,207,none,No Data Found
+510,"Екопътека ""Климент""",406,none,Already Good
+511,"Вазова екопътека (Гара Бов)
+3. \* Екопътека",85,none,No Data Found
+512,"Екопътека ""Горската пътека""",508,none,Already Good
+513,Тетевенски водопад „Скока“,187,none,No Data Found
+514,Трънска екопътека,195,none,No Data Found
+515,"Водопад ""Видимско пръскало""",1041,none,Already Good
+516,Екопътека Голямата река,164,none,No Data Found
+517,"Екопътека ""Боян Ботево – Улу дере – Орлови скали""",217,none,No Data Found
+518,"Екопътека ""Тайните водопади""",152,none,No Data Found
+519,"Чипровски водопад, Екопътека Демяница",242,none,No Data Found
+520,Връх Миджур,449,none,Already Good
+521,"Екопътека ""Мадарски конник""",54,none,No Data Found
+522,"Водопад ""Сини вир"" – Ковачевица",265,none,No Data Found
+523,Водопад Казанджи дере,420,none,Already Good

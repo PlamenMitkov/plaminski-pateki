@@ -119,6 +119,11 @@ public class AssistantController : ControllerBase
             var response = await _assistantService.GenerateReplyAsync(request, userId, cancellationToken);
             return Ok(response);
         }
+        catch (AiProviderException exception)
+        {
+            _logger.LogWarning(exception, "Assistant provider request failed with status {StatusCode}.", exception.StatusCode);
+            return StatusCode(exception.StatusCode, exception.ClientMessage);
+        }
         catch (InvalidOperationException exception)
         {
             _logger.LogWarning(exception, "Assistant request failed due to configuration or provider response.");
@@ -143,6 +148,11 @@ public class AssistantController : ControllerBase
         {
             var response = await _assistantService.EnrichTrailsAsync(request ?? new AssistantEnrichRequest(), cancellationToken);
             return Ok(response);
+        }
+        catch (AiProviderException exception)
+        {
+            _logger.LogWarning(exception, "Assistant enrichment provider request failed with status {StatusCode}.", exception.StatusCode);
+            return StatusCode(exception.StatusCode, exception.ClientMessage);
         }
         catch (InvalidOperationException exception)
         {
@@ -190,6 +200,11 @@ public class AssistantController : ControllerBase
         {
             var response = await _assistantService.SearchSimilarTrailsAsync(request, cancellationToken);
             return Ok(response);
+        }
+        catch (AiProviderException exception)
+        {
+            _logger.LogWarning(exception, "Assistant vector provider request failed with status {StatusCode}.", exception.StatusCode);
+            return StatusCode(exception.StatusCode, exception.ClientMessage);
         }
         catch (InvalidOperationException exception)
         {

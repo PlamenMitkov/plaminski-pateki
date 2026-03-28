@@ -4,18 +4,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EcoTrails.Api.Repositories;
 
-public class FavoritesRepository : IFavoritesRepository
+public class FavoritesRepository(AppDbContext context) : IFavoritesRepository
 {
-    private readonly AppDbContext _context;
-
-    public FavoritesRepository(AppDbContext context)
-    {
-        _context = context;
-    }
-
     public async Task<IReadOnlyList<int>> GetFavoriteTrailIdsAsync(string userId, CancellationToken cancellationToken = default)
     {
-        return await _context.UserFavoriteTrails
+        return await context.UserFavoriteTrails
             .AsNoTracking()
             .Where(item => item.UserId == userId)
             .Select(item => item.TrailId)
@@ -33,17 +26,18 @@ public class FavoritesRepository : IFavoritesRepository
             .Distinct()
             .ToHashSet();
 
-        var validTrailIds = await _context.Trails
+        var validTrailIds = await context.Trails
             .AsNoTracking()
             .Where(item => normalizedRequestedIds.Contains(item.Id))
             .Select(item => item.Id)
             .ToListAsync(cancellationToken);
 
-        var existingFavorites = await _context.UserFavoriteTrails
-            .Where(item => item.UserId == userId)
-            .ToListAsync(cancellationToken);
+        // Performance optimization: Using transaction to wrap ExecuteDeleteAsync and subsequent inserts
+        using var transaction = await context.Database.BeginTransactionAsync(cancellationToken);
 
-        _context.UserFavoriteTrails.RemoveRange(existingFavorites);
+        await context.UserFavoriteTrails
+            .Where(item => item.UserId == userId)
+            .ExecuteDeleteAsync(cancellationToken);
 
         var newFavorites = validTrailIds
             .Select(trailId => new UserFavoriteTrail
@@ -53,9 +47,11 @@ public class FavoritesRepository : IFavoritesRepository
                 CreatedAt = DateTime.UtcNow
             });
 
-        await _context.UserFavoriteTrails.AddRangeAsync(newFavorites, cancellationToken);
-        await _context.SaveChangesAsync(cancellationToken);
+        await context.UserFavoriteTrails.AddRangeAsync(newFavorites, cancellationToken);
+        await context.SaveChangesAsync(cancellationToken);
 
-        return validTrailIds.OrderBy(item => item).ToList();
+        await transaction.CommitAsync(cancellationToken);
+
+        return [.. validTrailIds.OrderBy(item => item)];
     }
 }

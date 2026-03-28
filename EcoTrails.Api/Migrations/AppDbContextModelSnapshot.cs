@@ -154,6 +154,86 @@ namespace EcoTrails.Api.Migrations
                     b.ToTable("AssistantChatSessions");
                 });
 
+            modelBuilder.Entity("EcoTrails.Api.Models.CommunityTrailPost", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AppUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasMaxLength(6000)
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("PostType")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProposalStatus")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RejectionReason")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ReviewedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(180)
+                        .HasColumnType("nvarchar(180)");
+
+                    b.Property<int?>("TrailId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TrailId");
+
+                    b.HasIndex("AppUserId", "CreatedAtUtc");
+
+                    b.ToTable("CommunityTrailPosts");
+                });
+
+            modelBuilder.Entity("EcoTrails.Api.Models.CommunityTrailPostImage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CommunityTrailPostId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasMaxLength(600)
+                        .HasColumnType("nvarchar(600)");
+
+                    b.Property<string>("StoragePath")
+                        .IsRequired()
+                        .HasMaxLength(600)
+                        .HasColumnType("nvarchar(600)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CommunityTrailPostId");
+
+                    b.ToTable("CommunityTrailPostImages");
+                });
+
             modelBuilder.Entity("EcoTrails.Api.Models.Trail", b =>
                 {
                     b.Property<int>("Id")
@@ -298,6 +378,34 @@ namespace EcoTrails.Api.Migrations
                             SuitableForKids = false,
                             WaterSources = false
                         });
+                });
+
+            modelBuilder.Entity("EcoTrails.Api.Models.TrailEnrichmentSnapshot", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("GeneratedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PayloadJson")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("SourcePreviewFetchedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("TrailId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TrailId", "GeneratedAtUtc");
+
+                    b.ToTable("TrailEnrichmentSnapshots");
                 });
 
             modelBuilder.Entity("EcoTrails.Api.Models.UserFavoriteTrail", b =>
@@ -462,6 +570,46 @@ namespace EcoTrails.Api.Migrations
                     b.Navigation("Session");
                 });
 
+            modelBuilder.Entity("EcoTrails.Api.Models.CommunityTrailPost", b =>
+                {
+                    b.HasOne("EcoTrails.Api.Models.AppUser", "User")
+                        .WithMany("CommunityPosts")
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EcoTrails.Api.Models.Trail", "Trail")
+                        .WithMany("CommunityPosts")
+                        .HasForeignKey("TrailId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("Trail");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("EcoTrails.Api.Models.CommunityTrailPostImage", b =>
+                {
+                    b.HasOne("EcoTrails.Api.Models.CommunityTrailPost", "Post")
+                        .WithMany("Images")
+                        .HasForeignKey("CommunityTrailPostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Post");
+                });
+
+            modelBuilder.Entity("EcoTrails.Api.Models.TrailEnrichmentSnapshot", b =>
+                {
+                    b.HasOne("EcoTrails.Api.Models.Trail", "Trail")
+                        .WithMany("EnrichmentSnapshots")
+                        .HasForeignKey("TrailId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Trail");
+                });
+
             modelBuilder.Entity("EcoTrails.Api.Models.UserFavoriteTrail", b =>
                 {
                     b.HasOne("EcoTrails.Api.Models.Trail", "Trail")
@@ -534,6 +682,8 @@ namespace EcoTrails.Api.Migrations
 
             modelBuilder.Entity("EcoTrails.Api.Models.AppUser", b =>
                 {
+                    b.Navigation("CommunityPosts");
+
                     b.Navigation("FavoriteTrails");
                 });
 
@@ -542,8 +692,17 @@ namespace EcoTrails.Api.Migrations
                     b.Navigation("Messages");
                 });
 
+            modelBuilder.Entity("EcoTrails.Api.Models.CommunityTrailPost", b =>
+                {
+                    b.Navigation("Images");
+                });
+
             modelBuilder.Entity("EcoTrails.Api.Models.Trail", b =>
                 {
+                    b.Navigation("CommunityPosts");
+
+                    b.Navigation("EnrichmentSnapshots");
+
                     b.Navigation("FavoritedByUsers");
                 });
 #pragma warning restore 612, 618

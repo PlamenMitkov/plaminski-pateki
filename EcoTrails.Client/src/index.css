@@ -19,7 +19,9 @@ body {
   margin: 0;
   min-width: 320px;
   background-color: #0f1c2f;
-  background-image: linear-gradient(145deg, rgba(6, 12, 28, 0.68), rgba(20, 38, 58, 0.62)),
+  background-image: radial-gradient(circle at 12% 10%, rgba(6, 16, 36, 0.36), transparent 48%),
+    linear-gradient(145deg, rgba(6, 12, 28, 0.74), rgba(20, 38, 58, 0.66)),
+    url('/backgrounds/bg-mountain-guide.webp'),
     url('/backgrounds/bg-forest.svg');
   background-size: cover;
   background-repeat: no-repeat;
@@ -42,13 +44,13 @@ body::after {
 }
 
 body::before {
-  background-image: linear-gradient(145deg, rgba(6, 12, 28, 0.66), rgba(20, 38, 58, 0.6)),
+  background-image: linear-gradient(145deg, rgba(6, 12, 28, 0.72), rgba(20, 38, 58, 0.66)),
     url('/backgrounds/bg-lake.svg');
   animation: eco-background-lake-fade 72s ease-in-out infinite;
 }
 
 body::after {
-  background-image: linear-gradient(145deg, rgba(6, 12, 28, 0.64), rgba(20, 38, 58, 0.58)),
+  background-image: linear-gradient(145deg, rgba(6, 12, 28, 0.7), rgba(20, 38, 58, 0.64)),
     url('/backgrounds/bg-dawn.svg');
   animation: eco-background-dawn-fade 72s ease-in-out infinite;
 }
@@ -95,10 +97,30 @@ a {
   transition: all 0.3s ease;
   font-size: 24px;
   backdrop-filter: blur(5px);
+  position: relative;
 }
 
 .round-button i {
   transition: transform 0.3s ease;
+}
+
+.round-button-label {
+  position: absolute;
+  left: calc(100% + 10px);
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: #dbeafe;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  line-height: 1;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
 .round-button:hover {
@@ -113,14 +135,38 @@ a {
   transform: scale(1.06);
 }
 
+.round-button:hover .round-button-label,
+.round-button.active-round-button .round-button-label,
+.admin-round-button .round-button-label {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}
+
 .active-round-button {
   background-color: #4ecca3;
   color: #1a1a2e;
   box-shadow: 0 0 18px rgba(78, 204, 163, 0.58);
 }
 
-.motion-toggle-btn {
-  margin-top: 10px;
+.admin-round-button {
+  border-color: #f59e0b;
+  background: linear-gradient(180deg, rgba(245, 158, 11, 0.22), rgba(120, 53, 15, 0.28));
+  color: #fbbf24;
+  box-shadow: 0 0 16px rgba(245, 158, 11, 0.22);
+}
+
+.admin-round-button:hover,
+.admin-round-button.active-round-button {
+  background: linear-gradient(180deg, #f59e0b, #d97706);
+  border-color: #fcd34d;
+  color: #1f1300;
+  box-shadow: 0 0 20px rgba(245, 158, 11, 0.45);
+}
+
+.admin-round-button .round-button-label {
+  background: rgba(120, 53, 15, 0.92);
+  border-color: rgba(251, 191, 36, 0.4);
+  color: #fef3c7;
 }
 
 .motion-disabled::before,
@@ -171,6 +217,11 @@ a {
     width: 52px;
     height: 52px;
     font-size: 20px;
+  }
+
+  .round-button-label {
+    font-size: 10px;
+    padding: 4px 8px;
   }
 
   .app-content {

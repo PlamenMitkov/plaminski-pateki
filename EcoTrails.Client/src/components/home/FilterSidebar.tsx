@@ -8,10 +8,6 @@ interface FilterSidebarProps {
   difficulty: number | '';
   sortBy: SortBy;
   sortDirection: SortDirection;
-  minDurationInput: string;
-  maxDurationInput: string;
-  minElevationInput: string;
-  maxElevationInput: string;
   onlyWithCoords: boolean;
   shouldShowOnlyFavorites: boolean;
   isExporting: boolean;
@@ -21,14 +17,10 @@ interface FilterSidebarProps {
   onDifficultyChange: (value: number | '') => void;
   onSortByChange: (value: SortBy) => void;
   onSortDirectionChange: (value: SortDirection) => void;
-  onMinDurationChange: (value: string) => void;
-  onMaxDurationChange: (value: string) => void;
-  onMinElevationChange: (value: string) => void;
-  onMaxElevationChange: (value: string) => void;
   onClearFilters: () => void;
   onToggleOnlyWithCoords: () => void;
   onToggleOnlyFavorites: () => void;
-  onExportCsv: () => void;
+  onExportOfflinePackage: () => void;
 }
 
 function FilterSidebar({
@@ -36,10 +28,6 @@ function FilterSidebar({
   difficulty,
   sortBy,
   sortDirection,
-  minDurationInput,
-  maxDurationInput,
-  minElevationInput,
-  maxElevationInput,
   onlyWithCoords,
   shouldShowOnlyFavorites,
   isExporting,
@@ -49,14 +37,10 @@ function FilterSidebar({
   onDifficultyChange,
   onSortByChange,
   onSortDirectionChange,
-  onMinDurationChange,
-  onMaxDurationChange,
-  onMinElevationChange,
-  onMaxElevationChange,
   onClearFilters,
   onToggleOnlyWithCoords,
   onToggleOnlyFavorites,
-  onExportCsv,
+  onExportOfflinePackage,
 }: FilterSidebarProps) {
   return (
     <div className="toolbar">
@@ -111,44 +95,6 @@ function FilterSidebar({
           <option value="desc">Низходящо</option>
         </select>
 
-        <input
-          type="number"
-          min={0}
-          step="0.5"
-          value={minDurationInput}
-          onChange={(event) => onMinDurationChange(event.target.value)}
-          className="select-input compact-input"
-          placeholder="Мин. часове"
-        />
-        <input
-          type="number"
-          min={0}
-          step="0.5"
-          value={maxDurationInput}
-          onChange={(event) => onMaxDurationChange(event.target.value)}
-          className="select-input compact-input"
-          placeholder="Макс. часове"
-        />
-
-        <input
-          type="number"
-          min={0}
-          step="50"
-          value={minElevationInput}
-          onChange={(event) => onMinElevationChange(event.target.value)}
-          className="select-input compact-input"
-          placeholder="Мин. денивелация"
-        />
-        <input
-          type="number"
-          min={0}
-          step="50"
-          value={maxElevationInput}
-          onChange={(event) => onMaxElevationChange(event.target.value)}
-          className="select-input compact-input"
-          placeholder="Макс. денивелация"
-        />
-
         <button onClick={onClearFilters} className="secondary-btn" type="button">
           Изчисти
         </button>
@@ -169,13 +115,13 @@ function FilterSidebar({
           Покажи само любими
         </button>
         <button
-          onClick={onExportCsv}
+          onClick={onExportOfflinePackage}
           className="secondary-btn export-btn"
           type="button"
           disabled={isExporting || isLoading}
         >
           <Download size={16} />
-          {isExporting ? 'Експортиране...' : 'Експорт CSV'}
+          {isExporting ? 'Експортиране...' : 'Офлайн пакет'}
         </button>
       </div>
     </div>

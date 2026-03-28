@@ -1,0 +1,4 @@
+"id","name","manual_elevation_gain_m","length_km","meters_per_km","validation_status","validation_reason","will_apply"
+"512","Екопътека ""Горската пътека""","260","3.5","","skipped","already_has_elevation","False"
+"421","Екопътека ""Драгиева чешма"" – Чавдар","90","1.7","","skipped","already_has_elevation","False"
+"4","Екопътека Заслон ""Опасен зъб"" – Тетевен","493","","","review","missing_length","True"

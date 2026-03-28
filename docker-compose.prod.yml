@@ -30,6 +30,7 @@ services:
       Jwt__Key: ${JWT_KEY:?Set JWT_KEY in env file}
       OpenRouteService__ApiKey: ${APP_OPENROUTESERVICE_API_KEY:-}
       OPENAI_API_KEY: ${APP_OPENAI_API_KEY:-}
+      GEMINI_API_KEY: ${APP_GEMINI_API_KEY:-}
       OpenTelemetry__Otlp__Endpoint: ${OTEL_EXPORTER_OTLP_ENDPOINT:-}
       OpenTelemetry__Otlp__Protocol: ${OTEL_EXPORTER_OTLP_PROTOCOL:-grpc}
       Cors__AllowedOrigins__0: ${CORS_ORIGIN_0:?Set CORS_ORIGIN_0 in env file}

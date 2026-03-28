@@ -12,10 +12,13 @@ public class AssistantTrailContext
     public double DurationInHours { get; set; }
     public int ElevationGain { get; set; }
     public bool HasCoordinates { get; set; }
+    public double? Latitude { get; set; }
+    public double? Longitude { get; set; }
     public string DifficultyLevel { get; set; } = "moderate";
     public bool WaterSources { get; set; }
     public int? MaxAltitude { get; set; }
     public bool SuitableForKids { get; set; }
+    public bool HasVerifiedSource { get; set; }
     public List<string> RequiredGear { get; set; } = [];
 }
 
@@ -71,7 +74,7 @@ public class AssistantChatRequest
     [MaxLength(64)]
     public string? SessionId { get; set; }
 
-    [MaxLength(20)]
+    [MaxLength(40)]
     public List<AssistantChatMessage> History { get; set; } = [];
 
     [MaxLength(500)]

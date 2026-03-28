@@ -82,7 +82,7 @@ docker compose up --build
 - Health (readiness): `http://localhost:5218/health/ready`
 - SQL Server: `localhost:1433`
 
-### OpenAI Assistant setup (gpt-3.5-turbo)
+### AI Assistant setup (Gemini Flash default)
 
 Backend assistant endpoint: `POST /api/assistant/chat`
 
@@ -104,10 +104,23 @@ Security: deleting session requires authenticated user ownership.
 Set API key in environment variable before starting API:
 
 ```powershell
+$env:GEMINI_API_KEY="your_gemini_key_here"
+```
+
+Optional OpenAI fallback:
+
+```powershell
 $env:OPENAI_API_KEY="your_openai_key_here"
 ```
 
-Default model is configured as `gpt-3.5-turbo` in `EcoTrails.Api/appsettings.json`.
+When Gemini returns `429` (quota/rate limit), API can automatically retry the request via OpenAI if `OPENAI_API_KEY` is configured (`OpenAI.FallbackToOpenAiOnGemini429=true`).
+
+Default model is configured as `gemini-2.5-flash` in `EcoTrails.Api/appsettings.json`.
+
+Live weather context is enabled by default for weather-related prompts (Open-Meteo, no API key required):
+- `OpenAI.WeatherEnabled=true`
+- `OpenAI.WeatherApiBaseUrl=https://api.open-meteo.com/v1`
+- `OpenAI.WeatherGeocodingBaseUrl=https://geocoding-api.open-meteo.com/v1`
 
 Example semantic enrichment request (process 25 trails):
 
@@ -116,6 +129,52 @@ curl -X POST http://localhost:5218/api/assistant/enrich \
 	-H "Content-Type: application/json" \
 	-d '{"limit":25,"overwriteExisting":false}'
 ```
+
+### Synthetic data governance operations (HITL + validation)
+
+1) Prepare reviewer decisions file from template:
+
+```powershell
+Copy-Item ./scripts/description-enrichment/approval-decisions.template.csv ./scripts/description-enrichment/approval-decisions.csv
+```
+
+2) Mandatory dry-run with human approval gate:
+
+```powershell
+./scripts/description-enrichment/merge-enriched-descriptions.ps1 `
+	-CsvPath ./scripts/description-enrichment/manual-ai-enrichment.csv `
+	-ApprovalCsvPath ./scripts/description-enrichment/approval-decisions.csv `
+	-RequireHumanApproval `
+	-DryRun
+```
+
+3) Apply after dry-run is clean:
+
+```powershell
+./scripts/description-enrichment/merge-enriched-descriptions.ps1 `
+	-CsvPath ./scripts/description-enrichment/manual-ai-enrichment.csv `
+	-ApprovalCsvPath ./scripts/description-enrichment/approval-decisions.csv `
+	-RequireHumanApproval
+```
+
+4) Run governance audit and produce snapshot artifacts:
+
+```powershell
+./scripts/data-quality/run-synthetic-governance-audit.ps1 -InputPath ./eco.json
+```
+
+Workflow reference: `scripts/data-quality/synthetic-governance-workflow-2026-03-21.md`
+
+Automated CI governance audit:
+- Workflow: `.github/workflows/synthetic-governance-audit.yml`
+- Schedule: daily at `05:00 UTC`
+- Manual trigger: GitHub Actions `workflow_dispatch`
+- Artifacts: latest + timestamped CSV/JSON reports from `scripts/data-quality/reports/`
+- Threshold gate (defaults): fail if `high_severity_findings > 0`
+- Optional manual inputs on dispatch:
+	- `maxHighSeverity` (default `0`)
+	- `maxMediumSeverity` (default `-1`, disabled)
+	- `maxLowSeverity` (default `-1`, disabled)
 
 ### OpenTelemetry (traces + metrics)
 
@@ -203,6 +262,7 @@ cp .env.production.example .env.production
 3) (Опционално) външни API ключове за backend:
 - `APP_OPENROUTESERVICE_API_KEY`
 - `APP_OPENAI_API_KEY`
+- `APP_GEMINI_API_KEY`
 
 4) (Опционално) за telemetry export към Grafana/Tempo/Collector:
 - `OTEL_EXPORTER_OTLP_ENDPOINT`
@@ -417,7 +477,7 @@ For CI environments without `OpenRouteService:ApiKey`, you can skip only the Ope
 
 ## 🗺️ Future Roadmap
 
-- 🌦️ Интеграция с weather API за реална прогноза по пътеки.
+- 🌄 Исторически weather trends и предупреждения за рязка промяна по региони.
 - 📱 PWA режим за офлайн достъп в планински условия.
 - 🧭 Разширени гео-филтри (денивелация, дължина, сезонност).
 - 👥 Role-based admin панел за управление на съдържание.

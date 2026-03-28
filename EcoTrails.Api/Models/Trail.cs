@@ -44,5 +44,7 @@ namespace EcoTrails.Api.Models
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         public ICollection<UserFavoriteTrail> FavoritedByUsers { get; set; } = new List<UserFavoriteTrail>();
+        public ICollection<TrailEnrichmentSnapshot> EnrichmentSnapshots { get; set; } = new List<TrailEnrichmentSnapshot>();
+        public ICollection<CommunityTrailPost> CommunityPosts { get; set; } = new List<CommunityTrailPost>();
     }
 }

@@ -1,0 +1,355 @@
+EcoProject Data Report
+Generated: 2026-03-20
+
+1. Scope
+
+This report summarizes the current state of eco.json after the description-enrichment workflow.
+It separates:
+- base dataset quality from the imported/scraped data layer
+- assistant-enriched derived fields added through the CSV enrichment workflow
+- test-data / synthetic-data assessment for QA and product use
+
+
+2. Files Used For Analysis
+
+- Current dataset: eco.json
+- Pre-merge backup: eco-backup-20260320-165734.json
+- Assistant enrichment source: scripts/description-enrichment/eco.csv
+- Missing-record patch file used during cleanup: scripts/description-enrichment/eco.missing-11.csv
+
+
+3. Base Dataset Before Assistant Enrichment
+
+Total trails: 522
+
+Observed condition before the assistant merge:
+- Coordinates coverage had already been completed to 522/522.
+- Every trail already had a description field, but 306 trails had weak descriptions under 150 characters.
+- Structural fields were uneven: some were strong, some still partial.
+
+Base/imported/scraped fields that were already present in the dataset model:
+- id
+- name
+- location.region
+- location.nearest_town
+- location.coordinates
+- location.keywords
+- trail_details.length_km
+- trail_details.duration
+- trail_details.difficulty
+- trail_details.route_type
+- source
+- photo_url
+- attractions
+- transportation
+- accessibility
+- contact_info
+- original description
+
+
+4. Cleanup Of The Google/Gemini Combined CSV
+
+The combined enrichment file delivered as eco.csv needed cleanup before merge.
+
+Detected issues:
+- duplicate rows by id
+- one repeated header row inserted as data
+- 11 target ids missing from the combined file after deduplication
+
+Cleanup actions performed:
+- starting file size: 408 rows
+- deduplicated by id, keeping the most complete row per id
+- removed duplicate rows: 112
+- removed accidental repeated header row: 1
+- restored missing target ids from the original target list: 11
+- final validated merge source: 306 rows
+
+Final validation of the cleaned assistant CSV:
+- rows: 306
+- duplicate ids: 0
+- non-numeric ids: 0
+- enriched_description_bg: 306/306
+- short_summary_bg: 306/306
+- confidence: 306/306
+- sources_urls: 299/306
+
+Rows still missing sources_urls in the assistant file:
+- id 182 - Божевски водопад
+- id 266 - Кървавата скала
+- id 281 - Меаните
+- id 284 - Мечи стъпки
+- id 290 - Обесен камък
+- id 291 - Окопна манастир
+- id 308 - Пътека
+
+
+5. Exact Assistant-Enrichment Impact On eco.json
+
+The current eco.json was compared directly with the pre-merge backup file.
+This gives exact field-level change counts.
+
+Trails touched by assistant enrichment: 306
+
+Exact changed or added fields:
+- description changed: 306
+- metadata.short_summary added: 306
+- metadata.key_highlights added: 306
+- metadata.terrain_and_difficulty added: 306
+- metadata.sources_urls added: 299
+- metadata.confidence added: 306
+- metadata.reviewer_notes added: 306
+- suitability changed: 306
+- best_season changed: 306
+- safety_warnings changed: 293
+- nearby_amenities changed: 306
+
+Interpretation:
+- The assistant enrichment did not just expand descriptions.
+- It also normalized several user-facing summary fields and evidence/provenance fields.
+- safety_warnings changed in 293 cases instead of 306, which implies 13 rows kept their previous warning content unchanged or effectively equivalent.
+
+
+5.1 Corrective Pass After Report Review
+
+After the first version of this report, a corrective pass was applied to eco.json to fix real data-quality issues discovered during review.
+
+Applied fixes:
+- replaced blank or placeholder top-level source values with the first real URL from metadata.sources_urls where available
+- fixed 4 blank region values
+- fixed 2 clearly wrong region assignments for records near Belitsa that had been incorrectly marked as Plovdiv
+
+Exact corrective-pass counts:
+- source updated from metadata: 257 rows
+- region corrected or filled: 6 rows
+
+Second corrective pass:
+- nearest_town auto-filled in 7 high-confidence cases where the trail name exactly matched a town name already used elsewhere in the dataset
+- no safe automatic length_km updates were found from the internal dataset using exact-name or same-coordinate matching
+
+Important correction to the original report logic:
+- The first report counted source as "filled" even when the value was the placeholder string "Екопътека.md файл".
+- That overstated source quality.
+- The corrected source metric below counts only non-empty, non-placeholder values.
+
+
+6. Current Final Dataset Status
+
+Current dataset size:
+- trails: 522
+
+Coverage after the merge:
+- coordinates: 522/522 (100%)
+- description: 522/522 (100%)
+- description with 150+ characters: 522/522 (100%)
+- best_season: 522/522 (100%)
+- safety_warnings: 522/522 (100%)
+- suitability: 522/522 (100%)
+- nearby_amenities: 522/522 (100%)
+- source (non-placeholder): 515/522 (98.7%)
+- location.region: 522/522 (100%)
+- photo_url: 226/522 (43.3%)
+- attractions: 226/522 (43.3%)
+- location.nearest_town: 264/522 (50.6%)
+- trail_details.length_km: 261/522 (50.0%)
+
+Current assistant-derived metadata coverage:
+- metadata.short_summary: 306/522 (58.6%)
+- metadata.key_highlights: 306/522 (58.6%)
+- metadata.terrain_and_difficulty: 306/522 (58.6%)
+- metadata.sources_urls: 299/522 (57.3%)
+- metadata.confidence: 306/522 (58.6%)
+- metadata.reviewer_notes: 306/522 (58.6%)
+
+Description quality after the merge:
+- average description length: 316 characters
+- minimum description length: 152 characters
+- maximum description length: 1642 characters
+- remaining trails under 150 characters: 0
+
+
+7. What Was Added By Scrape/Import vs Assistant Enrichment
+
+7.1 Base scraped/imported layer
+
+These fields belong to the imported/scraped or source-data layer and should be treated as the base factual record where available:
+- trail identity: id, name
+- geographic placement: region, nearest_town, coordinates
+- route structure: difficulty, duration, route_type, length_km
+- source references in the original dataset: source
+- media/context fields: photo_url, attractions
+- logistics/safety/access fields already in the dataset: transportation, accessibility, contact_info
+
+7.2 Assistant-enriched layer
+
+These fields were generated, expanded, normalized, or rewritten through the assistant workflow:
+- description for 306 trails
+- metadata.short_summary
+- metadata.key_highlights
+- metadata.terrain_and_difficulty
+- metadata.sources_urls
+- metadata.confidence
+- metadata.reviewer_notes
+- normalized suitability
+- normalized best_season
+- normalized nearby_amenities
+- normalized safety_warnings for most enriched rows
+
+
+8. Synthetic / Test Data Assessment
+
+Important distinction:
+- The structural trail records are not synthetic in the usual sense; they come from the project dataset and its import/scrape process.
+- The assistant-enriched narrative and summary fields are derived text. They are synthetic or semi-synthetic outputs, even when grounded in real sources.
+
+Practical classification:
+- Non-synthetic / base data: ids, names, coordinates, region, route metadata, source links already present in the imported dataset.
+- Derived synthetic-like data: rewritten descriptions, summaries, highlights, normalized terrain descriptions, reviewer notes, confidence labels, and some normalized user-facing fields.
+
+Recommended usage:
+- Good for QA, UI testing, search testing, ranking tests, offline package tests, demo content, and pilot product content.
+- Acceptable for production display if clearly treated as editorial/assistive copy rather than official authority.
+- Not ideal as a strict source of record for legal, safety-critical, or official-tourism claims without human review.
+
+Primary provenance weakness remaining:
+- 7 enriched rows still do not have metadata.sources_urls.
+- Those rows should be treated as lower-confidence editorial content until evidence links are added.
+
+
+9. Critical Remaining Data Gaps
+
+The short-description problem is resolved.
+The main remaining dataset gaps are now outside the description workflow:
+
+- photo_url coverage is still only 43.3%
+- attractions coverage is still only 43.3%
+- location.nearest_town coverage is still only 50.6%
+- trail_details.length_km coverage is still only 50.0%
+- source still has 7 placeholder values without usable metadata URL replacement
+- metadata.sources_urls is missing for 7 enriched trails
+
+Priority recommendation from a product perspective:
+1. Keep the current enrichment merge as accepted.
+2. Treat the 306 enriched descriptions as a successful content-quality upgrade.
+3. Next improve factual completeness in photo_url, attractions, nearest_town, and length_km.
+4. Close the 7 missing metadata.sources_urls and the 7 remaining placeholder top-level source values if provenance matters for release readiness.
+
+
+10. Overall Conclusion
+
+The enrichment phase materially improved the dataset.
+
+Before this merge:
+- all 522 trails existed
+- all had description fields
+- 306 descriptions were too short to be useful
+
+After this merge:
+- all 522 trails now have meaningful descriptions of 150+ characters
+- 306 trails gained an assistant-enriched metadata layer for summaries, highlights, terrain guidance, reviewer notes, and confidence
+- the dataset is substantially stronger for application UX, demo/testing, and user-facing browsing
+
+Final assessment:
+- Base trail dataset: usable and mostly complete
+- Enriched narrative layer: strong for test/demo/product content
+- Provenance layer: materially improved, but still incomplete in 7 enriched rows and 7 top-level placeholder source records
+- Remaining weak points are now mainly factual-completeness gaps, not description-quality gaps
+
+
+11. Recommended Next Architecture Improvements
+
+11.1 schema.org / structured data
+
+Recommendation:
+- publish a JSON-LD block for each trail page
+- use schema.org TouristAttraction as the baseline public type for discoverability
+- attach geo coordinates via GeoCoordinates
+- expose canonical source URLs through sameAs or url where appropriate
+- map existing dataset fields into structured properties where possible
+
+Practical field mapping recommendation:
+- name -> name
+- description -> description
+- coordinates -> geo.latitude and geo.longitude
+- photo_url -> image or photo
+- location.keywords -> keywords
+- source or metadata.sources_urls -> sameAs or url
+- accessibility / public visitor information -> publicAccess and isAccessibleForFree when known
+- map links -> hasMap
+
+Important modeling note:
+- schema.org does not give a perfect hiking-trail domain model for every trail-specific property already present in eco.json
+- for route-specific details such as difficulty, estimated duration, terrain notes, elevation gain, and seasonal cautions, use additionalProperty or a separate internal API schema instead of forcing a misleading public structured-data model
+
+Recommended purpose of schema.org here:
+- SEO and discoverability
+- better interoperability with search engines and tourism platforms
+- clean public-facing canonical metadata layer, separate from the richer internal application schema
+
+
+11.2 API security recommendations
+
+For the current project, the highest-value recommendations are:
+
+1. Require HTTPS everywhere.
+2. Enforce authorization checks per endpoint and per trail/resource id.
+3. Keep JWT validation strict: verify issuer, audience, expiry, and signature algorithm from server config, not from token header trust.
+4. Add strict input validation for ids, uploaded files, filters, paging, and any enrichment/admin endpoints.
+5. Use content-type allowlists and reject unsupported media types.
+6. Apply rate limiting and return 429 for abuse-prone endpoints, especially assistant/chat, enrichment, image upload, and external API proxy endpoints.
+7. Do not place API keys or secrets in URLs, logs, or client-visible payloads.
+8. Protect management/admin endpoints separately and avoid exposing them broadly.
+9. Log security-relevant events and validation failures without leaking secrets.
+10. Treat third-party API responses as untrusted input.
+
+Most relevant OWASP API risk areas for this project:
+- broken object level authorization
+- broken function level authorization
+- unrestricted resource consumption
+- server-side request forgery
+- unsafe consumption of APIs
+- improper inventory management
+
+
+11.3 Dynamic data from external APIs
+
+Recommendation:
+- keep eco.json as the canonical base dataset
+- layer dynamic fields from external APIs at runtime or through short-lived cache, instead of hard-writing them permanently into the core dataset unless reviewed
+
+Good candidates for dynamic enrichment:
+- weather forecast
+- route time estimates
+- live transport context
+- temporary closures or access warnings
+- wildfire, flood, or hazard alerts
+- seasonal public-opening status
+
+Recommended design pattern:
+- static layer: eco.json and reviewed assistant-enriched metadata
+- cached dynamic layer: external API responses with explicit TTL
+- merged response layer: API combines static data plus dynamic data on read
+
+Recommended metadata to store for every dynamic field:
+- source provider
+- fetched_at timestamp
+- expires_at timestamp
+- confidence/trust level
+- fallback policy if upstream is unavailable
+
+Security recommendations for external APIs:
+- allowlist target domains
+- set strict timeouts and retries with backoff
+- validate response schema before use
+- isolate provider failures so they do not break base trail pages
+- do not trust third-party fields more than local validated data
+- store secrets only in server-side configuration
+
+
+11.4 Data governance recommendation
+
+Use three trust levels in the project:
+- canonical: reviewed static fields in eco.json
+- derived/editorial: assistant-generated descriptions and summaries
+- dynamic/external: cached API overlays with timestamps and provenance
+
+That separation will keep product behavior clear, safer, and easier to audit.

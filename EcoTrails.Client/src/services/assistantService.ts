@@ -10,20 +10,24 @@ export interface AssistantTrailContext {
   id: number;
   name: string;
   location: string;
+  region: string;
   difficulty: number;
   durationInHours: number;
   elevationGain: number;
   hasCoordinates: boolean;
+  latitude?: number;
+  longitude?: number;
   difficultyLevel: string;
   waterSources: boolean;
   maxAltitude: number | null;
   suitableForKids: boolean;
   requiredGear: string[];
+  hasVerifiedSource?: boolean;
 }
 
 export interface AssistantKnowledgeChip {
   label: string;
-  type: string;
+  type: 'info' | 'warning' | 'success' | 'error' | string;
 }
 
 export interface AssistantQuickAction {
@@ -41,6 +45,7 @@ export interface AssistantChatRequest {
   favoriteTrailIds?: number[];
   maxContextTrails?: number;
   onlyWithCoordinates?: boolean;
+  signal?: AbortSignal;
 }
 
 export interface AssistantChatResponse {
@@ -85,17 +90,13 @@ export interface AssistantSessionMessageResponse {
 }
 
 export async function requestAssistantReply(request: AssistantChatRequest): Promise<AssistantChatResponse> {
-  const response = await apiClient.post<AssistantChatResponse>('/assistant/chat', request);
+  const { signal, ...payload } = request;
+  const response = await apiClient.post<AssistantChatResponse>('/assistant/chat', payload, { signal });
   return response.data;
 }
 
 export async function createAssistantSession(title?: string): Promise<AssistantSessionResponse> {
-  const response = await apiClient.post<AssistantSessionResponse>(
-    '/assistant/sessions',
-    {
-      title,
-    },
-  );
+  const response = await apiClient.post<AssistantSessionResponse>('/assistant/sessions', { title });
   return response.data;
 }
 
@@ -112,9 +113,7 @@ export async function getAssistantSessionMessages(
 ): Promise<AssistantSessionMessageResponse[]> {
   const response = await apiClient.get<AssistantSessionMessageResponse[]>(
     `/assistant/sessions/${sessionId}/messages`,
-    {
-      params: { limit },
-    },
+    { params: { limit } },
   );
   return response.data;
 }
@@ -123,11 +122,9 @@ export async function deleteAssistantSession(sessionId: string): Promise<void> {
   await apiClient.delete(`/assistant/sessions/${sessionId}`);
 }
 
-export async function enrichTrailSemanticData(
-  request: AssistantEnrichRequest = {},
-): Promise<AssistantEnrichResponse> {
+export async function enrichTrailSemanticData(request: AssistantEnrichRequest = {}): Promise<AssistantEnrichResponse> {
   if (!isCurrentUserAdmin()) {
-    throw new Error('Admin privileges are required to enrich trail semantic data.');
+    throw new Error('Необходими са администраторски права за обогатяване на данни.');
   }
 
   const response = await apiClient.post<AssistantEnrichResponse>('/assistant/enrich', request);

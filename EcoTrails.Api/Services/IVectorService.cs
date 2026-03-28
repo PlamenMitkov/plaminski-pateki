@@ -60,7 +60,14 @@ public class OpenAiVectorService : IVectorService
             throw new InvalidOperationException("Embedding input list cannot be empty.");
         }
 
-        var apiKey = ResolveApiKey();
+        var provider = ResolveProvider();
+        if (string.Equals(provider, "gemini", StringComparison.OrdinalIgnoreCase))
+        {
+            throw new InvalidOperationException(
+                "Vector embeddings are not configured for Gemini provider. Use text search in assistant chat or configure OpenAI embeddings.");
+        }
+
+        var apiKey = ResolveApiKey(provider);
         if (string.IsNullOrWhiteSpace(apiKey))
         {
             throw new InvalidOperationException("OpenAI API key is missing. Set OPENAI_API_KEY or OpenAI__ApiKey.");
@@ -153,11 +160,31 @@ public class OpenAiVectorService : IVectorService
 
     private string ResolveApiKey()
     {
+        return ResolveApiKey(ResolveProvider());
+    }
+
+    private string ResolveApiKey(string provider)
+    {
+        if (string.Equals(provider, "gemini", StringComparison.OrdinalIgnoreCase))
+        {
+            return Environment.GetEnvironmentVariable("GEMINI_API_KEY") ?? string.Empty;
+        }
+
         if (!string.IsNullOrWhiteSpace(_options.ApiKey))
         {
             return _options.ApiKey;
         }
 
         return Environment.GetEnvironmentVariable("OPENAI_API_KEY") ?? string.Empty;
+    }
+
+    private string ResolveProvider()
+    {
+        if (!string.IsNullOrWhiteSpace(_options.Provider))
+        {
+            return _options.Provider.Trim().ToLowerInvariant();
+        }
+
+        return (Environment.GetEnvironmentVariable("AI_PROVIDER") ?? "gemini").Trim().ToLowerInvariant();
     }
 }

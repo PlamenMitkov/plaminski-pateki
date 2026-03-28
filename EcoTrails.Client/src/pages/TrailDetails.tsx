@@ -44,6 +44,50 @@ function buildFallbackRoute(trail: Trail): TrailRouteResponse | null {
   };
 }
 
+function buildTrailSchemaOrg(trail: Trail) {
+  const keywords = [trail.region, trail.location, `трудност ${trail.difficulty}/5`, 'екопътека']
+    .filter(Boolean)
+    .join(', ');
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'TouristAttraction',
+    name: trail.name,
+    description: trail.description,
+    url: window.location.href,
+    keywords,
+    publicAccess: true,
+    isAccessibleForFree: true,
+    areaServed: trail.region || undefined,
+    geo:
+      trail.latitude !== null && trail.longitude !== null
+        ? {
+            '@type': 'GeoCoordinates',
+            latitude: trail.latitude,
+            longitude: trail.longitude,
+          }
+        : undefined,
+    additionalProperty: [
+      {
+        '@type': 'PropertyValue',
+        name: 'difficulty',
+        value: `${trail.difficulty}/5`,
+      },
+      {
+        '@type': 'PropertyValue',
+        name: 'durationInHours',
+        value: trail.durationInHours,
+      },
+      {
+        '@type': 'PropertyValue',
+        name: 'elevationGain',
+        value: trail.elevationGain,
+        unitCode: 'MTR',
+      },
+    ],
+  };
+}
+
 function TrailDetails() {
   const { id } = useParams<{ id: string }>();
   const [trail, setTrail] = useState<Trail | null>(null);
@@ -110,6 +154,38 @@ function TrailDetails() {
     return [42.7, 25.3] as [number, number];
   }, [trail, route]);
 
+  const schemaOrgJson = useMemo(() => {
+    if (!trail) {
+      return '';
+    }
+
+    return JSON.stringify(buildTrailSchemaOrg(trail));
+  }, [trail]);
+
+  useEffect(() => {
+    if (!schemaOrgJson) {
+      return;
+    }
+
+    const scriptId = 'trail-schema-org-jsonld';
+    let script = document.getElementById(scriptId) as HTMLScriptElement | null;
+    if (!script) {
+      script = document.createElement('script');
+      script.id = scriptId;
+      script.type = 'application/ld+json';
+      document.head.appendChild(script);
+    }
+
+    script.text = schemaOrgJson;
+
+    return () => {
+      const current = document.getElementById(scriptId);
+      if (current) {
+        current.remove();
+      }
+    };
+  }, [schemaOrgJson]);
+
   const handleShare = async () => {
     const shareUrl = window.location.href;
 
@@ -145,7 +221,7 @@ function TrailDetails() {
   }
 
   return (
-    <div className="app-container">
+    <div className="app-container trail-details-page">
       <div className="details-actions">
         <Link className="trail-link" to="/">
           <ArrowLeft size={16} />

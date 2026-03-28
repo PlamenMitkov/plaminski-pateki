@@ -10,8 +10,8 @@ RUN dotnet publish "EcoTrails.Api.csproj" -c Release -o /app/publish /p:UseAppHo
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS final
 WORKDIR /app
 
-RUN addgroup --system appgroup \
-	&& adduser --system --ingroup appgroup --uid 5678 appuser \
+RUN groupadd --gid 5678 appgroup \
+	&& useradd --uid 5678 --gid appgroup --no-create-home --shell /usr/sbin/nologin appuser \
 	&& chown -R appuser:appgroup /app
 
 COPY --from=build /app/publish .

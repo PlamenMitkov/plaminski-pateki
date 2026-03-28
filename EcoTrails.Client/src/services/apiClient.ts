@@ -55,3 +55,43 @@ apiClient.interceptors.response.use(
 );
 
 export default apiClient;
+export { TOKEN_STORAGE_KEY };
+
+export async function* postStream<TRequest = unknown>(
+  path: string,
+  request: TRequest,
+  signal?: AbortSignal,
+): AsyncGenerator<string, void, unknown> {
+  const token = localStorage.getItem(TOKEN_STORAGE_KEY);
+  const response = await fetch(`${apiBaseUrl}${path}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+    body: JSON.stringify(request),
+    signal,
+  });
+
+  if (!response.ok) {
+    throw new Error(`Streaming request failed: ${response.statusText}`);
+  }
+
+  const reader = response.body?.getReader();
+  if (!reader) {
+    throw new Error('Streaming not supported by response body.');
+  }
+
+  const decoder = new TextDecoder();
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      const chunk = decoder.decode(value, { stream: true });
+      yield chunk;
+    }
+  } finally {
+    reader.releaseLock();
+  }
+}
