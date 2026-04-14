@@ -10,11 +10,10 @@ function App() {
   const location = useLocation();
   const activeTab = new URLSearchParams(location.search).get('tab');
 
-  const isHomeActive = location.pathname === '/' && !activeTab;
+  const isHomeActive = location.pathname === '/' && (!activeTab || activeTab === 'home');
   const isTrailsActive =
     location.pathname === '/' && (activeTab === 'list' || activeTab === 'map' || activeTab === 'favorites');
   const isProfileActive = location.pathname === '/auth';
-  const isAdminActive = location.pathname === '/admin';
   const isSettingsActive = location.pathname === '/' && activeTab === 'assistant';
   const isAboutActive = location.pathname === '/about';
 
@@ -42,15 +41,6 @@ function App() {
         </Link>
         <Link to="/auth" className={roundButtonClass(isProfileActive)} title="Профил" aria-label="Профил">
           <i className="fas fa-id-badge" aria-hidden="true"></i>
-        </Link>
-        <Link
-          to="/admin"
-          className={roundButtonClass(isAdminActive, 'admin-round-button')}
-          title="Админ панел"
-          aria-label="Админ панел"
-        >
-          <i className="fas fa-shield-halved" aria-hidden="true"></i>
-          <span className="round-button-label">ADMIN</span>
         </Link>
         <Link to="/about" className={roundButtonClass(isAboutActive)} title="За нас" aria-label="За нас">
           <i className="fas fa-circle-info" aria-hidden="true"></i>

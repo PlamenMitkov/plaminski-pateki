@@ -1,0 +1,152 @@
+{
+  "audit_date": "2026-04-14",
+  "input_path": "C:\\Users\\35987\\source\\repos\\EcoProject\\ecoupdated.json",
+  "total_trails": 522,
+  "affected_trails": 522,
+  "total_findings": 1716,
+  "severity_counts": {
+    "high": 339,
+    "low": 314,
+    "medium": 1063
+  },
+  "category_counts": {
+    "contact_email_region_mismatch": 212,
+    "generic_description": 1,
+    "missing_length_km": 362,
+    "missing_nearest_town": 234,
+    "missing_photo_url": 296,
+    "missing_short_summary": 467,
+    "name_not_reflected_in_content": 82,
+    "placeholder_source": 7,
+    "summary_mismatch": 18,
+    "synthetic_without_sources": 37
+  },
+  "top_affected_trails": [
+    {
+      "trail_id": 401,
+      "trail_name": "на Чучулигите\n271. \\* Екопътека",
+      "findings": 6
+    },
+    {
+      "trail_id": 266,
+      "trail_name": "Кървавата скала",
+      "findings": 6
+    },
+    {
+      "trail_id": 281,
+      "trail_name": "Меаните",
+      "findings": 6
+    },
+    {
+      "trail_id": 284,
+      "trail_name": "Мечи стъпки",
+      "findings": 6
+    },
+    {
+      "trail_id": 62,
+      "trail_name": "Врацата",
+      "findings": 5
+    },
+    {
+      "trail_id": 157,
+      "trail_name": "Алея на билките",
+      "findings": 5
+    },
+    {
+      "trail_id": 163,
+      "trail_name": "Бабин пласт",
+      "findings": 5
+    },
+    {
+      "trail_id": 170,
+      "trail_name": "Беглика",
+      "findings": 5
+    },
+    {
+      "trail_id": 171,
+      "trail_name": "Беглика рали",
+      "findings": 5
+    },
+    {
+      "trail_id": 205,
+      "trail_name": "Горна земя",
+      "findings": 5
+    },
+    {
+      "trail_id": 208,
+      "trail_name": "Двете реки",
+      "findings": 5
+    },
+    {
+      "trail_id": 214,
+      "trail_name": "Дуранкулак",
+      "findings": 5
+    },
+    {
+      "trail_id": 215,
+      "trail_name": "Дървото на живота",
+      "findings": 5
+    },
+    {
+      "trail_id": 244,
+      "trail_name": "Каньона на водопадите",
+      "findings": 5
+    },
+    {
+      "trail_id": 248,
+      "trail_name": "Карандила",
+      "findings": 5
+    },
+    {
+      "trail_id": 250,
+      "trail_name": "Кечика Кая",
+      "findings": 5
+    },
+    {
+      "trail_id": 254,
+      "trail_name": "Княжевска пътека",
+      "findings": 5
+    },
+    {
+      "trail_id": 264,
+      "trail_name": "Крушунски водопади",
+      "findings": 5
+    },
+    {
+      "trail_id": 271,
+      "trail_name": "Лозенски манастир",
+      "findings": 5
+    },
+    {
+      "trail_id": 276,
+      "trail_name": "Малко Търново",
+      "findings": 5
+    },
+    {
+      "trail_id": 289,
+      "trail_name": "Невястата",
+      "findings": 5
+    },
+    {
+      "trail_id": 298,
+      "trail_name": "Петрова нива",
+      "findings": 5
+    },
+    {
+      "trail_id": 303,
+      "trail_name": "Поляната",
+      "findings": 5
+    },
+    {
+      "trail_id": 304,
+      "trail_name": "Поморие",
+      "findings": 5
+    },
+    {
+      "trail_id": 305,
+      "trail_name": "Понтийски път",
+      "findings": 5
+    }
+  ],
+  "csv_report": "C:\\Users\\35987\\source\\repos\\EcoProject\\scripts\\data-quality\\reports\\full-freshness-findings-20260414-102138.csv"
+}

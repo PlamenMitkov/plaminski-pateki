@@ -40,6 +40,7 @@ services:
     ports:
       - "${API_PORT:-5218}:8080"
     volumes:
+      - ./ecoupdated.json:/ecoupdated.json:ro
       - ./eco.json:/eco.json:ro
 
   client:

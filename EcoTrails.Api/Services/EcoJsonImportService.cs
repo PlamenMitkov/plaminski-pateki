@@ -10,6 +10,16 @@ namespace EcoTrails.Api.Services;
 public class EcoJsonImportService
 {
     private static readonly Regex NumberRegex = new(@"\d+(?:[\.,]\d+)?", RegexOptions.Compiled);
+    private static readonly Regex RussianSpecificCyrillicRegex = new("[ЭэЫыЁё]", RegexOptions.Compiled);
+    private static readonly string[] PreferredDatasetFiles = ["ecoupdated.json", "eco.json"];
+    private static readonly HashSet<string> PlaceholderRegions = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "Пловдив",
+        "София",
+        "Смолян",
+        "България",
+        "Неуточнено"
+    };
     private readonly AppDbContext _context;
     private readonly IWebHostEnvironment _environment;
     private readonly ILogger<EcoJsonImportService> _logger;
@@ -32,10 +42,10 @@ public class EcoJsonImportService
             return 0;
         }
 
-        var jsonPath = Path.Combine(workspaceRoot, "eco.json");
-        if (!File.Exists(jsonPath))
+        var jsonPath = ResolveDatasetPath(workspaceRoot);
+        if (jsonPath is null)
         {
-            _logger.LogWarning("eco.json was not found at {Path}", jsonPath);
+            _logger.LogWarning("No eco dataset file was found. Checked: {Files}", string.Join(", ", PreferredDatasetFiles));
             return 0;
         }
 
@@ -44,7 +54,7 @@ public class EcoJsonImportService
 
         if (!document.RootElement.TryGetProperty("eco_trails", out var trailsElement) || trailsElement.ValueKind != JsonValueKind.Array)
         {
-            _logger.LogWarning("eco.json does not contain a valid eco_trails array");
+            _logger.LogWarning("{JsonPath} does not contain a valid eco_trails array", jsonPath);
             return 0;
         }
 
@@ -52,26 +62,27 @@ public class EcoJsonImportService
         var existingByKey = existingTrails
             .GroupBy(item => BuildKey(item.Name, item.Location), StringComparer.OrdinalIgnoreCase)
             .ToDictionary(group => group.Key, group => group.First(), StringComparer.OrdinalIgnoreCase);
+        var existingByName = existingTrails
+            .GroupBy(item => NormalizeName(item.Name), StringComparer.OrdinalIgnoreCase)
+            .ToDictionary(group => group.Key, group => group.First(), StringComparer.OrdinalIgnoreCase);
 
         var itemsToAdd = new List<Trail>();
         var updatedItems = 0;
 
         foreach (var trailElement in trailsElement.EnumerateArray())
         {
-            var name = GetString(trailElement, "name");
+            var name = NormalizeBulgarianText(GetString(trailElement, "name"));
             if (string.IsNullOrWhiteSpace(name))
             {
                 continue;
             }
 
-            var description = GetString(trailElement, "description");
-            var shortSummary = GetString(trailElement, "short_summary");
-            var nearestTown = GetNestedString(trailElement, "location", "nearest_town");
-            var region = GetNestedString(trailElement, "location", "region");
-            var location = !string.IsNullOrWhiteSpace(nearestTown)
-                ? nearestTown
-                : (!string.IsNullOrWhiteSpace(region) ? region : "Неуточнено");
-            var normalizedRegion = !string.IsNullOrWhiteSpace(region) ? region : location;
+            var description = NormalizeBulgarianText(GetString(trailElement, "description"));
+            var shortSummary = NormalizeBulgarianText(GetString(trailElement, "short_summary"));
+            var nearestTown = NormalizeBulgarianText(GetNestedString(trailElement, "location", "nearest_town"));
+            var region = NormalizeBulgarianText(GetNestedString(trailElement, "location", "region"));
+            var location = ResolveLocation(name, nearestTown, region);
+            var normalizedRegion = ResolveRegion(region, location);
             var resolvedDescription = ResolveDescription(description, shortSummary, name, location);
 
             var difficultyText = GetNestedString(trailElement, "trail_details", "difficulty");
@@ -94,8 +105,11 @@ public class EcoJsonImportService
                 : "[\"туристически обувки\",\"вода\"]";
 
             var key = BuildKey(name, location);
-            if (existingByKey.TryGetValue(key, out var existingTrail))
+            var normalizedName = NormalizeName(name);
+            if (existingByKey.TryGetValue(key, out var existingTrail) ||
+                existingByName.TryGetValue(normalizedName, out existingTrail))
             {
+                existingByKey[key] = existingTrail;
                 var changed = false;
 
                 if (!existingTrail.Latitude.HasValue && latitude.HasValue)
@@ -111,6 +125,27 @@ public class EcoJsonImportService
                 }
 
                 if (string.IsNullOrWhiteSpace(existingTrail.Region) && !string.IsNullOrWhiteSpace(normalizedRegion))
+                {
+                    existingTrail.Region = normalizedRegion;
+                    changed = true;
+                }
+
+                if (ShouldReplaceText(existingTrail.Name, name))
+                {
+                    existingTrail.Name = name;
+                    changed = true;
+                }
+
+                if (ShouldReplaceText(existingTrail.Location, location) ||
+                    (IsGenericRegion(existingTrail.Location) && !IsGenericRegion(location)) ||
+                    string.Equals(existingTrail.Location, existingTrail.Region, StringComparison.OrdinalIgnoreCase))
+                {
+                    existingTrail.Location = location;
+                    changed = true;
+                }
+
+                if (ShouldReplaceText(existingTrail.Region, normalizedRegion) ||
+                    (IsGenericRegion(existingTrail.Region) && !IsGenericRegion(normalizedRegion)))
                 {
                     existingTrail.Region = normalizedRegion;
                     changed = true;
@@ -186,6 +221,7 @@ public class EcoJsonImportService
 
             itemsToAdd.Add(newTrail);
             existingByKey[key] = newTrail;
+            existingByName[normalizedName] = newTrail;
         }
 
         if (itemsToAdd.Count == 0 && updatedItems == 0)
@@ -200,13 +236,116 @@ public class EcoJsonImportService
 
         await _context.SaveChangesAsync(cancellationToken);
 
-        _logger.LogInformation("Imported {AddedCount} trails and updated coordinates for {UpdatedCount} trails from eco.json", itemsToAdd.Count, updatedItems);
+        _logger.LogInformation("Imported {AddedCount} trails and updated coordinates for {UpdatedCount} trails from {DatasetFile}", itemsToAdd.Count, updatedItems, Path.GetFileName(jsonPath));
         return itemsToAdd.Count + updatedItems;
+    }
+
+    private static string? ResolveDatasetPath(string workspaceRoot)
+    {
+        foreach (var fileName in PreferredDatasetFiles)
+        {
+            var fullPath = Path.Combine(workspaceRoot, fileName);
+            if (File.Exists(fullPath))
+            {
+                return fullPath;
+            }
+        }
+
+        return null;
     }
 
     private static string BuildKey(string name, string location)
     {
         return $"{name.Trim()}|{location.Trim()}";
+    }
+
+    private static string NormalizeName(string name)
+    {
+        return NormalizeBulgarianText(name);
+    }
+
+    private static bool ShouldReplaceText(string? current, string candidate)
+    {
+        if (string.IsNullOrWhiteSpace(candidate))
+        {
+            return false;
+        }
+
+        if (string.IsNullOrWhiteSpace(current))
+        {
+            return true;
+        }
+
+        if (string.Equals(current.Trim(), candidate.Trim(), StringComparison.OrdinalIgnoreCase))
+        {
+            return false;
+        }
+
+        return ContainsRussianSpecificLetters(current) ||
+               current.Trim().Equals("Неуточнено", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static bool IsGenericRegion(string? region)
+    {
+        if (string.IsNullOrWhiteSpace(region))
+        {
+            return true;
+        }
+
+        var normalized = region.Trim();
+        return PlaceholderRegions.Contains(normalized) ||
+               normalized.EndsWith("област", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static string ResolveLocation(string trailName, string nearestTown, string region)
+    {
+        if (!string.IsNullOrWhiteSpace(nearestTown))
+        {
+            return nearestTown;
+        }
+
+        if (!string.IsNullOrWhiteSpace(region) && !IsGenericRegion(region))
+        {
+            return region;
+        }
+
+        return !string.IsNullOrWhiteSpace(trailName) ? trailName.Trim() : "Неуточнено";
+    }
+
+    private static string ResolveRegion(string region, string location)
+    {
+        if (!string.IsNullOrWhiteSpace(region) && !IsGenericRegion(region))
+        {
+            return region;
+        }
+
+        return location;
+    }
+
+    private static bool ContainsRussianSpecificLetters(string value)
+    {
+        return RussianSpecificCyrillicRegex.IsMatch(value);
+    }
+
+    private static string NormalizeBulgarianText(string value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return string.Empty;
+        }
+
+        var normalized = value.Trim()
+            .Replace("Большое Търново", "Велико Търново", StringComparison.Ordinal)
+            .Replace("Этап", "Етап", StringComparison.Ordinal)
+            .Replace("этап", "етап", StringComparison.Ordinal)
+            .Replace('Э', 'Е')
+            .Replace('э', 'е')
+            .Replace('Ы', 'И')
+            .Replace('ы', 'и')
+            .Replace('Ё', 'Й')
+            .Replace('ё', 'й');
+
+        return Regex.Replace(normalized, "\\s+", " ").Trim();
     }
 
     private static string GetString(JsonElement element, string propertyName)

@@ -34,6 +34,7 @@ services:
       db:
         condition: service_healthy
     volumes:
+      - ./ecoupdated.json:/ecoupdated.json:ro
       - ./eco.json:/eco.json:ro
 
   client:

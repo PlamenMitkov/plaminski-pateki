@@ -1,0 +1,417 @@
+severity,category,trail_id,trail_name,region,nearest_town,details
+high,contact_email_region_mismatch,1,"Екопътека ""Ерантис"" – Киреево",Видин,Киреево,"contact email suggests Plovdiv, but record region is 'Видин'"
+high,contact_email_region_mismatch,2,"Екопътека ""Етър-Соколски манастир""",Габрово,Етър,"contact email suggests Plovdiv, but record region is 'Габрово'"
+high,contact_email_region_mismatch,3,"Екопътека ""Збегове"" – Белоградчик",Видин,Белоградчик,"contact email suggests Plovdiv, but record region is 'Видин'"
+high,contact_email_region_mismatch,4,"Екопътека Заслон ""Опасен зъб"" – Тетевен",Ловеч,Тетевен,"contact email suggests Plovdiv, but record region is 'Ловеч'"
+high,contact_email_region_mismatch,5,"Екопътека до ""Първия войнишки паметник"" - с. Алдомировци",Алдомировци,Алдомировци,"contact email suggests Plovdiv, but record region is 'Алдомировци'"
+high,contact_email_region_mismatch,6,"Водопад ""Лястовичи вир""",Асеновград,Долнослав,"contact email suggests Plovdiv, but record region is 'Асеновград'"
+high,contact_email_region_mismatch,7,Местност за пикник Орешак,Балчик,Орешак,"contact email suggests Plovdiv, but record region is 'Балчик'"
+high,contact_email_region_mismatch,8,Местност Бялата чешма – Самуилово,Беласица,Самуилово,"contact email suggests Plovdiv, but record region is 'Беласица'"
+high,contact_email_region_mismatch,9,Хайдушки водопади (екопътека),Берковица,Берковица,"contact email suggests Plovdiv, but record region is 'Берковица'"
+high,contact_email_region_mismatch,24,"Скално образование ""Камината"" – Бов",Бов,Бов,"contact email suggests Plovdiv, but record region is 'Бов'"
+high,contact_email_region_mismatch,26,"Екопътека ""Пещера и изворите на р. Младежка""",Бургас,Младежко,"contact email suggests Plovdiv, but record region is 'Бургас'"
+high,contact_email_region_mismatch,27,"Екопътека ""По следите на миналото"" – Приморско",Бургас,Приморско,"contact email suggests Plovdiv, but record region is 'Бургас'"
+high,contact_email_region_mismatch,28,"Екопътека ""По следите на римляните"" – Приморско",Бургас,Приморско,"contact email suggests Plovdiv, but record region is 'Бургас'"
+high,contact_email_region_mismatch,29,"Екопътека ""Пътят на ясния месец""",Бургас,Бръшлян,"contact email suggests Plovdiv, but record region is 'Бургас'"
+high,contact_email_region_mismatch,30,Дивите кактуси на Синеморец,Бургаска област,Синеморец,"contact email suggests Plovdiv, but record region is 'Бургаска област'"
+high,contact_email_region_mismatch,34,"Екопътека ""Хотнишки водопад""",Велико Търново,Хотница,"contact email suggests Plovdiv, but record region is 'Велико Търново'"
+high,contact_email_region_mismatch,35,Екопътека до Преображенския манастир,Велико Търново,Велико Търново,"contact email suggests Plovdiv, but record region is 'Велико Търново'"
+high,contact_email_region_mismatch,36,Еменски каньон,Велико Търново,Емен,"contact email suggests Plovdiv, but record region is 'Велико Търново'"
+high,contact_email_region_mismatch,37,Негованска екопътека – Емен,Велико Търново,Емен,"contact email suggests Plovdiv, but record region is 'Велико Търново'"
+high,contact_email_region_mismatch,38,Хотнишка екопътека,Велико Търново,Хотница,"contact email suggests Plovdiv, but record region is 'Велико Търново'"
+high,contact_email_region_mismatch,39,"Христовски водопад ""Руховци"" (екопътека)",Велико Търново,Христовци,"contact email suggests Plovdiv, but record region is 'Велико Търново'"
+high,contact_email_region_mismatch,40,Еко стадион Пишмана,Велико Търновска област,Велико Търново,"contact email suggests Plovdiv, but record region is 'Велико Търновска област'"
+high,contact_email_region_mismatch,41,"Екопътека ""Планиница""",Видин,Белоградчик,"contact email suggests Plovdiv, but record region is 'Видин'"
+high,contact_email_region_mismatch,42,Местност Божурица – Видин,Видин,Видин,"contact email suggests Plovdiv, but record region is 'Видин'"
+high,contact_email_region_mismatch,43,"""Пътеката на здравето"" – Кладница",Витоша,Кладница,"contact email suggests Plovdiv, but record region is 'Витоша'"
+high,contact_email_region_mismatch,44,Нископланинска обиколна пътека (НОП) Витоша,Витоша,София,"contact email suggests Plovdiv, but record region is 'Витоша'"
+high,contact_email_region_mismatch,45,"Панорамна алея ""Галунка""",Витоша,"Бистрица, Железница","contact email suggests Plovdiv, but record region is 'Витоша'"
+high,contact_email_region_mismatch,46,Подход от кв. Бояна,Витоша,Бояна,"contact email suggests Plovdiv, but record region is 'Витоша'"
+high,contact_email_region_mismatch,47,Подход от кв. Драгалевци,Витоша,Драгалевци,"contact email suggests Plovdiv, but record region is 'Витоша'"
+high,contact_email_region_mismatch,48,Подход от кв. Княжево,Витоша,Княжево,"contact email suggests Plovdiv, but record region is 'Витоша'"
+high,contact_email_region_mismatch,49,Подход от м. Златни мостове,Витоша,Златни мостове,"contact email suggests Plovdiv, but record region is 'Витоша'"
+high,contact_email_region_mismatch,50,Подход от м. Ярема,Витоша,Ярема,"contact email suggests Plovdiv, but record region is 'Витоша'"
+high,contact_email_region_mismatch,51,Подход от с. Бистрица,Витоша,Бистрица,"contact email suggests Plovdiv, but record region is 'Витоша'"
+high,contact_email_region_mismatch,52,Подход от с. Боснек,Витоша,Боснек,"contact email suggests Plovdiv, but record region is 'Витоша'"
+high,contact_email_region_mismatch,53,Подход от с. Владая,Витоша,Владая,"contact email suggests Plovdiv, but record region is 'Витоша'"
+high,contact_email_region_mismatch,54,Подход от с. Железница,Витоша,Железница,"contact email suggests Plovdiv, but record region is 'Витоша'"
+high,contact_email_region_mismatch,55,Подход от с. Кладница,Витоша,Кладница,"contact email suggests Plovdiv, but record region is 'Витоша'"
+high,contact_email_region_mismatch,56,Подход от с. Рударци,Витоша,Рударци,"contact email suggests Plovdiv, but record region is 'Витоша'"
+high,contact_email_region_mismatch,57,Подход от с. Чуйпетлово,Витоша,Чуйпетлово,"contact email suggests Plovdiv, but record region is 'Витоша'"
+high,contact_email_region_mismatch,58,Подход от с. Ярлово,Витоша,Ярлово,"contact email suggests Plovdiv, but record region is 'Витоша'"
+high,contact_email_region_mismatch,59,"Пътека ""Сила и живот""",Витоша,Симеоново,"contact email suggests Plovdiv, but record region is 'Витоша'"
+high,contact_email_region_mismatch,60,Среднопланинска обиколна пътека (СОП),Витоша,София,"contact email suggests Plovdiv, but record region is 'Витоша'"
+high,contact_email_region_mismatch,61,Торфищна информационна алея,Витоша,София,"contact email suggests Plovdiv, but record region is 'Витоша'"
+high,contact_email_region_mismatch,64,Врачанска екопътека,Врачанска област,Враца,"contact email suggests Plovdiv, but record region is 'Врачанска област'"
+high,contact_email_region_mismatch,65,Горска пътека на приказките,Врачанска област,Враца,"contact email suggests Plovdiv, but record region is 'Врачанска област'"
+high,contact_email_region_mismatch,66,"Водопад ""Боров Камък"", Врачанска екопътека",Врачански Балкан,Враца,"contact email suggests Plovdiv, but record region is 'Врачански Балкан'"
+high,contact_email_region_mismatch,67,Врачанска екопътека – Згориград,Врачански Балкан,село Згориград,"contact email suggests Plovdiv, but record region is 'Врачански Балкан'"
+high,contact_email_region_mismatch,68,Исторически маршрут „Антична и средновековна Вратица”,Врачански Балкан,Враца,"contact email suggests Plovdiv, but record region is 'Врачански Балкан'"
+high,contact_email_region_mismatch,69,Исторически маршрут „По стъпките на Ботевата чета”,Врачански Балкан,Враца,"contact email suggests Plovdiv, but record region is 'Врачански Балкан'"
+high,contact_email_region_mismatch,70,Местност КАРИЕРАТА – къмпинг над с. Згориград,Врачански Балкан,Згориград,"contact email suggests Plovdiv, but record region is 'Врачански Балкан'"
+high,contact_email_region_mismatch,71,Наследствена пътека с. Очин дол,Врачански Балкан,Очин дол,"contact email suggests Plovdiv, but record region is 'Врачански Балкан'"
+high,contact_email_region_mismatch,72,Познавателен маршрут „Белоглавият лешояд в ПП Врачански Балкан”,Врачански Балкан,Долно Озирово,"contact email suggests Plovdiv, but record region is 'Врачански Балкан'"
+high,contact_email_region_mismatch,73,Познавателен маршрут „Враца – пещера Леденика”,Врачански Балкан,Враца,"contact email suggests Plovdiv, but record region is 'Врачански Балкан'"
+high,contact_email_region_mismatch,74,Познавателен маршрут „Карст и биологично разнообразие”,Врачански Балкан,Враца,"contact email suggests Plovdiv, but record region is 'Врачански Балкан'"
+high,contact_email_region_mismatch,75,Познавателен маршрут „Планинарство за начинаещи”,Врачански Балкан,Враца,"contact email suggests Plovdiv, but record region is 'Врачански Балкан'"
+high,contact_email_region_mismatch,76,Спортно-туристически маршрут „Горска пътека на здравето“,Врачански Балкан,Враца,"contact email suggests Plovdiv, but record region is 'Врачански Балкан'"
+high,contact_email_region_mismatch,77,"Екопътека ""Иванчова поляна""",Вършец,Вършец,"contact email suggests Plovdiv, but record region is 'Вършец'"
+high,contact_email_region_mismatch,85,"Екопъ3тека ""Римският път""",Габрово,Боженци,"contact email suggests Plovdiv, but record region is 'Габрово'"
+high,contact_email_region_mismatch,86,"Екопътека ""Витата стена""",Габрово,Габрово,"contact email suggests Plovdiv, but record region is 'Габрово'"
+high,contact_email_region_mismatch,87,"Екопътека ""Градище-Кметовци""",Габрово,Габрово,"contact email suggests Plovdiv, but record region is 'Габрово'"
+high,contact_email_region_mismatch,88,"Екопътека ""Градище-пазителката на прохода""",Габрово,Габрово,"contact email suggests Plovdiv, but record region is 'Габрово'"
+high,contact_email_region_mismatch,89,"Екопътека ""Люляци–Дебел дял""",Габрово,Габрово,"contact email suggests Plovdiv, but record region is 'Габрово'"
+high,contact_email_region_mismatch,90,"Екопътека ""Могила""",Габрово,Дряново,"contact email suggests Plovdiv, but record region is 'Габрово'"
+high,contact_email_region_mismatch,91,"Екопътека ""Узана""",Габрово,Узана,"contact email suggests Plovdiv, but record region is 'Габрово'"
+high,contact_email_region_mismatch,92,"Екопътека Трявна - АИР ""Боженци""",Габрово,Трявна,"contact email suggests Plovdiv, but record region is 'Габрово'"
+high,contact_email_region_mismatch,94,Дряновска екопътека,Габровска област,Дряново,"contact email suggests Plovdiv, but record region is 'Габровска област'"
+high,contact_email_region_mismatch,95,Екопътека Via Ferrata,Габровска област,Дряново,"contact email suggests Plovdiv, but record region is 'Габровска област'"
+high,contact_email_region_mismatch,96,"Екопътека ""Камъка"" - Горна Оряховица",Горна Оряховица,Горна Оряховица,"contact email suggests Plovdiv, but record region is 'Горна Оряховица'"
+high,contact_email_region_mismatch,99,Ботаническа алея за незрящи,Дендрариум,София,"contact email suggests Plovdiv, but record region is 'Дендрариум'"
+high,contact_email_region_mismatch,100,"Екопътека и Скален феномен ""Марков камък"" – Елена",Елена,Елена,"contact email suggests Plovdiv, but record region is 'Елена'"
+high,contact_email_region_mismatch,101,"Екопътека ""Екот от камбанен звън"" – Рибарица",Етрополе,Етрополе,"contact email suggests Plovdiv, but record region is 'Етрополе'"
+high,contact_email_region_mismatch,102,"Екопътека ""Горица""",Западна Рила,Овчарци,"contact email suggests Plovdiv, but record region is 'Западна Рила'"
+high,contact_email_region_mismatch,103,"Екопътека ""Горица"" (Овчарченски водопад)",Западна Рила,Овчарци,"contact email suggests Plovdiv, but record region is 'Западна Рила'"
+high,contact_email_region_mismatch,104,Копренска екопътека,Западна Стара планина,Копиловци,"contact email suggests Plovdiv, but record region is 'Западна Стара планина'"
+high,contact_email_region_mismatch,105,"Водопади ""Дуплево"", ""Скакалото"" и ""Костен камък"" - с.Орехово",Западни Родопи,село Орехово,"contact email suggests Plovdiv, but record region is 'Западни Родопи'"
+high,contact_email_region_mismatch,106,Екопътека до Киселчовски водопад,Западни Родопи,Киселчово,"contact email suggests Plovdiv, but record region is 'Западни Родопи'"
+high,contact_email_region_mismatch,107,Вазова екопътека,Искърско дефиле,Заселе,"contact email suggests Plovdiv, but record region is 'Искърско дефиле'"
+high,contact_email_region_mismatch,108,"Водопад ""Вазова скакля"", Вазова екопътека",Искърско дефиле,Гара Бов,"contact email suggests Plovdiv, but record region is 'Искърско дефиле'"
+high,contact_email_region_mismatch,109,"Туристическа пътека ""Под Камико""",Искърско дефиле,Гара Бов,"contact email suggests Plovdiv, but record region is 'Искърско дефиле'"
+high,contact_email_region_mismatch,110,"Тракийски слънца и екопътека ""Дрънчи дупка""",Карлово,Мелница,"contact email suggests Plovdiv, but record region is 'Карлово'"
+high,contact_email_region_mismatch,111,"Екопътека ""Божения""",Красен-Божичен,Божичен,"contact email suggests Plovdiv, but record region is 'Красен-Божичен'"
+high,contact_email_region_mismatch,112,"Екопътека ""Пътят на Сърцето""",Кърджали,Борово,"contact email suggests Plovdiv, but record region is 'Кърджали'"
+high,contact_email_region_mismatch,122,"Екопътека ""Гложене - Гложенски манастир - пещера Моровица""",Ловеч,Гложене,"contact email suggests Plovdiv, but record region is 'Ловеч'"
+high,contact_email_region_mismatch,123,"Екопътека ""Нагоре към Слънцето""",Ловеч,Бабинци,"contact email suggests Plovdiv, but record region is 'Ловеч'"
+high,contact_email_region_mismatch,124,"Екопътека ""Опасният зъб""",Ловеч,Тетевен,"contact email suggests Plovdiv, but record region is 'Ловеч'"
+high,contact_email_region_mismatch,125,"Екопътека ""По стъпките на балканджиите"" – Априлци",Ловеч,Априлци,"contact email suggests Plovdiv, but record region is 'Ловеч'"
+high,contact_email_region_mismatch,126,"Екопътека ""Под пръските на водопада""",Ловеч,Тетевен,"contact email suggests Plovdiv, but record region is 'Ловеч'"
+high,contact_email_region_mismatch,127,"Екопътека ""През очите на времето - история и природа""",Ловеч,Крушуна,"contact email suggests Plovdiv, but record region is 'Ловеч'"
+high,contact_email_region_mismatch,128,"Екопътека ""Станина дупка""",Ловеч,Тетевен,"contact email suggests Plovdiv, but record region is 'Ловеч'"
+high,contact_email_region_mismatch,129,Екопътека – Ведерник,Ловеч,Ведерник,"contact email suggests Plovdiv, but record region is 'Ловеч'"
+high,contact_email_region_mismatch,130,Крушунска екопътека,Ловеч,Крушуна,"contact email suggests Plovdiv, but record region is 'Ловеч'"
+high,contact_email_region_mismatch,131,Местност за отдих Мийковци,Ловеч,Мийковци,"contact email suggests Plovdiv, but record region is 'Ловеч'"
+high,contact_email_region_mismatch,132,Местност за пикник с. Малко Чочовени,Ловеч,Малко Чочовени,"contact email suggests Plovdiv, but record region is 'Ловеч'"
+high,contact_email_region_mismatch,133,Геопътека Задънен дол,Ловешка област,Луковит,"contact email suggests Plovdiv, but record region is 'Ловешка област'"
+high,contact_email_region_mismatch,134,Екопътека Искър-Панега,Луковит,Луковит,"contact email suggests Plovdiv, but record region is 'Луковит'"
+high,contact_email_region_mismatch,135,"Екопътека ""Белите скали"" – Лютиброд",Лютиброд,Лютиброд,"contact email suggests Plovdiv, but record region is 'Лютиброд'"
+high,contact_email_region_mismatch,137,"Екопътека ""Хайдушки водопади""",Монтана,Берковица,"contact email suggests Plovdiv, but record region is 'Монтана'"
+high,contact_email_region_mismatch,138,"Водопад ""Бабско пръскало""","Национален парк ""Централен Балкан""",Калофер,"contact email suggests Plovdiv, but record region is 'Национален парк ""Централен Балкан""'"
+high,contact_email_region_mismatch,139,"Екопътека ""Калето"" - Обзор",Обзор,Обзор,"contact email suggests Plovdiv, but record region is 'Обзор'"
+high,contact_email_region_mismatch,140,Геокомплекс Зарапово,Област Велико Търново,Павликени,"contact email suggests Plovdiv, but record region is 'Област Велико Търново'"
+high,contact_email_region_mismatch,141,"Екопътека ""Беглика""",Пазарджишка област,,"contact email suggests Plovdiv, but record region is 'Пазарджишка област'"
+high,contact_email_region_mismatch,145,Православен мемориален кръст „Памет и вяра”,Пирин,Благоевград,"contact email suggests Plovdiv, but record region is 'Пирин'"
+high,contact_email_region_mismatch,146,"Пътека за крепост ""Беаднос""",Пирин,Беден,"contact email suggests Plovdiv, but record region is 'Пирин'"
+high,contact_email_region_mismatch,147,Високопланинска обиколна пътека (ВОП),Планина Витоша,София,"contact email suggests Plovdiv, but record region is 'Планина Витоша'"
+high,contact_email_region_mismatch,148,"Екопътека ""Никопол Римски път - Скална църква""",Плевен,Никопол,"contact email suggests Plovdiv, but record region is 'Плевен'"
+high,contact_email_region_mismatch,149,"Екопътека ""Попската скала""",Плевен,Плевен,"contact email suggests Plovdiv, but record region is 'Плевен'"
+high,contact_email_region_mismatch,150,"Екопътека ""Черне3лка""",Плевен,Горталово,"contact email suggests Plovdiv, but record region is 'Плевен'"
+high,contact_email_region_mismatch,151,"""Зелената пътека"" - Бачковски манастир",Пловдив,Бачковски манастир,"contact email suggests Plovdiv, but record region is 'Пловдив'"
+high,contact_email_region_mismatch,218,"Екопътека ""Комин дере"" – Лъки",Пловдив,Лъки,"contact email suggests Plovdiv, but record region is 'Пловдив'"
+high,contact_email_region_mismatch,219,"Екопътека ""Манастира""",Пловдив,Перущица,"contact email suggests Plovdiv, but record region is 'Пловдив'"
+high,contact_email_region_mismatch,220,"Екопътека ""По пътя на героите""",Пловдив,Перущица,"contact email suggests Plovdiv, but record region is 'Пловдив'"
+high,contact_email_region_mismatch,221,"Екопътека ""Равнища""",Пловдив,Равнища,"contact email suggests Plovdiv, but record region is 'Пловдив'"
+high,contact_email_region_mismatch,222,"Екопътека ""Стара Река"" – Стеврек",Пловдив,Стеврек,"contact email suggests Plovdiv, but record region is 'Пловдив'"
+high,contact_email_region_mismatch,223,"Екопътека ""Стражка могила""",Пловдив,Страж,"contact email suggests Plovdiv, but record region is 'Пловдив'"
+high,contact_email_region_mismatch,224,"Екопътека ""с. Белица-Пещерата""",Благоевград,Белица,"contact email suggests Plovdiv, but record region is 'Благоевград'"
+high,contact_email_region_mismatch,225,"Екопътека ""с.Белица - Кръстова гора""",Благоевград,Белица,"contact email suggests Plovdiv, but record region is 'Благоевград'"
+high,contact_email_region_mismatch,407,Екопътека Бяла река (Калоферска),Пловдивска област,Калофер,"contact email suggests Plovdiv, but record region is 'Пловдивска област'"
+high,contact_email_region_mismatch,408,"Туристическа пътека ""По поречието на р.Бебреш при с.Своде""",Правец,Своде,"contact email suggests Plovdiv, but record region is 'Правец'"
+high,contact_email_region_mismatch,409,Разходка до Голак,Разложка котловина,Разлог,"contact email suggests Plovdiv, but record region is 'Разложка котловина'"
+high,contact_email_region_mismatch,410,"""Пътека на приказките"" – Паничище",Рила,Паничище,"contact email suggests Plovdiv, but record region is 'Рила'"
+high,contact_email_region_mismatch,411,Екопътека до местност Самоковището,Рила,Дупница,"contact email suggests Plovdiv, but record region is 'Рила'"
+high,contact_email_region_mismatch,412,"Екопътека и Водопади ""Бохемия"" – Рила",Рила,Рила,"contact email suggests Plovdiv, but record region is 'Рила'"
+high,contact_email_region_mismatch,413,"Пътека ""Към царството на еделвайса""",Рила,Разлог,"contact email suggests Plovdiv, but record region is 'Рила'"
+high,contact_email_region_mismatch,414,Пътека на глухаря,Рила,Добърско,"contact email suggests Plovdiv, but record region is 'Рила'"
+high,contact_email_region_mismatch,415,Пътека на рилската иглика,Рила,Добърско,"contact email suggests Plovdiv, but record region is 'Рила'"
+high,contact_email_region_mismatch,416,Пътеката на Дивата коза,Рила,Баня,"contact email suggests Plovdiv, but record region is 'Рила'"
+high,contact_email_region_mismatch,417,Самодивска пътека,Рила,Бачево,"contact email suggests Plovdiv, but record region is 'Рила'"
+high,contact_email_region_mismatch,418,Хайдушка пътека с.Годлево – връх Равник,Рила,Годлево,"contact email suggests Plovdiv, but record region is 'Рила'"
+high,contact_email_region_mismatch,419,Веломаршрут село Смилян - село Чеплят,Родопи,Рудозем,"contact email suggests Plovdiv, but record region is 'Родопи'"
+high,contact_email_region_mismatch,420,Връх Драгойна,Родопи,село Драгойново,"contact email suggests Plovdiv, but record region is 'Родопи'"
+high,contact_email_region_mismatch,421,"Екопътека ""Драгиева чешма"" – Чавдар",Родопи,Чавдар,"contact email suggests Plovdiv, but record region is 'Родопи'"
+high,contact_email_region_mismatch,422,"Екопътека ""Лисичево - Чурал""",Родопи,Девин,"contact email suggests Plovdiv, but record region is 'Родопи'"
+high,contact_email_region_mismatch,423,"Екопътека ""Лява река - Предела""",Родопи,Лява река,"contact email suggests Plovdiv, but record region is 'Родопи'"
+high,contact_email_region_mismatch,424,Екопътека „Каньонът на водопадите“,Родопи,Смолян,"contact email suggests Plovdiv, but record region is 'Родопи'"
+high,contact_email_region_mismatch,425,Екопътека „Торнал е Тодьо“ – с. Момчиловци,Родопи,Момчиловци,"contact email suggests Plovdiv, but record region is 'Родопи'"
+high,contact_email_region_mismatch,426,Изворите на река Въча – Меандрите на Буйновска река,Родопи,Буйново,"contact email suggests Plovdiv, but record region is 'Родопи'"
+high,contact_email_region_mismatch,427,Калдъръмената пътека – Рожен,Родопи,Рожен,"contact email suggests Plovdiv, but record region is 'Родопи'"
+high,contact_email_region_mismatch,428,Канинската екопътека – Гърмен,Родопи,Ковачевица,"contact email suggests Plovdiv, but record region is 'Родопи'"
+high,contact_email_region_mismatch,429,Маршрут гр. Батак – х. Техеран – вр. Баташки снежник,Родопи,Батак,"contact email suggests Plovdiv, but record region is 'Родопи'"
+high,contact_email_region_mismatch,430,Маршрут крепост Козник – м. Главата,Родопи,Рудозем,"contact email suggests Plovdiv, but record region is 'Родопи'"
+high,contact_email_region_mismatch,431,Маршрут с. Орехово – Дяволска дупка,Родопи,Орехово,"contact email suggests Plovdiv, but record region is 'Родопи'"
+high,contact_email_region_mismatch,432,Маршрут с. Пловдивци – с. Мочура – Циганско градище – с. Пловдивци,Родопи,Пловдивци,"contact email suggests Plovdiv, but record region is 'Родопи'"
+high,contact_email_region_mismatch,433,Маршрут с. Рибница – крепост Козник,Родопи,Рибница,"contact email suggests Plovdiv, but record region is 'Родопи'"
+high,contact_email_region_mismatch,434,Маршрут язовирна стена Доспат – СОМАТ,Родопи,Доспат,"contact email suggests Plovdiv, but record region is 'Родопи'"
+high,contact_email_region_mismatch,435,Местност Съдилището – Мочура,Родопи,Мочура,"contact email suggests Plovdiv, but record region is 'Родопи'"
+high,contact_email_region_mismatch,436,"Пещера ""Голубовица 2"" с Виа Ферата",Родопи,Кошница,"contact email suggests Plovdiv, but record region is 'Родопи'"
+high,contact_email_region_mismatch,437,Познавателен маршрут „Музей на гората”,Родопи,Батак,"contact email suggests Plovdiv, but record region is 'Родопи'"
+high,contact_email_region_mismatch,438,Природен феномен „Гергева скала”,Родопи,Бачево,"contact email suggests Plovdiv, but record region is 'Родопи'"
+high,contact_email_region_mismatch,439,Смилян – с. Змиево – местност Аламушница – с. Смилян,Родопи,Смилян,"contact email suggests Plovdiv, but record region is 'Родопи'"
+high,contact_email_region_mismatch,440,Трансгранична родопска екопътека Хвойна – Ставруполи,Родопи,Хвойна,"contact email suggests Plovdiv, but record region is 'Родопи'"
+high,contact_email_region_mismatch,441,"Екопътека ""Кечи Кая"" - Рибница",Рудозем,Рибница,"contact email suggests Plovdiv, but record region is 'Рудозем'"
+high,contact_email_region_mismatch,442,"Екопътека ""Бъзовец""",Русе,Бъзовец,"contact email suggests Plovdiv, but record region is 'Русе'"
+high,contact_email_region_mismatch,444,"Ивановски скален манастир ""Свети Архангел Михаил""",Русенски лом,Иваново,"contact email suggests Plovdiv, but record region is 'Русенски лом'"
+high,contact_email_region_mismatch,445,"Екопътека ""Лаго""",Самоков,Самоков,"contact email suggests Plovdiv, but record region is 'Самоков'"
+high,contact_email_region_mismatch,446,"Екопътека ""Знамето"" – с. Младен",Севлиево,Севлиево,"contact email suggests Plovdiv, but record region is 'Севлиево'"
+high,contact_email_region_mismatch,447,"Екопътека ""Бели Искър""",Село Бели Искър,Самоков,"contact email suggests Plovdiv, but record region is 'Село Бели Искър'"
+high,contact_email_region_mismatch,448,"Водопад ""Мангъро""",Село Скрът,Скрът,"contact email suggests Plovdiv, but record region is 'Село Скрът'"
+high,contact_email_region_mismatch,449,"Резерват ""Сребърна""",Силистра,Сребърна,"contact email suggests Plovdiv, but record region is 'Силистра'"
+high,contact_email_region_mismatch,450,Местност Карандила – Сливен,Сините камъни,Сливен,"contact email suggests Plovdiv, but record region is 'Сините камъни'"
+high,contact_email_region_mismatch,451,Местност Тютюнлюка – Сливен,Сините камъни,Сливен,"contact email suggests Plovdiv, but record region is 'Сините камъни'"
+high,contact_email_region_mismatch,452,"""Синия вир"" – Сливен",Сливен,Сливен,"contact email suggests Plovdiv, but record region is 'Сливен'"
+high,contact_email_region_mismatch,453,Хайдушка пътека гр.Сливен – Карандила – Кушбунар,Сливен,Сливен,"contact email suggests Plovdiv, but record region is 'Сливен'"
+high,contact_email_region_mismatch,456,"Водопад ""Орфей"" и каньона на водопадите - Смолян",Смолян,Смолян,"contact email suggests Smolyan, but record region is 'Смолян'"
+high,contact_email_region_mismatch,458,"Екопътека ""Каньона на водопадите"" - Смолян",Смолян,Смолян,"contact email suggests Smolyan, but record region is 'Смолян'"
+high,contact_email_region_mismatch,459,"Екопътека ""Невястата""",Смолян,Смолян,"contact email suggests Smolyan, but record region is 'Смолян'"
+high,contact_email_region_mismatch,460,"Екопътека ""Св Неделя""",Смолян,Златоград,"contact email suggests Smolyan, but record region is 'Смолян'"
+high,contact_email_region_mismatch,461,"Екопътека ""Свети дух""",Смолян,Манастир,"contact email suggests Smolyan, but record region is 'Смолян'"
+high,contact_email_region_mismatch,462,"Екопътека ""Сърница Ай""",Смолян,Сърница,"contact email suggests Smolyan, but record region is 'Смолян'"
+high,contact_email_region_mismatch,463,"Екопътека ""Трите Смолянски езера""",Смолян,Смолян,"contact email suggests Smolyan, but record region is 'Смолян'"
+high,contact_email_region_mismatch,464,"Екопътека ""Храстево""",Смолян,Девин,"contact email suggests Smolyan, but record region is 'Смолян'"
+high,contact_email_region_mismatch,465,"Екопътека ""Царичина""",Смолян,Царичина,"contact email suggests Smolyan, but record region is 'Смолян'"
+high,contact_email_region_mismatch,466,Загражденска екопътека,Смолян,Загражден,"contact email suggests Smolyan, but record region is 'Смолян'"
+high,contact_email_region_mismatch,467,Римски мост – Любча,Смолян,Любча,"contact email suggests Smolyan, but record region is 'Смолян'"
+high,contact_email_region_mismatch,468,Скален масив Невястата (Турлука),Смолян,Смолян,"contact email suggests Smolyan, but record region is 'Смолян'"
+high,contact_email_region_mismatch,470,"Южнородопска или ""Дяволска"" екопътека",Смолян,Борино,"contact email suggests Smolyan, but record region is 'Смолян'"
+high,contact_email_region_mismatch,473,Дяволския мост и водопада,Смолянска област,Борино,"contact email suggests Plovdiv, but record region is 'Смолянска област'"
+high,contact_email_region_mismatch,474,"Екопътека ""12-та застава""",Смолянска област,Барутин,"contact email suggests Plovdiv, but record region is 'Смолянска област'"
+high,contact_email_region_mismatch,475,"Екопътека ""Барутин - вр. Чуката - Касъка""",Смолянска област,Доспат,"contact email suggests Plovdiv, but record region is 'Смолянска област'"
+high,contact_email_region_mismatch,476,"Екопътека ""Паметник Арабаконак до из3вора на река Бебреш""",Софийска,Арабаконак,"contact email suggests Plovdiv, but record region is 'Софийска'"
+high,contact_email_region_mismatch,477,"Екопътека ""Параклис"" – с. Врабево",Софийска,Врабево,"contact email suggests Plovdiv, but record region is 'Софийска'"
+high,contact_email_region_mismatch,478,"Екопътека ""Под Камико""",Софийска,Гара Бов,"contact email suggests Plovdiv, but record region is 'Софийска'"
+high,contact_email_region_mismatch,479,"Екопътека ""Седмовратица""",Софийска,Карлуково,"contact email suggests Plovdiv, but record region is 'Софийска'"
+high,contact_email_region_mismatch,480,"Екопътека ""Тракийски могили""",Софийска,Копривщица,"contact email suggests Plovdiv, but record region is 'Софийска'"
+high,contact_email_region_mismatch,481,Екопътека Червени камък - с. Челопеч,Софийска,Челопеч,"contact email suggests Plovdiv, but record region is 'Софийска'"
+high,contact_email_region_mismatch,482,"Екопътека с. Мърчаево - местност ""Церова поляна""",Софийска,Мърчаево,"contact email suggests Plovdiv, but record region is 'Софийска'"
+high,contact_email_region_mismatch,483,Директни изкачвания на Черни връх,Софийска област,София,"contact email suggests Plovdiv, but record region is 'Софийска област'"
+high,contact_email_region_mismatch,484,Екопътека Бележката,Софийска област,Етрополе,"contact email suggests Plovdiv, but record region is 'Софийска област'"
+high,contact_email_region_mismatch,485,"Туристическа екопътека ""Тульово""",Софийска област,Тульово,"contact email suggests Plovdiv, but record region is 'Софийска област'"
+high,contact_email_region_mismatch,496,"Екопътека ""Лозенската планина""",София,Долни Лозен,"contact email suggests Plovdiv, but record region is 'София'"
+high,contact_email_region_mismatch,499,Спортно-информационна алея за хора с увреждания на опорно-двигателния апарат,София,София,"contact email suggests Plovdiv, but record region is 'София'"
+high,contact_email_region_mismatch,501,"Екопътека ""Пъ3тека на здравето""",София-град,Банкя,"contact email suggests Plovdiv, but record region is 'София-град'"
+high,contact_email_region_mismatch,502,"Екопътека ""Пътека през вековете""",Стара Загора,Бузовград,"contact email suggests Plovdiv, but record region is 'Стара Загора'"
+high,contact_email_region_mismatch,503,"Резерват ""Камещица"" – ждрело ""Боазът""",Стара Загора,Енина,"contact email suggests Plovdiv, but record region is 'Стара Загора'"
+high,contact_email_region_mismatch,504,"Екопътека ""Бяла река"" край Калофер",Стара Планина,Калофер,"contact email suggests Plovdiv, but record region is 'Стара Планина'"
+high,contact_email_region_mismatch,505,"Екопътека до Водопад ""Скока""",Стара Планина,Веселиново,"contact email suggests Plovdiv, but record region is 'Стара Планина'"
+high,contact_email_region_mismatch,506,"Калоферски мегалити ""Драмовете""",Стара Планина,Калофер,"contact email suggests Plovdiv, but record region is 'Стара Планина'"
+high,contact_email_region_mismatch,507,Каменишки водопади,Стара Планина,Камена,"contact email suggests Plovdiv, but record region is 'Стара Планина'"
+high,contact_email_region_mismatch,508,Пейката на любовта,Стара Планина,Дряново,"contact email suggests Plovdiv, but record region is 'Стара Планина'"
+high,contact_email_region_mismatch,509,Странджанска горска пътека,Странджа,Стоилово,"contact email suggests Plovdiv, but record region is 'Странджа'"
+high,contact_email_region_mismatch,510,"Екопътека ""Климент""",Същинска Средна гора,Климент,"contact email suggests Plovdiv, but record region is 'Същинска Средна гора'"
+high,contact_email_region_mismatch,512,"Екопътека ""Горската пътека""",Тетевен,Тетевен,"contact email suggests Plovdiv, but record region is 'Тетевен'"
+high,contact_email_region_mismatch,513,Тетевенски водопад „Скока“,Тетевен,Тетевен,"contact email suggests Plovdiv, but record region is 'Тетевен'"
+high,contact_email_region_mismatch,514,Трънска екопътека,Трън,Трън,"contact email suggests Plovdiv, but record region is 'Трън'"
+high,contact_email_region_mismatch,515,"Водопад ""Видимско пръскало""",Туристически регион Балкания,Априлци,"contact email suggests Plovdiv, but record region is 'Туристически регион Балкания'"
+high,contact_email_region_mismatch,516,Екопътека Голямата река,Търговище,Попово,"contact email suggests Plovdiv, but record region is 'Търговище'"
+high,contact_email_region_mismatch,517,"Екопътека ""Боян Ботево – Улу дере – Орлови скали""",Хасково,Боян Ботево,"contact email suggests Plovdiv, but record region is 'Хасково'"
+high,contact_email_region_mismatch,518,"Екопътека ""Тайните водопади""",Хасково,Малко Градище,"contact email suggests Plovdiv, but record region is 'Хасково'"
+high,contact_email_region_mismatch,519,"Чипровски водопад, Екопътека Демяница",Чипровци,Чипровци,"contact email suggests Plovdiv, but record region is 'Чипровци'"
+high,contact_email_region_mismatch,520,Връх Миджур,"Чупренска планина, Стара планина",село Горни Лом,"contact email suggests Plovdiv, but record region is 'Чупренска планина, Стара планина'"
+high,contact_email_region_mismatch,521,"Екопътека ""Мадарски конник""",Шумен,Мадара,"contact email suggests Plovdiv, but record region is 'Шумен'"
+high,contact_email_region_mismatch,522,"Водопад ""Сини вир"" – Ковачевица",Югозападна България,Ковачевица,"contact email suggests Plovdiv, but record region is 'Югозападна България'"
+high,contact_email_region_mismatch,523,Водопад Казанджи дере,с.Мугла,Мугла,"contact email suggests Plovdiv, but record region is 'с.Мугла'"
+high,generic_description,3,"Екопътека ""Збегове"" – Белоградчик",Видин,Белоградчик,description starts with generic placeholder wording
+high,generic_description,4,"Екопътека Заслон ""Опасен зъб"" – Тетевен",Ловеч,Тетевен,description starts with generic placeholder wording
+high,generic_description,5,"Екопътека до ""Първия войнишки паметник"" - с. Алдомировци",Алдомировци,Алдомировци,description starts with generic placeholder wording
+high,generic_description,15,Долина на река Благоевградска Бистрица,Благоевград,,description starts with generic placeholder wording
+high,generic_description,20,"Екопътека ""Мелник - Роженски манастир""",Благоевград,Мелник,description starts with generic placeholder wording
+high,generic_description,22,"Екопътека ""Римски мост""",Благоевград,Бръщен,description starts with generic placeholder wording
+high,generic_description,27,"Екопътека ""По следите на миналото"" – Приморско",Бургас,Приморско,description starts with generic placeholder wording
+high,generic_description,28,"Екопътека ""По следите на римляните"" – Приморско",Бургас,Приморско,description starts with generic placeholder wording
+high,generic_description,35,Екопътека до Преображенския манастир,Велико Търново,Велико Търново,description starts with generic placeholder wording
+high,generic_description,38,Хотнишка екопътека,Велико Търново,Хотница,description starts with generic placeholder wording
+high,generic_description,77,"Екопътека ""Иванчова поляна""",Вършец,Вършец,description starts with generic placeholder wording
+high,generic_description,85,"Екопъ3тека ""Римският път""",Габрово,Боженци,description starts with generic placeholder wording
+high,generic_description,89,"Екопътека ""Люляци–Дебел дял""",Габрово,Габрово,description starts with generic placeholder wording
+high,generic_description,95,Екопътека Via Ferrata,Габровска област,Дряново,description starts with generic placeholder wording
+high,generic_description,103,"Екопътека ""Горица"" (Овчарченски водопад)",Западна Рила,Овчарци,description starts with generic placeholder wording
+high,generic_description,148,"Екопътека ""Никопол Римски път - Скална църква""",Плевен,Никопол,description starts with generic placeholder wording
+high,generic_description,150,"Екопътека ""Черне3лка""",Плевен,Горталово,description starts with generic placeholder wording
+high,generic_description,151,"""Зелената пътека"" - Бачковски манастир",Пловдив,Бачковски манастир,description starts with generic placeholder wording
+high,generic_description,153,Академика,Пловдив,,description starts with generic placeholder wording
+high,generic_description,172,Беклемето,Пловдив,,description starts with generic placeholder wording
+high,generic_description,177,Белоградчишки скали,Пловдив,,description starts with generic placeholder wording
+high,generic_description,179,Бистрица,Пловдив,Бистрица,description starts with generic placeholder wording
+high,generic_description,190,Българи,Пловдив,,description starts with generic placeholder wording
+high,generic_description,191,Бяла река,Пловдив,,description starts with generic placeholder wording
+high,generic_description,193,Варовитец,Пловдив,,description starts with generic placeholder wording
+high,generic_description,194,Велека,Пловдив,,description starts with generic placeholder wording
+high,generic_description,195,Видимско пръскало,Пловдив,,description starts with generic placeholder wording
+high,generic_description,197,Врабча,Пловдив,,description starts with generic placeholder wording
+high,generic_description,201,Геопарк Искър-Панега,Пловдив,,description starts with generic placeholder wording
+high,generic_description,202,Гложенски манастир,Пловдив,,description starts with generic placeholder wording
+high,generic_description,204,Горица,Пловдив,,description starts with generic placeholder wording
+high,generic_description,206,Градище,Пловдив,,description starts with generic placeholder wording
+high,generic_description,218,"Екопътека ""Комин дере"" – Лъки",Пловдив,Лъки,description starts with generic placeholder wording
+high,generic_description,222,"Екопътека ""Стара Река"" – Стеврек",Пловдив,Стеврек,description starts with generic placeholder wording
+high,generic_description,223,"Екопътека ""Стражка могила""",Пловдив,Страж,description starts with generic placeholder wording
+high,generic_description,224,"Екопътека ""с. Белица-Пещерата""",Благоевград,Белица,description starts with generic placeholder wording
+high,generic_description,225,"Екопътека ""с.Белица - Кръстова гора""",Благоевград,Белица,description starts with generic placeholder wording
+high,generic_description,227,Етрополски водопад,Пловдив,,description starts with generic placeholder wording
+high,generic_description,234,Изворите на Младежка,Пловдив,,description starts with generic placeholder wording
+high,generic_description,250,Кечика Кая,Пловдив,,description starts with generic placeholder wording
+high,generic_description,260,Копрен,Пловдив,,description starts with generic placeholder wording
+high,generic_description,267,Лакатнишки скали,Пловдив,,description starts with generic placeholder wording
+high,generic_description,274,Мадарски конник,Пловдив,,description starts with generic placeholder wording
+high,generic_description,282,Медвен,Пловдив,,description starts with generic placeholder wording
+high,generic_description,286,Мишкова нива,Пловдив,,description starts with generic placeholder wording
+high,generic_description,290,Обесен камък,Пловдив,,description starts with generic placeholder wording
+high,generic_description,314,Ритлите,Пловдив,,description starts with generic placeholder wording
+high,generic_description,319,Самуилова крепост,Пловдив,,description starts with generic placeholder wording
+high,generic_description,321,Света Петка,Пловдив,,description starts with generic placeholder wording
+high,generic_description,322,Светлина,Пловдив,,description starts with generic placeholder wording
+high,generic_description,327,Синия вир,Пловдив,,description starts with generic placeholder wording
+high,generic_description,337,Странджански дъб,Пловдив,,description starts with generic placeholder wording
+high,generic_description,362,Чернелка,Пловдив,,description starts with generic placeholder wording
+high,generic_description,364,Чипровски водопад,Пловдив,,description starts with generic placeholder wording
+high,generic_description,401,"на Чучулигите
+271. \* Екопътека",Пловдив,,description starts with generic placeholder wording
+high,generic_description,421,"Екопътека ""Драгиева чешма"" – Чавдар",Родопи,Чавдар,description starts with generic placeholder wording
+high,generic_description,424,Екопътека „Каньонът на водопадите“,Родопи,Смолян,description starts with generic placeholder wording
+high,generic_description,441,"Екопътека ""Кечи Кая"" - Рибница",Рудозем,Рибница,description starts with generic placeholder wording
+high,generic_description,445,"Екопътека ""Лаго""",Самоков,Самоков,description starts with generic placeholder wording
+high,generic_description,446,"Екопътека ""Знамето"" – с. Младен",Севлиево,Севлиево,description starts with generic placeholder wording
+high,generic_description,447,"Екопътека ""Бели Искър""",Село Бели Искър,Самоков,description starts with generic placeholder wording
+high,generic_description,459,"Екопътека ""Невястата""",Смолян,Смолян,description starts with generic placeholder wording
+high,generic_description,461,"Екопътека ""Свети дух""",Смолян,Манастир,description starts with generic placeholder wording
+high,generic_description,463,"Екопътека ""Трите Смолянски езера""",Смолян,Смолян,description starts with generic placeholder wording
+high,generic_description,470,"Южнородопска или ""Дяволска"" екопътека",Смолян,Борино,description starts with generic placeholder wording
+high,generic_description,475,"Екопътека ""Барутин - вр. Чуката - Касъка""",Смолянска област,Доспат,description starts with generic placeholder wording
+high,generic_description,477,"Екопътека ""Параклис"" – с. Врабево",Софийска,Врабево,description starts with generic placeholder wording
+high,generic_description,479,"Екопътека ""Седмовратица""",Софийска,Карлуково,description starts with generic placeholder wording
+high,generic_description,481,Екопътека Червени камък - с. Челопеч,Софийска,Челопеч,description starts with generic placeholder wording
+high,generic_description,482,"Екопътека с. Мърчаево - местност ""Церова поляна""",Софийска,Мърчаево,description starts with generic placeholder wording
+high,generic_description,510,"Екопътека ""Климент""",Същинска Средна гора,Климент,description starts with generic placeholder wording
+high,generic_description,513,Тетевенски водопад „Скока“,Тетевен,Тетевен,description starts with generic placeholder wording
+high,generic_description,514,Трънска екопътека,Трън,Трън,description starts with generic placeholder wording
+high,generic_description,516,Екопътека Голямата река,Търговище,Попово,description starts with generic placeholder wording
+high,generic_description,518,"Екопътека ""Тайните водопади""",Хасково,Малко Градище,description starts with generic placeholder wording
+high,generic_description,519,"Чипровски водопад, Екопътека Демяница",Чипровци,Чипровци,description starts with generic placeholder wording
+high,generic_description,521,"Екопътека ""Мадарски конник""",Шумен,Мадара,description starts with generic placeholder wording
+high,name_not_reflected_in_content,17,"Екопътека ""Властелинът на планините""",Благоевград,Белица,none of the core name tokens appear in description/summary: властелинът
+high,name_not_reflected_in_content,27,"Екопътека ""По следите на миналото"" – Приморско",Бургас,Приморско,"none of the core name tokens appear in description/summary: следите, миналото, приморско"
+high,name_not_reflected_in_content,29,"Екопътека ""Пътят на ясния месец""",Бургас,Бръшлян,"none of the core name tokens appear in description/summary: ясния, месец"
+high,name_not_reflected_in_content,38,Хотнишка екопътека,Велико Търново,Хотница,none of the core name tokens appear in description/summary: хотнишка
+high,name_not_reflected_in_content,60,Среднопланинска обиколна пътека (СОП),Витоша,София,none of the core name tokens appear in description/summary: среднопланинска
+high,name_not_reflected_in_content,61,Торфищна информационна алея,Витоша,София,none of the core name tokens appear in description/summary: торфищна
+high,name_not_reflected_in_content,62,Врацата,Враца,,none of the core name tokens appear in description/summary: врацата
+high,name_not_reflected_in_content,65,Горска пътека на приказките,Врачанска област,Враца,"none of the core name tokens appear in description/summary: горска, приказките"
+high,name_not_reflected_in_content,69,Исторически маршрут „По стъпките на Ботевата чета”,Врачански Балкан,Враца,"none of the core name tokens appear in description/summary: исторически, стъпките, ботевата"
+high,name_not_reflected_in_content,76,Спортно-туристически маршрут „Горска пътека на здравето“,Врачански Балкан,Враца,"none of the core name tokens appear in description/summary: туристически, горска"
+high,name_not_reflected_in_content,80,E3 Етап 6: Тетевен - Чулово,Габрово,Габрово,"none of the core name tokens appear in description/summary: тетевен, чулово"
+high,name_not_reflected_in_content,81,E3 Етап 7: Чулово - Боян,Габрово,Габрово,none of the core name tokens appear in description/summary: чулово
+high,name_not_reflected_in_content,91,"Екопътека ""Узана""",Габрово,Узана,none of the core name tokens appear in description/summary: узана
+high,name_not_reflected_in_content,99,Ботаническа алея за незрящи,Дендрариум,София,"none of the core name tokens appear in description/summary: ботаническа, незрящи"
+high,name_not_reflected_in_content,111,"Екопътека ""Божения""",Красен-Божичен,Божичен,none of the core name tokens appear in description/summary: божения
+high,name_not_reflected_in_content,112,"Екопътека ""Пътят на Сърцето""",Кърджали,Борово,none of the core name tokens appear in description/summary: сърцето
+high,name_not_reflected_in_content,123,"Екопътека ""Нагоре към Слънцето""",Ловеч,Бабинци,"none of the core name tokens appear in description/summary: нагоре, слънцето"
+high,name_not_reflected_in_content,124,"Екопътека ""Опасният зъб""",Ловеч,Тетевен,none of the core name tokens appear in description/summary: опасният
+high,name_not_reflected_in_content,126,"Екопътека ""Под пръските на водопада""",Ловеч,Тетевен,"none of the core name tokens appear in description/summary: пръските, водопада"
+high,name_not_reflected_in_content,149,"Екопътека ""Попската скала""",Плевен,Плевен,"none of the core name tokens appear in description/summary: попската, скала"
+high,name_not_reflected_in_content,150,"Екопътека ""Черне3лка""",Плевен,Горталово,none of the core name tokens appear in description/summary: черне3лка
+high,name_not_reflected_in_content,157,Алея на билките,Пловдив,,none of the core name tokens appear in description/summary: билките
+high,name_not_reflected_in_content,159,Ардинци,Пловдив,,none of the core name tokens appear in description/summary: ардинци
+high,name_not_reflected_in_content,163,Бабин пласт,Пловдив,,"none of the core name tokens appear in description/summary: бабин, пласт"
+high,name_not_reflected_in_content,164,Бабини Видини кули,Пловдив,,"none of the core name tokens appear in description/summary: бабини, видини"
+high,name_not_reflected_in_content,170,Беглика,Пловдив,,none of the core name tokens appear in description/summary: беглика
+high,name_not_reflected_in_content,171,Беглика рали,Пловдив,,none of the core name tokens appear in description/summary: беглика
+high,name_not_reflected_in_content,205,Горна земя,Пловдив,,none of the core name tokens appear in description/summary: горна
+high,name_not_reflected_in_content,208,Двете реки,Пловдив,,none of the core name tokens appear in description/summary: двете
+high,name_not_reflected_in_content,214,Дуранкулак,Пловдив,,none of the core name tokens appear in description/summary: дуранкулак
+high,name_not_reflected_in_content,215,Дървото на живота,Пловдив,,"none of the core name tokens appear in description/summary: дървото, живота"
+high,name_not_reflected_in_content,220,"Екопътека ""По пътя на героите""",Пловдив,Перущица,none of the core name tokens appear in description/summary: героите
+high,name_not_reflected_in_content,244,Каньона на водопадите,Пловдив,,"none of the core name tokens appear in description/summary: каньона, водопадите"
+high,name_not_reflected_in_content,248,Карандила,Пловдив,,none of the core name tokens appear in description/summary: карандила
+high,name_not_reflected_in_content,250,Кечика Кая,Пловдив,,none of the core name tokens appear in description/summary: кечика
+high,name_not_reflected_in_content,254,Княжевска пътека,Пловдив,,none of the core name tokens appear in description/summary: княжевска
+high,name_not_reflected_in_content,264,Крушунски водопади,Пловдив,,"none of the core name tokens appear in description/summary: крушунски, водопади"
+high,name_not_reflected_in_content,266,Кървавата скала,Пловдив,,"none of the core name tokens appear in description/summary: кървавата, скала"
+high,name_not_reflected_in_content,271,Лозенски манастир,Пловдив,,none of the core name tokens appear in description/summary: лозенски
+high,name_not_reflected_in_content,276,Малко Търново,Пловдив,,"none of the core name tokens appear in description/summary: малко, търново"
+high,name_not_reflected_in_content,281,Меаните,Пловдив,,none of the core name tokens appear in description/summary: меаните
+high,name_not_reflected_in_content,284,Мечи стъпки,Пловдив,,none of the core name tokens appear in description/summary: стъпки
+high,name_not_reflected_in_content,289,Невястата,Пловдив,,none of the core name tokens appear in description/summary: невястата
+high,name_not_reflected_in_content,298,Петрова нива,Пловдив,,none of the core name tokens appear in description/summary: петрова
+high,name_not_reflected_in_content,303,Поляната,Пловдив,,none of the core name tokens appear in description/summary: поляната
+high,name_not_reflected_in_content,304,Поморие,Пловдив,,none of the core name tokens appear in description/summary: поморие
+high,name_not_reflected_in_content,305,Понтийски път,Пловдив,,none of the core name tokens appear in description/summary: понтииски
+high,name_not_reflected_in_content,307,Правешка екопътека,Пловдив,,none of the core name tokens appear in description/summary: правешка
+high,name_not_reflected_in_content,310,Резово,Пловдив,,none of the core name tokens appear in description/summary: резово
+high,name_not_reflected_in_content,317,Рупите,Пловдив,,none of the core name tokens appear in description/summary: рупите
+high,name_not_reflected_in_content,325,Симеоновски езера,Пловдив,,"none of the core name tokens appear in description/summary: симеоновски, езера"
+high,name_not_reflected_in_content,337,Странджански дъб,Пловдив,,none of the core name tokens appear in description/summary: странджански
+high,name_not_reflected_in_content,343,Торфено бранище,Пловдив,,"none of the core name tokens appear in description/summary: торфено, бранище"
+high,name_not_reflected_in_content,352,Хайдушка песен,Пловдив,,"none of the core name tokens appear in description/summary: хаидушка, песен"
+high,name_not_reflected_in_content,353,Хайдушка поляна,Пловдив,,"none of the core name tokens appear in description/summary: хаидушка, поляна"
+high,name_not_reflected_in_content,357,Царството на зелениката,Пловдив,,"none of the core name tokens appear in description/summary: царството, зелениката"
+high,name_not_reflected_in_content,358,Централен Балкан,Пловдив,,none of the core name tokens appear in description/summary: централен
+high,name_not_reflected_in_content,369,Шейтан дере,Пловдив,,none of the core name tokens appear in description/summary: шеитан
+high,name_not_reflected_in_content,401,"на Чучулигите
+271. \* Екопътека",Пловдив,,none of the core name tokens appear in description/summary: чучулигите
+high,name_not_reflected_in_content,402,"на балканската дива коза
+243. \* Екопътека",Пловдив,,none of the core name tokens appear in description/summary: балканската
+high,name_not_reflected_in_content,406,"на партизаните (историческа)
+222. \* Екопътека",Пловдив,,none of the core name tokens appear in description/summary: партизаните
+high,name_not_reflected_in_content,407,Екопътека Бяла река (Калоферска),Пловдивска област,Калофер,none of the core name tokens appear in description/summary: калоферска
+high,name_not_reflected_in_content,413,"Пътека ""Към царството на еделвайса""",Рила,Разлог,"none of the core name tokens appear in description/summary: царството, еделваиса"
+high,name_not_reflected_in_content,417,Самодивска пътека,Рила,Бачево,none of the core name tokens appear in description/summary: самодивска
+high,name_not_reflected_in_content,424,Екопътека „Каньонът на водопадите“,Родопи,Смолян,"none of the core name tokens appear in description/summary: каньонът, водопадите"
+high,name_not_reflected_in_content,437,Познавателен маршрут „Музей на гората”,Родопи,Батак,"none of the core name tokens appear in description/summary: познавателен, музеи, гората"
+high,name_not_reflected_in_content,440,Трансгранична родопска екопътека Хвойна – Ставруполи,Родопи,Хвойна,"none of the core name tokens appear in description/summary: трансгранична, родопска, хвоина, ставруполи"
+high,name_not_reflected_in_content,452,"""Синия вир"" – Сливен",Сливен,Сливен,"none of the core name tokens appear in description/summary: синия, сливен"
+high,name_not_reflected_in_content,457,"Дяволската пътека (Борино)
+11. \* Екопътека",Смолян,,"none of the core name tokens appear in description/summary: дяволската, борино"
+high,name_not_reflected_in_content,458,"Екопътека ""Каньона на водопадите"" - Смолян",Смолян,Смолян,"none of the core name tokens appear in description/summary: каньона, водопадите, смолян"
+high,name_not_reflected_in_content,470,"Южнородопска или ""Дяволска"" екопътека",Смолян,Борино,"none of the core name tokens appear in description/summary: южнородопска, дяволска"
+high,name_not_reflected_in_content,480,"Екопътека ""Тракийски могили""",Софийска,Копривщица,"none of the core name tokens appear in description/summary: тракииски, могили"
+high,name_not_reflected_in_content,499,Спортно-информационна алея за хора с увреждания на опорно-двигателния апарат,София,София,"none of the core name tokens appear in description/summary: увреждания, опорно, двигателния, апарат"
+high,name_not_reflected_in_content,501,"Екопътека ""Пъ3тека на здравето""",София-град,Банкя,none of the core name tokens appear in description/summary: пъ3тека
+high,name_not_reflected_in_content,509,Странджанска горска пътека,Странджа,Стоилово,"none of the core name tokens appear in description/summary: странджанска, горска"
+high,name_not_reflected_in_content,512,"Екопътека ""Горската пътека""",Тетевен,Тетевен,none of the core name tokens appear in description/summary: горската
+high,name_not_reflected_in_content,514,Трънска екопътека,Трън,Трън,none of the core name tokens appear in description/summary: трънска
+high,name_not_reflected_in_content,518,"Екопътека ""Тайните водопади""",Хасково,Малко Градище,"none of the core name tokens appear in description/summary: таините, водопади"
+high,placeholder_source,182,Божевски водопад,Пловдив,,source uses placeholder value
+high,placeholder_source,266,Кървавата скала,Пловдив,,source uses placeholder value
+high,placeholder_source,281,Меаните,Пловдив,,source uses placeholder value
+high,placeholder_source,284,Мечи стъпки,Пловдив,,source uses placeholder value
+high,placeholder_source,290,Обесен камък,Пловдив,,source uses placeholder value
+high,placeholder_source,291,Окопна манастир,Пловдив,,source uses placeholder value
+high,placeholder_source,308,Пътека,Пловдив,,source uses placeholder value
+high,synthetic_without_sources,3,"Екопътека ""Збегове"" – Белоградчик",Видин,Белоградчик,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,4,"Екопътека Заслон ""Опасен зъб"" – Тетевен",Ловеч,Тетевен,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,5,"Екопътека до ""Първия войнишки паметник"" - с. Алдомировци",Алдомировци,Алдомировци,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,8,Местност Бялата чешма – Самуилово,Беласица,Самуилово,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,9,Хайдушки водопади (екопътека),Берковица,Берковица,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,17,"Екопътека ""Властелинът на планините""",Благоевград,Белица,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,18,"Екопътека ""Влахи""",Благоевград,Влахи,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,19,"Екопътека ""Кръстът"" – Благоевград",Благоевград,Благоевград,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,21,"Екопътека ""Пътеката на дивата коза""",Благоевград,"Баня, Добърско",ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,22,"Екопътека ""Римски мост""",Благоевград,Бръщен,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,23,"Екопътека ""Тай3ните на водата"" и водопад ""Срамежливеца""",Благоевград,Коларово,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,36,Еменски каньон,Велико Търново,Емен,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,39,"Христовски водопад ""Руховци"" (екопътека)",Велико Търново,Христовци,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,44,Нископланинска обиколна пътека (НОП) Витоша,Витоша,София,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,46,Подход от кв. Бояна,Витоша,Бояна,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,47,Подход от кв. Драгалевци,Витоша,Драгалевци,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,48,Подход от кв. Княжево,Витоша,Княжево,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,49,Подход от м. Златни мостове,Витоша,Златни мостове,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,50,Подход от м. Ярема,Витоша,Ярема,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,51,Подход от с. Бистрица,Витоша,Бистрица,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,52,Подход от с. Боснек,Витоша,Боснек,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,54,Подход от с. Железница,Витоша,Железница,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,55,Подход от с. Кладница,Витоша,Кладница,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,59,"Пътека ""Сила и живот""",Витоша,Симеоново,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,64,Врачанска екопътека,Врачанска област,Враца,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,65,Горска пътека на приказките,Врачанска област,Враца,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,71,Наследствена пътека с. Очин дол,Врачански Балкан,Очин дол,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,77,"Екопътека ""Иванчова поляна""",Вършец,Вършец,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,85,"Екопъ3тека ""Римският път""",Габрово,Боженци,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,97,Алея на туриста до м. Струилица – Девин,Девин,Струилица,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,101,"Екопътека ""Екот от камбанен звън"" – Рибарица",Етрополе,Етрополе,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,102,"Екопътека ""Горица""",Западна Рила,Овчарци,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,103,"Екопътека ""Горица"" (Овчарченски водопад)",Западна Рила,Овчарци,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,105,"Водопади ""Дуплево"", ""Скакалото"" и ""Костен камък"" - с.Орехово",Западни Родопи,село Орехово,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,106,Екопътека до Киселчовски водопад,Западни Родопи,Киселчово,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,107,Вазова екопътека,Искърско дефиле,Заселе,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,151,"""Зелената пътека"" - Бачковски манастир",Пловдив,Бачковски манастир,ai_enriched is true but metadata.sources_urls is missing

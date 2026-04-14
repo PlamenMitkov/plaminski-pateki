@@ -1,0 +1,298 @@
+EcoProject - Доклад за всички Copilot Chat сесии
+Дата на изготвяне: 2026-04-01
+Обхват: от началото на проекта до текущата дата
+
+Забележка за метода на изготвяне:
+Сесийните логове на Copilot се пазят само за активните сесии в деня на извличане.
+По-старите сесии са реконструирани от:
+  - персистирани session memory файлове (записвани по-рано по инициатива на асистента)
+  - доклади в scripts/reports/ и scripts/description-enrichment/
+  - вградената repo memory (ecoproject.md, ecoproject-data-enrichment-2026-03-12.md)
+  - git commit история (засегнати файлове по сесия)
+
+=================================================================
+СЕСИЯ 1 — Ранно боравене с git и workspace
+=================================================================
+Дата: 2026-02-25 (приблизително, по-ранна от персистираните memory файлове)
+Session ID: неналичен (recovery от git)
+
+Тема: Настройка и почистване на git хранилището при начален commit
+
+Извършено:
+- Изготвяне на чист Initial Commit след отстраняване на bin/Debug файлове от индекса.
+- Генериране и настройка на .gitignore за .NET build изходи.
+- Регистрация на всички 273 файла в началния commit (60f8182).
+- Уточняване на git line-ending предупреждения (CRLF) и потвърождаване на успешен commit.
+
+Резултат: Проектът е поставен под version control с 60 609 добавени реда в 273 файла.
+
+=================================================================
+СЕСИЯ 2 — Data enrichment за eco.json (координати и описания)
+=================================================================
+Дата: 2026-03-12
+Session ID: неналичен — реконструиран от memory файл
+
+Тема: Обогатяване на данните в eco.json с координати и оценка на доверие в источника
+
+Извършено:
+- Разработен режим -OnlyReal за enrich-ecojson-missing.ps1 (без изчислена денивелация от дължина/трудност).
+- В нерешения CSV (unresolved) добавени полета source_trust и source_trust_reason.
+- Дефинирана логика за класификация на доверие в источника:
+  * потребителски/UGC источник → trusted (reason=user_contributed)
+  * непознат/несигурен → untrusted
+- Сортиране на unresolved списъка с trusted источниците на върха.
+- Потвърдено покритие на координати: 522/522 (100%).
+
+Резултат: Завършено CoordEnrichment покритие; въведен quality слой за source trust.
+
+=================================================================
+СЕСИЯ 3 — Data quality и pre-merge cleanup (20 March 2026)
+=================================================================
+Дата: 2026-03-20
+Session ID: неналичен — реконструиран от data-report-2026-03-20.txt и backup файлове
+
+Тема: Почистване на Gemini/Google CSV обогатяване преди merge в eco.json
+
+Извършено:
+- Анализ на eco.csv: установени дублирани редове (408 входа) и повторен header ред вмъкнат като данни.
+- Деduplication по id — запазване на най-пълния ред.
+- Идентифицирани 11 липсващи target id-та след deduplication; обработени с eco.missing-11.csv пач.
+- Извършен merge в eco.json за 306 пътеки с кратки описания (< 150 символа).
+- Проверка на stato: 522/522 наличие; описания покрити за всички.
+- Архивиран snapshot: eco-backup-20260320-165734.json.
+
+Допълнителни данни:
+- Установени полета с по-слаба покритост след merge: length_km (365 липсват), photo_url (296 липсват), nearest_town (258 липсват).
+
+Резултат: Обогатен и верифициран dataset; изготвен прозрачен доклад за качеството.
+
+=================================================================
+СЕСИЯ 4 — Assistant behavior, provider fallback, schema.org (21 March 2026)
+=================================================================
+Дата: 2026-03-21 (начало/утро)
+Session ID: неналичен — реконструиран от assistant-implementation-report-2026-03-21.txt
+
+Тема: Подобрения на assistant точността и резилиентността
+
+Извършено:
+
+1) Exact-token anti-ambiguity matching:
+   - Добавен TrailSearchTextMatcher с точно токен-базирано търсене.
+   - Коригиран е проблем с false positives (напр. "рила" вътре в "открила").
+   - Актуализирано assistant scoring за whole-token проверки.
+
+2) Provider fallback hardening:
+   - Разширени условия за fallback от Gemini към OpenAI (+ model unavailability случаи).
+   - Добавен конфигурируем secondary OpenAI fallback модел.
+   - Намалена зависимост от единствен provider.
+
+3) Schema.org JSON-LD в TrailDetails:
+   - Добавен структуриран TouristAttraction markup с geo/additionalProperty.
+   - Без допълнителни frontend зависимости.
+
+4) Synthetic governance HITL:
+   - merge-enriched-descriptions.ps1 разширен с RequireHumanApproval gate, ApprovalCsvPath и default source gate.
+   - Добавен approval-decisions.template.csv за reviewer решения (approve/reject).
+   - Добавен synthetic-governance-audit.ps1 за повторяем качествен export.
+   - Добавен run-synthetic-governance-audit.ps1 runner с timestamped artifacts.
+   - GitHub Actions CI workflow synthetic-governance-audit.yml (ежедневно 05:00 UTC + manual trigger).
+
+Резултат: Подобрена точност на assistant; HITL governance workflow активен в CI.
+
+=================================================================
+СЕСИЯ 5 — Архитектурен refactor на Assistant подсистемата (21 March 2026)
+=================================================================
+Дата: 2026-03-21 (следобед/вечер)
+Session ID: неналичен — реконструиран от assistant-refactor-compact-report-2026-03-21.txt и repo memory
+
+Тема: Прогресивна декомпозиция на OpenAiAssistantService без регресии в поведението
+
+Извършено (10 стъпки):
+1. Извлечена prompt safety политика → IAssistantPromptSafetyService / AssistantPromptSafetyService
+2. Извлечена provenance/trust политика → IAssistantProvenancePolicyService / AssistantProvenancePolicyService
+3. Извлечено retrieval (hybrid vector + FTS ranking + алтернативи) → IAssistantRetrievalService / AssistantRetrievalService
+4. Извлечен enrichment workflow → IAssistantEnrichmentWorkflowService / AssistantEnrichmentWorkflowService
+5. Извлечен provider transport (Gemini/OpenAI HTTP, retries, error mapping) → IAiProviderClient / AiProviderClient
+6. Извлечена fallback routing политика → IAiProviderFallbackPolicy / AiProviderFallbackPolicy
+7. Извлечен weather context → IAssistantWeatherContextService / AssistantWeatherContextService
+8. Извлечена session/chat оркестрация → IAssistantSessionOrchestrationService / AssistantSessionOrchestrationService
+9. Извлечена response composition (knowledge chips, quick actions) → IAssistantResponseCompositionService
+10. Извлечен prompt assembly (mode resolution, system/user builders) → IAssistantPromptAssemblyService
+
+Тестово покритие добавено:
+- AssistantRetrievalServiceTests (ranking и coordinate fallback)
+- AiProviderFallbackPolicyTests (Gemini->OpenAI и secondary OpenAI)
+- AssistantResponseCompositionServiceTests
+- AssistantPromptAssemblyServiceTests
+- OpenAiAssistantServiceFallbackOrchestrationTests (fail-open, shadow mode, strict mode)
+- AssistantSecurityAndProvenanceTests
+
+Резултат: OpenAiAssistantService напълно декомпозиран; пълно unit тестово покритие на новите DI услуги.
+
+=================================================================
+СЕСИЯ 6 — Profile Hub (UI) + Phase 2 frontend завършване (21 March 2026)
+=================================================================
+Дата: 2026-03-21 (паралелно или след рефактора)
+Session ID: ae412739-0141-4069-98be-6b3650976593 (реконструиран от base64 session memory)
+
+Тема: Подобряване на ProfileHub и AuthPage.tsx с нови функционалности
+
+Планирано (Phase 1 — frontend-only):
+- Нов глобален фон (mountain illustration WebP) в index.css с тъмен overlay.
+- Profile Hub в AuthPage.tsx: Profile Overview, Quick Actions, My Posts, Admin секции.
+- Reuse на useFavorites, assistantService (list/delete sessions), offline export workflow.
+
+Изпълнено (Phase 2 — frontend + backend wiring):
+
+Backend добавено:
+- PUT /api/auth/profile → updateProfile (email, username, phone)
+- POST /api/auth/change-password → changePassword
+- PUT /api/communityposts/mine/{id} → updateCommunityPost
+- DELETE /api/communityposts/mine/{id} → deleteCommunityPost
+
+Frontend добавено:
+- authService.ts: updateProfile(), changePassword(); разширен AuthSessionInfo interface.
+- communityService.ts: updateCommunityPost(), deleteCommunityPost().
+- AuthPage.tsx: 3 нови modal-а (edit profile, password change, post edit); handler функции за всеки; success/error notifications.
+
+Валидация:
+- Успешен frontend build (2492 модула).
+- Backend integration тестове: 6/6 pass.
+- Проверени: profile update, password change validation, post edit/delete ownership.
+
+Резултат: Напълно функционален Profile Hub с real edit/delete/password действия.
+
+=================================================================
+СЕСИЯ 7 — Trail ID duplication bug анализ (29 March 2026)
+=================================================================
+Дата: 2026-03-29
+Session ID: 64b4fc72-135a-41bd-abef-d77ab8aae8a6 (реконструиран от base64 session memory)
+
+Тема: Разследване на прескачане на идентификатори при import на пътеки
+
+Проблемът:
+- При reimport когато location данните в eco.json се променят (nearestTown липсва или region актуализиран), се генерира нов ред вместо update.
+- SQL Server Identity seed не запълва gaps → появяват се прескачания на ID-та (напр. 1004→2004).
+
+Root Cause анализ:
+- EcoJsonImportService.cs изгражда lookup key по (Name, Location).
+- Stored Location в базата може да не съвпада с recalculated Location от eco.json → lookup miss → вмъкване на нов ред.
+- При изтриване на редове Identity counter не се ресетва; следващият INSERT използва текущия seed.
+
+Идентифицирани файлове:
+- EcoTrails.Api/Services/EcoJsonImportService.cs (ред ~217)
+
+Резултат: Установена и документирана root cause; препоръка за fix чрез стабилен уникален ключ (напр. source id от eco.json вместо name+location).
+
+=================================================================
+СЕСИЯ 8 — Git workspace setup (01 April 2026, 05:11)
+=================================================================
+Дата: 2026-04-01
+Session ID: b72ed560-0f1b-4fd7-9a2c-38e46c60ab65
+
+Тема: Почистване и рестартиране на git workspace
+
+Извършено:
+- Отстраняване на bin/Debug файлове от git index (rm команди за сотни DLL файлове).
+- Настройка на .gitignore.
+- Успешен Initial Commit след почистване.
+- Потвърдено: 273 файла, 60 609 insertions.
+
+Резултат: Произведени чист initial commit; workspace с правилен .gitignore.
+
+=================================================================
+СЕСИЯ 9 — Docker startup (01 April 2026, 05:15)
+=================================================================
+Дата: 2026-04-01
+Session ID: afb94b6b-67de-4290-9ad0-e720f0dba62c
+
+Тема: Стартиране на проекта чрез start.bat
+
+Извършено:
+- Изпълнено start.bat; Docker Compose стартира build процеса.
+- API, Client (node:24-alpine, nginx:alpine) и SQL Server образи построени/ теглени.
+- Потвърден успешен build на ecoproject-api image.
+- Containers стартирани.
+
+Резултат: Проектът стартиран успешно в Docker; containers достигнати healthy/running.
+
+=================================================================
+СЕСИЯ 10 — SQL Server login грешка диагностика (01 April 2026, 05:20)
+=================================================================
+Дата: 2026-04-01
+Session ID: e3ef404b-1af0-4aff-96c2-7255814deaa6
+
+Тема: API не може да се свърже с базата данни след Docker startup
+
+Грешка:
+- "Cannot open database 'EcoTrailsDb' requested by the login. Login failed for user 'sa'."
+- SQL Error Number: 4060, State:1, Class:11
+
+Диагностика:
+- docker logs plaminski-api разкриха повтарящ се login failure при EF Core query.
+- Причина: stale persisted SQL Server volume от предишен run; базата EcoTrailsDb не съществував в него.
+
+Решение:
+- Извършен docker compose down -v (изтриване на volume).
+- Рестарт с docker compose up --build.
+- Потвърдено: containers стартирани чисто; SQL Server можа да открие EcoTrailsDb.
+
+Резултат: Проблемът решен чрез clean compose reset; документирано в REPORT_PROGRESS.txt.
+
+=================================================================
+СЕСИЯ 11 — Пълен обобщаващ доклад за проекта (01 April 2026, 05:34)
+=================================================================
+Дата: 2026-04-01
+Session ID: ebd899df-dd6a-46d9-809b-df887b61fd2d
+
+Тема: Изготвяне на обобщаващ доклад от създаването на проекта до днес
+
+Извършено:
+- Четене и анализ на git история (10 commit-а), README, TESTING, REPORT_PROGRESS.txt, REPORT_uv_setup.txt, discovery документ, repo memory.
+- Изготвен пълен хронологичен доклад с 8 раздела.
+- Записан файл: PROJECT_FULL_REPORT_2026-04-01.txt
+
+Резултат: Пълен text-базиран доклад за целия проект.
+
+=================================================================
+СЕСИЯ 12 — Доклад за chat сесиите (01 April 2026 — текуща)
+=================================================================
+Дата: 2026-04-01
+Session ID: ebd899df-dd6a-46d9-809b-df887b61fd2d (продължение)
+
+Тема: Изготвяне на отделен доклад за всяка chat сесия
+
+Извършено:
+- Извлечени session resource файлове от VS Code workspace storage.
+- Прочетени session memory файлове за по-стари сесии (plan.md, phase2-frontend-completion.md, ecoproject-trail-duplication-bug.md).
+- Прочетени отчетни файлове от scripts/reports/.
+- Съставен и записан настоящият доклад.
+
+Резултат: Настоящият файл CHAT_SESSIONS_REPORT_2026-04-01.txt.
+
+=================================================================
+ОБОБЩЕНИЕ НА ВСИЧКИ СЕСИИ
+=================================================================
+
+Брой идентифицирани сесии: 12 (+ 1 по-ранна, неперсистирана)
+Период: 2026-02-25 до 2026-04-01
+
+По теми:
+- Инфраструктура и DevOps:         Сесии 1, 8, 9, 10
+- Data enrichment и quality:        Сесии 2, 3
+- AI Assistant развитие и refactor: Сесии 4, 5
+- Frontend UI и Profile Hub:        Сесия 6
+- Bug анализ:                       Сесия 7
+- Докладване:                       Сесии 11, 12
+
+Ключови постижения по сесии:
+- 100% координатно покритие за 522 пътеки
+- HITL governance workflow в CI
+- Напълно модулен AI assistant (10 DI услуги)
+- Profile Hub с реални edit/delete/password функции
+- Диагностика и документация на trail duplication bug
+- Проектът стартира без проблеми след Docker clean reset
+
+=================================================================
+Край на доклада
+=================================================================

@@ -132,14 +132,18 @@ public sealed class AssistantResponseCompositionService : IAssistantResponseComp
             ? primaryTrail.Region.Trim()
             : primaryLocation;
 
-        var trailWithCoords = trails.FirstOrDefault(item => item.HasCoordinates);
-        if (trailWithCoords is not null)
+        var mapTrails = trails
+            .Where(item => item.HasCoordinates)
+            .Take(3)
+            .ToList();
+
+        foreach (var mapTrail in mapTrails)
         {
             requiredActions.Add(new AssistantQuickAction
             {
                 Id = "show-map",
-                Label = "Покажи ми маршрута на картата",
-                Value = trailWithCoords.Id.ToString()
+                Label = $"Карта: {mapTrail.Name}",
+                Value = mapTrail.Id.ToString()
             });
         }
 
@@ -249,6 +253,16 @@ public sealed class AssistantResponseCompositionService : IAssistantResponseComp
                 Label = $"Покажи ми детайли за {alternative.Name}",
                 Value = alternative.Id.ToString()
             });
+
+            if (alternative.HasCoordinates)
+            {
+                optionalActions.Add(new AssistantQuickAction
+                {
+                    Id = "show-map",
+                    Label = $"Карта: {alternative.Name}",
+                    Value = alternative.Id.ToString()
+                });
+            }
 
             if (!string.IsNullOrWhiteSpace(alternative.Location))
             {

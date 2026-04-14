@@ -51,6 +51,28 @@ public class AssistantSessionMessageResponse
     public DateTime CreatedAt { get; set; }
 }
 
+public class AssistantFeedbackRequest
+{
+    [Required]
+    [MaxLength(64)]
+    public string SessionId { get; set; } = string.Empty;
+
+    [Required]
+    [MaxLength(128)]
+    public string MessageId { get; set; } = string.Empty;
+
+    public bool IsPositive { get; set; }
+}
+
+public class AssistantFeedbackResponse
+{
+    public bool Recorded { get; set; }
+    public string SessionId { get; set; } = string.Empty;
+    public string MessageId { get; set; } = string.Empty;
+    public string Sentiment { get; set; } = string.Empty;
+    public DateTime RecordedAt { get; set; }
+}
+
 public class AssistantKnowledgeChip
 {
     public string Label { get; set; } = string.Empty;

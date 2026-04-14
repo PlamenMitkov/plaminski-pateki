@@ -168,7 +168,12 @@ export function useAssistant() {
         if (axios.isAxiosError(err)) {
           const status = err.response?.status;
           if (status === 401) errorMsg = 'Сесията е изтекла. Моля, влез отново.';
-          else if (status === 503) errorMsg = 'AI услугата е временно недостъпна (Polly fallback).';
+          else if (status === 404) {
+            errorMsg = 'AI услугата е недостъпна: проверете конфигурацията на модел/ключ в сървъра.';
+          }
+          else if (status === 503) {
+            errorMsg = 'AI услугата е бавна или временно недостъпна. Опитай отново след няколко секунди.';
+          }
           else if (status === 429) errorMsg = 'Прекалено много заявки. Опитай отново след минута.';
         }
         dispatch({ type: 'SET_ERROR', error: errorMsg });

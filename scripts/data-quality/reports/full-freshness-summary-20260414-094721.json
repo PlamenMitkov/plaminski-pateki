@@ -1,0 +1,152 @@
+{
+  "audit_date": "2026-04-14",
+  "input_path": "C:\\Users\\35987\\source\\repos\\EcoProject\\ecoupdated.json",
+  "total_trails": 522,
+  "affected_trails": 522,
+  "total_findings": 1782,
+  "severity_counts": {
+    "high": 405,
+    "low": 314,
+    "medium": 1063
+  },
+  "category_counts": {
+    "contact_email_region_mismatch": 212,
+    "generic_description": 71,
+    "missing_length_km": 362,
+    "missing_nearest_town": 234,
+    "missing_photo_url": 296,
+    "missing_short_summary": 467,
+    "name_not_reflected_in_content": 78,
+    "placeholder_source": 7,
+    "summary_mismatch": 18,
+    "synthetic_without_sources": 37
+  },
+  "top_affected_trails": [
+    {
+      "trail_id": 250,
+      "trail_name": "Кечика Кая",
+      "findings": 6
+    },
+    {
+      "trail_id": 290,
+      "trail_name": "Обесен камък",
+      "findings": 6
+    },
+    {
+      "trail_id": 337,
+      "trail_name": "Странджански дъб",
+      "findings": 6
+    },
+    {
+      "trail_id": 401,
+      "trail_name": "на Чучулигите\n271. \\* Екопътека",
+      "findings": 6
+    },
+    {
+      "trail_id": 266,
+      "trail_name": "Кървавата скала",
+      "findings": 6
+    },
+    {
+      "trail_id": 281,
+      "trail_name": "Меаните",
+      "findings": 6
+    },
+    {
+      "trail_id": 284,
+      "trail_name": "Мечи стъпки",
+      "findings": 6
+    },
+    {
+      "trail_id": 518,
+      "trail_name": "Екопътека \"Тайните водопади\"",
+      "findings": 5
+    },
+    {
+      "trail_id": 15,
+      "trail_name": "Долина на река Благоевградска Бистрица",
+      "findings": 5
+    },
+    {
+      "trail_id": 193,
+      "trail_name": "Варовитец",
+      "findings": 5
+    },
+    {
+      "trail_id": 206,
+      "trail_name": "Градище",
+      "findings": 5
+    },
+    {
+      "trail_id": 234,
+      "trail_name": "Изворите на Младежка",
+      "findings": 5
+    },
+    {
+      "trail_id": 260,
+      "trail_name": "Копрен",
+      "findings": 5
+    },
+    {
+      "trail_id": 267,
+      "trail_name": "Лакатнишки скали",
+      "findings": 5
+    },
+    {
+      "trail_id": 274,
+      "trail_name": "Мадарски конник",
+      "findings": 5
+    },
+    {
+      "trail_id": 282,
+      "trail_name": "Медвен",
+      "findings": 5
+    },
+    {
+      "trail_id": 286,
+      "trail_name": "Мишкова нива",
+      "findings": 5
+    },
+    {
+      "trail_id": 314,
+      "trail_name": "Ритлите",
+      "findings": 5
+    },
+    {
+      "trail_id": 319,
+      "trail_name": "Самуилова крепост",
+      "findings": 5
+    },
+    {
+      "trail_id": 321,
+      "trail_name": "Света Петка",
+      "findings": 5
+    },
+    {
+      "trail_id": 322,
+      "trail_name": "Светлина",
+      "findings": 5
+    },
+    {
+      "trail_id": 327,
+      "trail_name": "Синия вир",
+      "findings": 5
+    },
+    {
+      "trail_id": 362,
+      "trail_name": "Чернелка",
+      "findings": 5
+    },
+    {
+      "trail_id": 364,
+      "trail_name": "Чипровски водопад",
+      "findings": 5
+    },
+    {
+      "trail_id": 62,
+      "trail_name": "Врацата",
+      "findings": 5
+    }
+  ],
+  "csv_report": "C:\\Users\\35987\\source\\repos\\EcoProject\\scripts\\data-quality\\reports\\full-freshness-findings-20260414-094721.csv"
+}

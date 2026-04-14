@@ -39,8 +39,13 @@ public sealed class AssistantPromptAssemblyService : IAssistantPromptAssemblySer
             return "Ти си Еко-Асистент за планински екопътеки в България. " +
                    "Получаваш структуриран JSON контекст. Спазвай строго output_contract и говори на български. " +
                    "Не измисляй факти извън trails_context/alternative_trails/weather_context. " +
+                   "Пиши в чист текст без Markdown символи като **, #, -, *. " +
+                   "Форматирай отговора с ясни секции и номериран списък за препоръките. " +
+                   "За всяко предложение изписвай на отделни редове: Име, Регион/Локация, Трудност, Продължителност, Денивелация, За кого е подходящо, Подготовка. " +
                    "При difficult маршрут добави предупреждение за физическа подготовка. " +
                    "При water_sources=false добави препоръка за вода. " +
+                   "Не показвай сурови географски координати, освен ако потребителят изрично не ги поиска. " +
+                   "Пиши персонализирано и разговорно към човека отсреща, с по-подробен отговор в поне 3 абзаца. " +
                    "Завърши с конкретно следващо действие според required_gear. " +
                    safetyRules + reliabilityRules + injectionRules;
         }
@@ -50,7 +55,11 @@ public sealed class AssistantPromptAssemblyService : IAssistantPromptAssemblySer
                "добави предупреждение за физическа подготовка. 3) Ако water_sources е false, задължително " +
                "препоръчай носене на вода. 4) Ако е налична секция за актуално време, използвай я и дай конкретна подготовка. " +
                "5) Завършвай с конкретно действие според required_gear. " +
-               "Бъди практичен и дай 2-3 конкретни маршрута, когато има достатъчно данни. " +
+             "Пиши в чист текст без Markdown символи като **, #, -, *. " +
+               "Форматирай отговора с ясни секции и номериран списък за предложенията. " +
+             "За всяко предложение използвай отделни редове: Име, Регион/Локация, Трудност, Продължителност, Денивелация, За кого е подходящо, Подготовка. " +
+             "Не показвай сурови географски координати, освен ако потребителят изрично не ги поиска. " +
+             "Бъди практичен, персонализиран и разговорен. Дай по-дълъг отговор в поне 3 абзаца и 2-3 конкретни маршрута, когато има достатъчно данни. " +
                safetyRules + reliabilityRules + injectionRules;
     }
 
@@ -134,12 +143,12 @@ public sealed class AssistantPromptAssemblyService : IAssistantPromptAssemblySer
                     $"вода: {(trail.WaterSources ? "да" : "не")} | " +
                     $"подходяща за деца: {(trail.SuitableForKids ? "да" : "не")} | " +
                     $"макс. височина: {(trail.MaxAltitude.HasValue ? trail.MaxAltitude.Value.ToString() : "няма данни")} м | " +
-                    $"координати: {(trail.Latitude.HasValue && trail.Longitude.HasValue ? $"{trail.Latitude.Value:F5}, {trail.Longitude.Value:F5}" : "няма данни")} | " +
+                    $"има координати: {(trail.HasCoordinates ? "да" : "не")} | " +
                     $"екипировка: {(trail.RequiredGear.Count > 0 ? string.Join(", ", trail.RequiredGear) : "няма данни")}");
             }
         }
 
-        sb.AppendLine("Отговори с кратък анализ и 2-3 конкретни предложения.");
+        sb.AppendLine("Отговори с персонализиран по-дълъг анализ в чист текст и 2-3 конкретни предложения.");
         return sb.ToString();
     }
 
@@ -185,8 +194,6 @@ public sealed class AssistantPromptAssemblyService : IAssistantPromptAssemblySer
                 duration_hours = item.DurationInHours,
                 elevation_gain_m = item.ElevationGain,
                 has_coordinates = item.HasCoordinates,
-                latitude = item.Latitude,
-                longitude = item.Longitude,
                 water_sources = item.WaterSources,
                 suitable_for_kids = item.SuitableForKids,
                 max_altitude = item.MaxAltitude,
@@ -209,7 +216,10 @@ public sealed class AssistantPromptAssemblyService : IAssistantPromptAssemblySer
             {
                 sections = new[] { "кратък анализ", "препоръки", "рискове и подготовка", "следващо действие" },
                 language = "bg",
-                concise = true
+                concise = false,
+                plain_text_only = true,
+                avoid_raw_coordinates = true,
+                minimum_paragraphs = 3
             }
         };
 

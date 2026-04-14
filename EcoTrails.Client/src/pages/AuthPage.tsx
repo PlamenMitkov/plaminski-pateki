@@ -269,7 +269,7 @@ function AuthPage() {
       }
 
       await refreshSession();
-      navigate('/auth', { replace: true });
+      navigate('/', { replace: true });
     } catch (requestError) {
       console.error('Auth error:', requestError);
 
@@ -1184,6 +1184,11 @@ function AuthPage() {
           {isAdmin && (
             <section className="profile-card profile-admin-quality">
               <h3>Admin: Data Quality</h3>
+              <div className="auth-admin-actions" style={{ marginBottom: '10px' }}>
+                <Link className="secondary-btn" to="/admin">
+                  Отвори Admin Panel
+                </Link>
+              </div>
               {qualityError && <p className="status-text error">{qualityError}</p>}
               {qualityNotice && <p className="status-text">{qualityNotice}</p>}
               {quality ? (
@@ -1275,6 +1280,12 @@ function AuthPage() {
           onSubmit={(event) => {
             event.preventDefault();
             void submit();
+          }}
+          onKeyDown={(event) => {
+            if (event.key === 'Enter') {
+              event.preventDefault();
+              void submit();
+            }
           }}
         >
           {sessionExpired && <p className="status-text error">Сесията е изтекла. Влез отново.</p>}

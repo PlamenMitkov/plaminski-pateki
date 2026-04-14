@@ -5,6 +5,7 @@ namespace EcoTrails.Api.Services;
 
 [JsonSerializable(typeof(OpenAiPayload))]
 [JsonSerializable(typeof(GeminiPayload))]
+[JsonSerializable(typeof(GeminiGenerationConfig))]
 [JsonSerializable(typeof(AssistantChatMessage))]
 [JsonSerializable(typeof(List<AssistantChatMessage>))]
 [JsonSerializable(typeof(OpenAiMessage))]
@@ -32,7 +33,14 @@ public class OpenAiMessage
 public class GeminiPayload
 {
     public List<GeminiContent> contents { get; set; } = [];
-    public object generationConfig { get; set; } = new { };
+    public GeminiGenerationConfig generationConfig { get; set; } = new();
+}
+
+public class GeminiGenerationConfig
+{
+    public double temperature { get; set; }
+    public int maxOutputTokens { get; set; }
+    public string responseMimeType { get; set; } = "text/plain";
 }
 
 public class GeminiContent

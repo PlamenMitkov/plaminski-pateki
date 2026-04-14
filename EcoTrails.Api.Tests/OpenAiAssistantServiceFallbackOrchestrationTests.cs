@@ -295,7 +295,7 @@ public class OpenAiAssistantServiceFallbackOrchestrationTests
         Assert.Contains("mode:context_prompt", aiClient.OpenAiUserPrompts[0], StringComparison.Ordinal);
     }
 
-    private static OpenAiAssistantService CreateService(
+    private static AssistantService CreateService(
         EcoTrails.Api.Data.AppDbContext dbContext,
         RecordingAiProviderClient aiClient,
         StubFallbackPolicy fallbackPolicy,
@@ -305,7 +305,7 @@ public class OpenAiAssistantServiceFallbackOrchestrationTests
         var options = new OpenAiOptions();
         configure?.Invoke(options);
 
-        return new OpenAiAssistantService(
+        return new AssistantService(
             new HttpClient(),
             Options.Create(options),
             dbContext,
@@ -319,12 +319,13 @@ public class OpenAiAssistantServiceFallbackOrchestrationTests
             new StubAssistantEnrichmentWorkflowService(),
             new StubAssistantResponseCompositionService(),
             aiClient,
+                aiClient,
             fallbackPolicy,
             new StubAssistantWeatherContextService(),
-            NullLogger<OpenAiAssistantService>.Instance);
+                NullLogger<AssistantService>.Instance);
     }
 
-    private sealed class RecordingAiProviderClient : IAiProviderClient
+            private sealed class RecordingAiProviderClient : IOpenAiProvider, IGeminiProvider
     {
         private readonly Func<string, string, string> _onOpenAi;
         private readonly Func<string, string, string> _onGemini;
@@ -339,17 +340,29 @@ public class OpenAiAssistantServiceFallbackOrchestrationTests
         public List<string> OpenAiUserPrompts { get; } = [];
         public List<string> GeminiModels { get; } = [];
 
-        public Task<string> SendOpenAiRequestAsync(string model, string systemInstruction, List<AssistantChatMessage> history, string userPrompt, double temperature, int maxTokens, CancellationToken cancellationToken, bool forceJsonResponse)
+        Task<string> IOpenAiProvider.SendRequestAsync(string model, string systemInstruction, List<AssistantChatMessage> history, string userPrompt, double temperature, int maxTokens, CancellationToken cancellationToken, bool forceJsonResponse)
         {
             OpenAiModels.Add(model);
             OpenAiUserPrompts.Add(userPrompt);
             return Task.FromResult(_onOpenAi(model, userPrompt));
         }
 
-        public Task<string> SendGeminiRequestAsync(string model, string systemInstruction, List<AssistantChatMessage> history, string userPrompt, double temperature, int maxTokens, CancellationToken cancellationToken, bool forceJsonResponse)
+        Task<string> IGeminiProvider.SendRequestAsync(string model, string systemInstruction, List<AssistantChatMessage> history, string userPrompt, double temperature, int maxTokens, CancellationToken cancellationToken, bool forceJsonResponse)
         {
             GeminiModels.Add(model);
             return Task.FromResult(_onGemini(model, userPrompt));
+        }
+
+        async IAsyncEnumerable<string> IOpenAiProvider.StreamRequestAsync(string model, string systemInstruction, List<AssistantChatMessage> history, string userPrompt, double temperature, int maxTokens, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken)
+        {
+            await Task.CompletedTask;
+            yield break;
+        }
+
+        async IAsyncEnumerable<string> IGeminiProvider.StreamRequestAsync(string model, string systemInstruction, List<AssistantChatMessage> history, string userPrompt, double temperature, int maxTokens, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken)
+        {
+            await Task.CompletedTask;
+            yield break;
         }
     }
 

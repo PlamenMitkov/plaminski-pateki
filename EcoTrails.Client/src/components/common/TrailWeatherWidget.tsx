@@ -3,9 +3,10 @@ import { Sun, Cloud, CloudRain, Snowflake } from 'lucide-react';
 export interface TrailWeatherWidgetProps {
   temperature: number;
   weatherIcon: 'sunny' | 'cloudy' | 'rainy' | 'snowy';
+  label?: string;
 }
 
-export function TrailWeatherWidget({ temperature, weatherIcon }: TrailWeatherWidgetProps) {
+export function TrailWeatherWidget({ temperature, weatherIcon, label }: TrailWeatherWidgetProps) {
   const renderIcon = () => {
     switch (weatherIcon) {
       case 'sunny':
@@ -26,23 +27,34 @@ export function TrailWeatherWidget({ temperature, weatherIcon }: TrailWeatherWid
       className="trail-weather-widget"
       style={{
         position: 'absolute',
-        top: '8px',
-        right: '8px',
+        top: '10px',
+        right: '10px',
         display: 'flex',
+        flexDirection: 'column',
         alignItems: 'center',
-        gap: '8px',
-        padding: '4px 8px',
-        borderRadius: '8px',
-        backgroundColor: 'rgba(8, 20, 44, 0.9)',
-        backdropFilter: 'blur(5px)',
+        gap: '6px',
+        padding: '8px 10px',
+        borderRadius: '10px',
+        border: '1px solid rgba(78, 204, 163, 0.75)',
+        backgroundColor: 'rgba(8, 20, 44, 0.95)',
+        backdropFilter: 'blur(6px)',
+        boxShadow: '0 8px 22px rgba(4, 10, 24, 0.45)',
         color: '#f8fbff',
         fontSize: '14px',
-        fontWeight: 'bold',
+        fontWeight: 700,
         zIndex: 10,
+        minWidth: '132px',
       }}
     >
-      <span className="trail-weather-widget__temp">{temperature}°C</span>
-      <div className="trail-weather-widget__icon">{renderIcon()}</div>
+      {label && (
+        <span style={{ fontSize: '11px', opacity: 0.9, lineHeight: 1.2, textAlign: 'center' }}>
+          {label}
+        </span>
+      )}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <span className="trail-weather-widget__temp">{temperature}°C</span>
+        <div className="trail-weather-widget__icon">{renderIcon()}</div>
+      </div>
     </div>
   );
 }

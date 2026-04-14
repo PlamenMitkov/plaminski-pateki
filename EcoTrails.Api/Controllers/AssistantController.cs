@@ -1,6 +1,9 @@
 using EcoTrails.Api.Contracts;
+using EcoTrails.Api.Data;
+using EcoTrails.Api.Models;
 using EcoTrails.Api.Services;
 using Hangfire;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
@@ -14,13 +17,16 @@ namespace EcoTrails.Api.Controllers;
 public class AssistantController : ControllerBase
 {
     private readonly IOpenAiAssistantService _assistantService;
+    private readonly AppDbContext _dbContext;
     private readonly ILogger<AssistantController> _logger;
 
     public AssistantController(
         IOpenAiAssistantService assistantService,
+        AppDbContext dbContext,
         ILogger<AssistantController> logger)
     {
         _assistantService = assistantService;
+        _dbContext = dbContext;
         _logger = logger;
     }
 
@@ -95,6 +101,60 @@ public class AssistantController : ControllerBase
         }
 
         return NoContent();
+    }
+
+    [Authorize]
+    [HttpPost("feedback")]
+    public async Task<ActionResult<AssistantFeedbackResponse>> SubmitFeedback(
+        [FromBody] AssistantFeedbackRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        if (request is null || string.IsNullOrWhiteSpace(request.SessionId) || string.IsNullOrWhiteSpace(request.MessageId))
+        {
+            return BadRequest("SessionId and MessageId are required.");
+        }
+
+        var userId = GetCurrentUserId();
+        if (string.IsNullOrWhiteSpace(userId))
+        {
+            return Unauthorized();
+        }
+
+        var session = await _dbContext.AssistantChatSessions
+            .FirstOrDefaultAsync(item => item.SessionId == request.SessionId, cancellationToken);
+
+        if (session is null)
+        {
+            return NotFound("Session not found.");
+        }
+
+        if (!string.IsNullOrWhiteSpace(session.AppUserId) && !string.Equals(session.AppUserId, userId, StringComparison.Ordinal))
+        {
+            return Forbid();
+        }
+
+        var sentiment = request.IsPositive ? "up" : "down";
+        var feedbackPayload = $"{{\"messageId\":\"{request.MessageId.Trim()}\",\"value\":\"{sentiment}\",\"recordedAt\":\"{DateTime.UtcNow:O}\"}}";
+
+        _dbContext.AssistantChatEntries.Add(new AssistantChatEntry
+        {
+            SessionInternalId = session.Id,
+            Role = "feedback",
+            Content = feedbackPayload,
+            CreatedAt = DateTime.UtcNow,
+        });
+
+        session.LastActivityAt = DateTime.UtcNow;
+        await _dbContext.SaveChangesAsync(cancellationToken);
+
+        return Ok(new AssistantFeedbackResponse
+        {
+            Recorded = true,
+            SessionId = session.SessionId,
+            MessageId = request.MessageId.Trim(),
+            Sentiment = sentiment,
+            RecordedAt = DateTime.UtcNow,
+        });
     }
 
     [Authorize]

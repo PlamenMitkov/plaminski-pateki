@@ -1,0 +1,186 @@
+EcoProject - Пълен обобщаващ доклад за извършената работа
+Дата на изготвяне: 2026-04-01
+Период: от създаването на хранилището (2026-02-25) до текущото състояние на workspace
+
+=================================================================
+1) Обхват и източници
+=================================================================
+Докладът е изготвен по:
+- git историята на проекта (10 commit-а, хронологично от първия до последния)
+- налична проектна документация (README.md, TESTING.md, onboarding/discovery документ)
+- вътрешни прогрес файлове (REPORT_PROGRESS.txt, REPORT_uv_setup.txt)
+- текущо локално състояние (git status --short)
+
+Забележка:
+- Част от работата след последния commit е налична като локални промени (unstaged/untracked) и е включена отделно в секция 7.
+
+=================================================================
+2) Резюме на развитието (в числа)
+=================================================================
+- Общо commit-и: 10
+- Автори: 1
+- Активни дни с commit-и: 6
+- Първи commit: 2026-02-25 (60f8182) - Initial commit: EcoTrails full-stack app
+- Последен commit: 2026-03-28 (f87f3f8) - UI Expansion sequential implementation completion
+
+=================================================================
+3) Хронология по основни етапи
+=================================================================
+
+Етап 0 - Основа на продукта (2026-02-25)
+Commit: 60f8182
+Какво е реализирано:
+- Създаден е full-stack скелет: ASP.NET Core API + React/TypeScript клиент + SQL модел.
+- Добавени са ключови backend модули: trails, auth, favorites, JWT, импорт от eco.json.
+- Добавени са базови EF Core миграции и модели за потребители/любими.
+- Добавена е карта и основни frontend страници (home, details, auth).
+
+Етап 1 - Контейнеризация (2026-02-25)
+Commit: c963196
+Какво е реализирано:
+- Добавени Dockerfile-и за API и Client.
+- Добавен docker-compose стек с SQL Server.
+- Поставена е основа за локално стартиране на целия продукт като контейнери.
+
+Етап 2 - Документация (2026-02-25)
+Commit: 79c45d5
+Какво е реализирано:
+- Разширен професионален README с архитектура, quick start и оперативни инструкции.
+
+Етап 3 - Workspace sync и UX/ops подобрения (2026-02-28)
+Commit: 29fb480
+Какво е реализирано:
+- Подобрения по trails API и Program конфигурация.
+- Подобрения във frontend визуализацията и pages (Home/Details, стилове, map).
+- Добавени start/stop batch скриптове за Windows.
+- Интегрирани service worker и обновени compose/README инструкции.
+
+Етап 4 - AI Assistant v1 + семантика (2026-02-28)
+Commit: e2ffa7e
+Какво е реализирано:
+- Добавен Assistant backend модул (chat endpoint, договори, service).
+- Добавена сесийност на чатовете и миграции за assistant session данни.
+- Добавени семантични полета в trail модела и region-ориентирани алтернативи.
+- Интеграция frontend -> assistant service и UI промени в Home.
+
+Етап 5 - CI/CD, GHCR, smoke автоматизация, modular frontend (2026-03-02)
+Commit: cd171be
+Какво е реализирано:
+- Добавен CI workflow.
+- Подготовка за публикация на image-и в GHCR.
+- Добавени smoke скриптове за auth/admin/openroute.
+- Frontend реорганизация към по-модулна структура (components/home, hooks, services).
+- Разширения в assistant и data слоя (вкл. embedding/FTS миграции).
+
+Етап 6 - OpenAPI/OTel, production deployment и сериозно тестово покритие (2026-03-10)
+Commit: d6a1a5b
+Какво е реализирано:
+- Добавени OpenAPI подобрения (документация на auth/rate limit поведение).
+- Добавена OpenTelemetry/observability интеграция.
+- Добавена production compose конфигурация и deploy automation (PowerShell + Bash).
+- Създаден тестов проект с интеграционни и unit тестове за trails/favorites/auth/assistant/health.
+- Добавени middleware/repository структури и стабилизация на backend слоевете.
+
+Етап 7 - Synthetic governance (HITL) и CI audit workflow (2026-03-21)
+Commit: c2d1e0e
+Какво е реализирано:
+- Въведен Human-in-the-loop процес за AI enrichment merge.
+- Добавен approval template и gating в merge-enriched-descriptions.ps1.
+- Добавени synthetic governance audit скриптове.
+- Добавен отделен CI workflow за регулярни governance проверки.
+
+Етап 8 - Голямо функционално разширение + refactor на Assistant архитектурата (2026-03-28)
+Commit: b86b1d6
+Какво е реализирано:
+- Добавени нови backend домейни: community posts, admin panel, offline enrichment, proposal lifecycle.
+- Добавени нови контракти/контролери/модели/миграции за горните модули.
+- Направен е сериозен service refactor в Assistant подсистемата:
+  * retrieval
+  * prompt assembly
+  * response composition
+  * prompt safety и provenance policy
+  * weather context
+  * session orchestration
+  * provider fallback policy
+- Разширени тестове за fallback, security/provenance, retrieval logic, prompt/response assembly.
+- Frontend: PWA/manifest/nginx/docker подобрения, нови страници (About/Admin), разширени services и hook тестове.
+- Данни/скриптове: добавени backup/merged snapshots, quality worklists, enrichment pipeline файлове, governance reports.
+
+Етап 9 - UI expansion завършване (2026-03-28)
+Commit: f87f3f8
+Какво е реализирано:
+- Добавени UI компоненти и тестове:
+  * DifficultyGauge
+  * OfflineMapDownload
+  * TrailWeatherWidget
+  * AiFeedbackLoop
+- Добавен useOfflineMap hook + тест.
+- Довършени интеграции в AssistantPanel.
+
+=================================================================
+4) Какво реално е постигнато като продукт
+=================================================================
+1. Изграден е работещ full-stack продукт за 500+ еко маршрута в България.
+2. Реализирани са: интерактивна карта, филтриране, детайли, favorites sync, auth/JWT, paged API.
+3. Добавен е AI Assistant с:
+   - чат и сесии
+   - семантично търсене/алтернативи
+   - weather контекст
+   - multi-provider стратегия (Gemini/OpenAI) и fallback механизми
+   - защити за prompt safety и source provenance.
+4. Изградени са DevOps практики: Docker local/prod, CI, GHCR publish, smoke тестове, health checks.
+5. Добавена е observability основа (OpenTelemetry).
+6. Развита е data governance линия за AI enrichment с HITL контрол, одит и CI валидация.
+7. Изградено е сериозно backend и frontend тестово покритие.
+8. Направени са UX и UI разширения, включително PWA и offline-свързани елементи.
+
+=================================================================
+5) Тестване и надеждност
+=================================================================
+- Съществува отделен тестов проект EcoTrails.Api.Tests.
+- Покрити са критични сценарии: auth, rate limits, repositories, assistant authorization, fallback, security/provenance, health endpoints, caching headers.
+- Има отделен Testing guide с конкретни команди за full suite и таргетирани групи.
+- Налични са smoke скриптове за оперативна проверка на ключови функционалности.
+
+=================================================================
+6) Данни, enrichment и governance
+=================================================================
+- Проектът работи с основен dataset eco.json и множество backup/snapshot варианти.
+- Има enrichment pipeline (PowerShell/Python/.NET helper) за подобряване на данните.
+- Добавени са quality worklists и архитектурни бележки за data quality.
+- Внедрен е synthetic governance процес:
+  - reviewer approval решения
+  - dry-run/apply стъпки
+  - автоматизирани audit отчети и threshold-based CI gate.
+
+=================================================================
+7) Последни локални дейности (след commit-ите)
+=================================================================
+По текущия workspace (към 2026-04-01) има незаписани промени:
+- Backend: модификации в assistant контракти/контролер/услуги, Program конфигурация, favorites repository, offline enrichment service, EcoJsonImportService.
+- Backend tests: промени в AssistantSecurityAndProvenanceTests и OpenAiAssistantServiceFallbackOrchestrationTests.
+- Frontend: промени в App, HomePage, AuthPage, стилове, MapWidget, assistant service, useOfflineMap тест.
+- Нови backend файлове: AiProviderClient.cs, AiProviderException.cs, OpenAiOptions.cs.
+- Нови отчетни файлове: REPORT_PROGRESS.txt и REPORT_uv_setup.txt.
+
+Допълнително отчетени локални дейности:
+- Добавени start.bat/stop.bat и troubleshooting за Docker startup.
+- Решен SQL volume/login проблем чрез clean compose reset.
+- Корекция в логиката за Favorites визуализация.
+- Потвърден успешен frontend production build.
+- Документирана инсталация и активиране на uv tooling.
+
+=================================================================
+8) Текущ статус и зрялост
+=================================================================
+Проектът е на етап работеща, функционално богата платформа с:
+- стабилна backend/frontend архитектура,
+- CI/CD и production deployment основа,
+- развита AI подсистема с модулен refactor,
+- фокус върху quality governance и тестова надеждност.
+
+Има ясни признаци за преминаване от MVP към по-зрял продукт с оперативни процеси, наблюдаемост и контрол на качеството на данните.
+
+=================================================================
+Край на доклада
+=================================================================

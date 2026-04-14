@@ -1,11 +1,14 @@
 import { useMemo, useState } from 'react';
 import { useEffect } from 'react';
-import { ArrowLeft, Heart, Share2 } from 'lucide-react';
-import { Link, useParams } from 'react-router-dom';
+import { ArrowLeft, Heart, Map, Navigation, Share2 } from 'lucide-react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { CircleMarker, MapContainer, Polyline, Popup, TileLayer } from 'react-leaflet';
+import { latLngBounds, type LatLngBounds } from 'leaflet';
 import type { Trail } from '../types/trail';
 import { useFavorites } from '../hooks/useFavorites';
 import apiClient from '../services/apiClient';
+import { OfflineMapDownload } from '../components/common/OfflineMapDownload';
+import { TrailWeatherWidget } from '../components/common/TrailWeatherWidget';
 import '../App.css';
 
 interface TrailRouteResponse {
@@ -89,13 +92,74 @@ function buildTrailSchemaOrg(trail: Trail) {
 }
 
 function TrailDetails() {
+  const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const [trail, setTrail] = useState<Trail | null>(null);
   const [route, setRoute] = useState<TrailRouteResponse | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [routeWarning, setRouteWarning] = useState('');
+  const [weatherState, setWeatherState] = useState<{
+    temperature: number;
+    weatherIcon: 'sunny' | 'cloudy' | 'rainy' | 'snowy';
+  } | null>(null);
   const { isFavorite, toggleFavorite } = useFavorites();
+
+  useEffect(() => {
+    if (!trail?.latitude || !trail?.longitude) {
+      setWeatherState(null);
+      return;
+    }
+
+    const controller = new AbortController();
+
+    const fetchWeather = async () => {
+      try {
+        const query = new URLSearchParams({
+          latitude: String(trail.latitude),
+          longitude: String(trail.longitude),
+          current: 'temperature_2m,weather_code',
+          timezone: 'auto',
+        });
+
+        const response = await fetch(`https://api.open-meteo.com/v1/forecast?${query.toString()}`, {
+          signal: controller.signal,
+        });
+
+        if (!response.ok) throw new Error(`Open-Meteo ${response.status}`);
+
+        const payload = (await response.json()) as {
+          current?: { temperature_2m?: number; weather_code?: number };
+        };
+
+        const temperature = payload.current?.temperature_2m;
+        const code = payload.current?.weather_code;
+
+        if (typeof temperature !== 'number') {
+          setWeatherState(null);
+          return;
+        }
+
+        let weatherIcon: 'sunny' | 'cloudy' | 'rainy' | 'snowy' = 'cloudy';
+        if (typeof code === 'number') {
+          if (code === 0) weatherIcon = 'sunny';
+          else if ([71, 73, 75, 77, 85, 86].includes(code)) weatherIcon = 'snowy';
+          else if ([51, 53, 55, 56, 57, 61, 63, 65, 66, 67, 80, 81, 82, 95, 96, 99].includes(code)) weatherIcon = 'rainy';
+        }
+
+        setWeatherState({ temperature: Math.round(temperature), weatherIcon });
+      } catch (err) {
+        if (!(err instanceof DOMException && err.name === 'AbortError')) {
+          setWeatherState(null);
+        }
+      }
+    };
+
+    void fetchWeather();
+    return () => {
+      controller.abort();
+    };
+  }, [trail?.latitude, trail?.longitude]);
 
   useEffect(() => {
     if (!id) {
@@ -154,6 +218,27 @@ function TrailDetails() {
     return [42.7, 25.3] as [number, number];
   }, [trail, route]);
 
+  const offlineMapBounds = useMemo<LatLngBounds | null>(() => {
+    if (route && route.coordinates.length >= 2) {
+      return latLngBounds(route.coordinates);
+    }
+
+    if (
+      trail?.latitude !== null &&
+      trail?.latitude !== undefined &&
+      trail?.longitude !== null &&
+      trail?.longitude !== undefined
+    ) {
+      const padding = 0.03;
+      return latLngBounds(
+        [trail.latitude - padding, trail.longitude - padding],
+        [trail.latitude + padding, trail.longitude + padding],
+      );
+    }
+
+    return null;
+  }, [trail, route]);
+
   const schemaOrgJson = useMemo(() => {
     if (!trail) {
       return '';
@@ -205,6 +290,66 @@ function TrailDetails() {
     window.alert('Линкът е копиран.');
   };
 
+  const handleOpenMapTab = () => {
+    if (!trail) {
+      return;
+    }
+
+    const params = new URLSearchParams();
+    params.set('tab', 'map');
+    params.set('selectedTrailId', String(trail.id));
+    params.set('onlySelectedOnMap', 'true');
+
+    if (trail.latitude !== null && trail.longitude !== null) {
+      params.set('mapLat', String(trail.latitude));
+      params.set('mapLng', String(trail.longitude));
+      params.set('mapZoom', '13');
+    }
+
+    navigate(`/?${params.toString()}`);
+  };
+
+  const handleDownloadOfflineNavigation = () => {
+    if (!trail || !route || route.coordinates.length < 2) {
+      window.alert('Липсва маршрут за изтегляне.');
+      return;
+    }
+
+    const pointsXml = route.coordinates
+      .map(([latitude, longitude]) => `    <trkpt lat="${latitude}" lon="${longitude}"></trkpt>`)
+      .join('\n');
+
+    const gpx = `<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="EcoTrails" xmlns="http://www.topografix.com/GPX/1/1">
+  <metadata>
+    <name>${trail.name}</name>
+    <time>${new Date().toISOString()}</time>
+  </metadata>
+  <wpt lat="${route.startLatitude}" lon="${route.startLongitude}">
+    <name>Начало - ${trail.name}</name>
+  </wpt>
+  <wpt lat="${route.endLatitude}" lon="${route.endLongitude}">
+    <name>Край - ${trail.name}</name>
+  </wpt>
+  <trk>
+    <name>${trail.name}</name>
+    <trkseg>
+${pointsXml}
+    </trkseg>
+  </trk>
+</gpx>`;
+
+    const blob = new Blob([gpx], { type: 'application/gpx+xml;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `ecotrails-trail-${trail.id}.gpx`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
   if (isLoading) {
     return <div className="app-container">Зареждане...</div>;
   }
@@ -228,6 +373,14 @@ function TrailDetails() {
           Назад
         </Link>
         <div className="details-actions-right">
+          <button type="button" className="secondary-btn" onClick={handleOpenMapTab}>
+            <Map size={16} />
+            Таб Карта
+          </button>
+          <button type="button" className="secondary-btn" onClick={handleDownloadOfflineNavigation}>
+            <Navigation size={16} />
+            Офлайн навигация (GPX)
+          </button>
           <button
             type="button"
             className={`secondary-btn favorite-btn ${isFavorite(trail.id) ? 'active-btn' : ''}`}
@@ -245,7 +398,11 @@ function TrailDetails() {
 
       <h1 className="app-title">{trail.name}</h1>
 
-      <MapContainer
+      <div style={{ position: 'relative' }}>
+        {weatherState && (
+          <TrailWeatherWidget temperature={weatherState.temperature} weatherIcon={weatherState.weatherIcon} />
+        )}
+        <MapContainer
         center={mapCenter}
         zoom={trail.latitude !== null && trail.longitude !== null ? 11 : 7}
         style={{ height: '420px', width: '100%', borderRadius: '12px', marginBottom: '20px' }}
@@ -285,7 +442,9 @@ function TrailDetails() {
         )}
       </MapContainer>
 
-      {route && (
+  </div>
+
+  {route && (
         <>
           <div className="route-legend">
             <span className="legend-item">
@@ -304,6 +463,8 @@ function TrailDetails() {
       )}
 
       {routeWarning && <p className="status-text error">{routeWarning}</p>}
+
+      <OfflineMapDownload trailId={trail.id} mapBounds={offlineMapBounds} />
 
       <div className="trail-card">
         <p>

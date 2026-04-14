@@ -1,0 +1,161 @@
+severity,category,trail_id,trail_name,region,nearest_town,details
+high,generic_description,3,"Екопътека ""Збегове"" – Белоградчик",Видин,Белоградчик,description starts with generic placeholder wording
+high,generic_description,4,"Екопътека Заслон ""Опасен зъб"" – Тетевен",Ловеч,Тетевен,description starts with generic placeholder wording
+high,generic_description,5,"Екопътека до ""Първия войнишки паметник"" - с. Алдомировци",Алдомировци,Алдомировци,description starts with generic placeholder wording
+high,generic_description,15,Долина на река Благоевградска Бистрица,Благоевград,,description starts with generic placeholder wording
+high,generic_description,20,"Екопътека ""Мелник - Роженски манастир""",Благоевград,Мелник,description starts with generic placeholder wording
+high,generic_description,22,"Екопътека ""Римски мост""",Благоевград,Бръщен,description starts with generic placeholder wording
+high,generic_description,27,"Екопътека ""По следите на миналото"" – Приморско",Бургас,Приморско,description starts with generic placeholder wording
+high,generic_description,28,"Екопътека ""По следите на римляните"" – Приморско",Бургас,Приморско,description starts with generic placeholder wording
+high,generic_description,35,Екопътека до Преображенския манастир,Велико Търново,Велико Търново,description starts with generic placeholder wording
+high,generic_description,38,Хотнишка екопътека,Велико Търново,Хотница,description starts with generic placeholder wording
+high,generic_description,77,"Екопътека ""Иванчова поляна""",Вършец,Вършец,description starts with generic placeholder wording
+high,generic_description,85,"Екопъ3тека ""Римският път""",Габрово,Боженци,description starts with generic placeholder wording
+high,generic_description,89,"Екопътека ""Люляци–Дебел дял""",Габрово,Габрово,description starts with generic placeholder wording
+high,generic_description,95,Екопътека Via Ferrata,Габровска област,Дряново,description starts with generic placeholder wording
+high,generic_description,103,"Екопътека ""Горица"" (Овчарченски водопад)",Западна Рила,Овчарци,description starts with generic placeholder wording
+high,generic_description,148,"Екопътека ""Никопол Римски път - Скална църква""",Плевен,Никопол,description starts with generic placeholder wording
+high,generic_description,150,"Екопътека ""Черне3лка""",Плевен,Горталово,description starts with generic placeholder wording
+high,generic_description,151,"""Зелената пътека"" - Бачковски манастир",Пловдив,Бачковски манастир,description starts with generic placeholder wording
+high,generic_description,153,Академика,Пловдив,,description starts with generic placeholder wording
+high,generic_description,172,Беклемето,Пловдив,,description starts with generic placeholder wording
+high,generic_description,177,Белоградчишки скали,Пловдив,,description starts with generic placeholder wording
+high,generic_description,179,Бистрица,Пловдив,Бистрица,description starts with generic placeholder wording
+high,generic_description,190,Българи,Пловдив,,description starts with generic placeholder wording
+high,generic_description,191,Бяла река,Пловдив,,description starts with generic placeholder wording
+high,generic_description,193,Варовитец,Пловдив,,description starts with generic placeholder wording
+high,generic_description,194,Велека,Пловдив,,description starts with generic placeholder wording
+high,generic_description,195,Видимско пръскало,Пловдив,,description starts with generic placeholder wording
+high,generic_description,197,Врабча,Пловдив,,description starts with generic placeholder wording
+high,generic_description,201,Геопарк Искър-Панега,Пловдив,,description starts with generic placeholder wording
+high,generic_description,202,Гложенски манастир,Пловдив,,description starts with generic placeholder wording
+high,generic_description,204,Горица,Пловдив,,description starts with generic placeholder wording
+high,generic_description,206,Градище,Пловдив,,description starts with generic placeholder wording
+high,generic_description,218,"Екопътека ""Комин дере"" – Лъки",Пловдив,Лъки,description starts with generic placeholder wording
+high,generic_description,222,"Екопътека ""Стара Река"" – Стеврек",Пловдив,Стеврек,description starts with generic placeholder wording
+high,generic_description,223,"Екопътека ""Стражка могила""",Пловдив,Страж,description starts with generic placeholder wording
+high,generic_description,224,"Екопътека ""с. Белица-Пещерата""",Благоевград,Белица,description starts with generic placeholder wording
+high,generic_description,225,"Екопътека ""с.Белица - Кръстова гора""",Благоевград,Белица,description starts with generic placeholder wording
+high,generic_description,227,Етрополски водопад,Пловдив,,description starts with generic placeholder wording
+high,generic_description,234,Изворите на Младежка,Пловдив,,description starts with generic placeholder wording
+high,generic_description,250,Кечика Кая,Пловдив,,description starts with generic placeholder wording
+high,generic_description,260,Копрен,Пловдив,,description starts with generic placeholder wording
+high,generic_description,267,Лакатнишки скали,Пловдив,,description starts with generic placeholder wording
+high,generic_description,274,Мадарски конник,Пловдив,,description starts with generic placeholder wording
+high,generic_description,282,Медвен,Пловдив,,description starts with generic placeholder wording
+high,generic_description,286,Мишкова нива,Пловдив,,description starts with generic placeholder wording
+high,generic_description,290,Обесен камък,Пловдив,,description starts with generic placeholder wording
+high,generic_description,314,Ритлите,Пловдив,,description starts with generic placeholder wording
+high,generic_description,319,Самуилова крепост,Пловдив,,description starts with generic placeholder wording
+high,generic_description,321,Света Петка,Пловдив,,description starts with generic placeholder wording
+high,generic_description,322,Светлина,Пловдив,,description starts with generic placeholder wording
+high,generic_description,327,Синия вир,Пловдив,,description starts with generic placeholder wording
+high,generic_description,337,Странджански дъб,Пловдив,,description starts with generic placeholder wording
+high,generic_description,362,Чернелка,Пловдив,,description starts with generic placeholder wording
+high,generic_description,364,Чипровски водопад,Пловдив,,description starts with generic placeholder wording
+high,generic_description,401,"на Чучулигите
+271. \* Екопътека",Пловдив,,description starts with generic placeholder wording
+high,generic_description,421,"Екопътека ""Драгиева чешма"" – Чавдар",Родопи,Чавдар,description starts with generic placeholder wording
+high,generic_description,424,Екопътека „Каньонът на водопадите“,Родопи,Смолян,description starts with generic placeholder wording
+high,generic_description,441,"Екопътека ""Кечи Кая"" - Рибница",Рудозем,Рибница,description starts with generic placeholder wording
+high,generic_description,445,"Екопътека ""Лаго""",Самоков,Самоков,description starts with generic placeholder wording
+high,generic_description,446,"Екопътека ""Знамето"" – с. Младен",Севлиево,Севлиево,description starts with generic placeholder wording
+high,generic_description,447,"Екопътека ""Бели Искър""",Село Бели Искър,Самоков,description starts with generic placeholder wording
+high,generic_description,459,"Екопътека ""Невястата""",Смолян,Смолян,description starts with generic placeholder wording
+high,generic_description,461,"Екопътека ""Свети дух""",Смолян,Манастир,description starts with generic placeholder wording
+high,generic_description,463,"Екопътека ""Трите Смолянски езера""",Смолян,Смолян,description starts with generic placeholder wording
+high,generic_description,470,"Южнородопска или ""Дяволска"" екопътека",Смолян,Борино,description starts with generic placeholder wording
+high,generic_description,475,"Екопътека ""Барутин - вр. Чуката - Касъка""",Смолянска област,Доспат,description starts with generic placeholder wording
+high,generic_description,477,"Екопътека ""Параклис"" – с. Врабево",Софийска,Врабево,description starts with generic placeholder wording
+high,generic_description,479,"Екопътека ""Седмовратица""",Софийска,Карлуково,description starts with generic placeholder wording
+high,generic_description,481,Екопътека Червени камък - с. Челопеч,Софийска,Челопеч,description starts with generic placeholder wording
+high,generic_description,482,"Екопътека с. Мърчаево - местност ""Церова поляна""",Софийска,Мърчаево,description starts with generic placeholder wording
+high,generic_description,510,"Екопътека ""Климент""",Същинска Средна гора,Климент,description starts with generic placeholder wording
+high,generic_description,513,Тетевенски водопад „Скока“,Тетевен,Тетевен,description starts with generic placeholder wording
+high,generic_description,514,Трънска екопътека,Трън,Трън,description starts with generic placeholder wording
+high,generic_description,516,Екопътека Голямата река,Търговище,Попово,description starts with generic placeholder wording
+high,generic_description,518,"Екопътека ""Тайните водопади""",Хасково,Малко Градище,description starts with generic placeholder wording
+high,generic_description,519,"Чипровски водопад, Екопътека Демяница",Чипровци,Чипровци,description starts with generic placeholder wording
+high,generic_description,521,"Екопътека ""Мадарски конник""",Шумен,Мадара,description starts with generic placeholder wording
+high,name_not_reflected_in_content,17,"Екопътека ""Властелинът на планините""",Благоевград,Белица,none of the core name tokens appear in description/summary: властелинът
+high,name_not_reflected_in_content,27,"Екопътека ""По следите на миналото"" – Приморско",Бургас,Приморско,"none of the core name tokens appear in description/summary: следите, миналото, приморско"
+high,name_not_reflected_in_content,29,"Екопътека ""Пътят на ясния месец""",Бургас,Бръшлян,"none of the core name tokens appear in description/summary: ясния, месец"
+high,name_not_reflected_in_content,38,Хотнишка екопътека,Велико Търново,Хотница,none of the core name tokens appear in description/summary: хотнишка
+high,name_not_reflected_in_content,60,Среднопланинска обиколна пътека (СОП),Витоша,София,none of the core name tokens appear in description/summary: среднопланинска
+high,name_not_reflected_in_content,61,Торфищна информационна алея,Витоша,София,none of the core name tokens appear in description/summary: торфищна
+high,name_not_reflected_in_content,62,Врацата,Враца,,none of the core name tokens appear in description/summary: врацата
+high,name_not_reflected_in_content,65,Горска пътека на приказките,Врачанска област,Враца,"none of the core name tokens appear in description/summary: горска, приказките"
+high,name_not_reflected_in_content,69,Исторически маршрут „По стъпките на Ботевата чета”,Врачански Балкан,Враца,"none of the core name tokens appear in description/summary: исторически, стъпките, ботевата"
+high,name_not_reflected_in_content,76,Спортно-туристически маршрут „Горска пътека на здравето“,Врачански Балкан,Враца,"none of the core name tokens appear in description/summary: туристически, горска"
+high,name_not_reflected_in_content,80,E3 Етап 6: Тетевен - Чулово,Габрово,Габрово,"none of the core name tokens appear in description/summary: тетевен, чулово"
+high,name_not_reflected_in_content,81,E3 Етап 7: Чулово - Боян,Габрово,Габрово,none of the core name tokens appear in description/summary: чулово
+high,name_not_reflected_in_content,91,"Екопътека ""Узана""",Габрово,Узана,none of the core name tokens appear in description/summary: узана
+high,name_not_reflected_in_content,99,Ботаническа алея за незрящи,Дендрариум,София,"none of the core name tokens appear in description/summary: ботаническа, незрящи"
+high,name_not_reflected_in_content,111,"Екопътека ""Божения""",Красен-Божичен,Божичен,none of the core name tokens appear in description/summary: божения
+high,name_not_reflected_in_content,112,"Екопътека ""Пътят на Сърцето""",Кърджали,Борово,none of the core name tokens appear in description/summary: сърцето
+high,name_not_reflected_in_content,123,"Екопътека ""Нагоре към Слънцето""",Ловеч,Бабинци,"none of the core name tokens appear in description/summary: нагоре, слънцето"
+high,name_not_reflected_in_content,124,"Екопътека ""Опасният зъб""",Ловеч,Тетевен,none of the core name tokens appear in description/summary: опасният
+high,name_not_reflected_in_content,126,"Екопътека ""Под пръските на водопада""",Ловеч,Тетевен,"none of the core name tokens appear in description/summary: пръските, водопада"
+high,name_not_reflected_in_content,149,"Екопътека ""Попската скала""",Плевен,Плевен,"none of the core name tokens appear in description/summary: попската, скала"
+high,name_not_reflected_in_content,150,"Екопътека ""Черне3лка""",Плевен,Горталово,none of the core name tokens appear in description/summary: черне3лка
+high,name_not_reflected_in_content,157,Алея на билките,Пловдив,,none of the core name tokens appear in description/summary: билките
+high,name_not_reflected_in_content,159,Ардинци,Пловдив,,none of the core name tokens appear in description/summary: ардинци
+high,name_not_reflected_in_content,163,Бабин пласт,Пловдив,,"none of the core name tokens appear in description/summary: бабин, пласт"
+high,name_not_reflected_in_content,164,Бабини Видини кули,Пловдив,,"none of the core name tokens appear in description/summary: бабини, видини"
+high,name_not_reflected_in_content,170,Беглика,Пловдив,,none of the core name tokens appear in description/summary: беглика
+high,name_not_reflected_in_content,171,Беглика рали,Пловдив,,none of the core name tokens appear in description/summary: беглика
+high,name_not_reflected_in_content,205,Горна земя,Пловдив,,none of the core name tokens appear in description/summary: горна
+high,name_not_reflected_in_content,208,Двете реки,Пловдив,,none of the core name tokens appear in description/summary: двете
+high,name_not_reflected_in_content,214,Дуранкулак,Пловдив,,none of the core name tokens appear in description/summary: дуранкулак
+high,name_not_reflected_in_content,215,Дървото на живота,Пловдив,,"none of the core name tokens appear in description/summary: дървото, живота"
+high,name_not_reflected_in_content,220,"Екопътека ""По пътя на героите""",Пловдив,Перущица,none of the core name tokens appear in description/summary: героите
+high,name_not_reflected_in_content,244,Каньона на водопадите,Пловдив,,"none of the core name tokens appear in description/summary: каньона, водопадите"
+high,name_not_reflected_in_content,248,Карандила,Пловдив,,none of the core name tokens appear in description/summary: карандила
+high,name_not_reflected_in_content,250,Кечика Кая,Пловдив,,none of the core name tokens appear in description/summary: кечика
+high,name_not_reflected_in_content,254,Княжевска пътека,Пловдив,,none of the core name tokens appear in description/summary: княжевска
+high,name_not_reflected_in_content,264,Крушунски водопади,Пловдив,,"none of the core name tokens appear in description/summary: крушунски, водопади"
+high,name_not_reflected_in_content,266,Кървавата скала,Пловдив,,"none of the core name tokens appear in description/summary: кървавата, скала"
+high,name_not_reflected_in_content,271,Лозенски манастир,Пловдив,,none of the core name tokens appear in description/summary: лозенски
+high,name_not_reflected_in_content,276,Малко Търново,Пловдив,,"none of the core name tokens appear in description/summary: малко, търново"
+high,name_not_reflected_in_content,281,Меаните,Пловдив,,none of the core name tokens appear in description/summary: меаните
+high,name_not_reflected_in_content,284,Мечи стъпки,Пловдив,,none of the core name tokens appear in description/summary: стъпки
+high,name_not_reflected_in_content,289,Невястата,Пловдив,,none of the core name tokens appear in description/summary: невястата
+high,name_not_reflected_in_content,298,Петрова нива,Пловдив,,none of the core name tokens appear in description/summary: петрова
+high,name_not_reflected_in_content,303,Поляната,Пловдив,,none of the core name tokens appear in description/summary: поляната
+high,name_not_reflected_in_content,304,Поморие,Пловдив,,none of the core name tokens appear in description/summary: поморие
+high,name_not_reflected_in_content,305,Понтийски път,Пловдив,,none of the core name tokens appear in description/summary: понтииски
+high,name_not_reflected_in_content,307,Правешка екопътека,Пловдив,,none of the core name tokens appear in description/summary: правешка
+high,name_not_reflected_in_content,310,Резово,Пловдив,,none of the core name tokens appear in description/summary: резово
+high,name_not_reflected_in_content,317,Рупите,Пловдив,,none of the core name tokens appear in description/summary: рупите
+high,name_not_reflected_in_content,325,Симеоновски езера,Пловдив,,"none of the core name tokens appear in description/summary: симеоновски, езера"
+high,name_not_reflected_in_content,337,Странджански дъб,Пловдив,,none of the core name tokens appear in description/summary: странджански
+high,name_not_reflected_in_content,343,Торфено бранище,Пловдив,,"none of the core name tokens appear in description/summary: торфено, бранище"
+high,name_not_reflected_in_content,352,Хайдушка песен,Пловдив,,"none of the core name tokens appear in description/summary: хаидушка, песен"
+high,name_not_reflected_in_content,353,Хайдушка поляна,Пловдив,,"none of the core name tokens appear in description/summary: хаидушка, поляна"
+high,name_not_reflected_in_content,357,Царството на зелениката,Пловдив,,"none of the core name tokens appear in description/summary: царството, зелениката"
+high,name_not_reflected_in_content,358,Централен Балкан,Пловдив,,none of the core name tokens appear in description/summary: централен
+high,name_not_reflected_in_content,369,Шейтан дере,Пловдив,,none of the core name tokens appear in description/summary: шеитан
+high,name_not_reflected_in_content,401,"на Чучулигите
+271. \* Екопътека",Пловдив,,none of the core name tokens appear in description/summary: чучулигите
+high,name_not_reflected_in_content,402,"на балканската дива коза
+243. \* Екопътека",Пловдив,,none of the core name tokens appear in description/summary: балканската
+high,name_not_reflected_in_content,406,"на партизаните (историческа)
+222. \* Екопътека",Пловдив,,none of the core name tokens appear in description/summary: партизаните
+high,name_not_reflected_in_content,407,Екопътека Бяла река (Калоферска),Пловдивска област,Калофер,none of the core name tokens appear in description/summary: калоферска
+high,name_not_reflected_in_content,413,"Пътека ""Към царството на еделвайса""",Рила,Разлог,"none of the core name tokens appear in description/summary: царството, еделваиса"
+high,name_not_reflected_in_content,417,Самодивска пътека,Рила,Бачево,none of the core name tokens appear in description/summary: самодивска
+high,name_not_reflected_in_content,424,Екопътека „Каньонът на водопадите“,Родопи,Смолян,"none of the core name tokens appear in description/summary: каньонът, водопадите"
+high,name_not_reflected_in_content,437,Познавателен маршрут „Музей на гората”,Родопи,Батак,"none of the core name tokens appear in description/summary: познавателен, музеи, гората"
+high,name_not_reflected_in_content,440,Трансгранична родопска екопътека Хвойна – Ставруполи,Родопи,Хвойна,"none of the core name tokens appear in description/summary: трансгранична, родопска, хвоина, ставруполи"
+high,name_not_reflected_in_content,452,"""Синия вир"" – Сливен",Сливен,Сливен,"none of the core name tokens appear in description/summary: синия, сливен"
+high,name_not_reflected_in_content,457,"Дяволската пътека (Борино)
+11. \* Екопътека",Смолян,,"none of the core name tokens appear in description/summary: дяволската, борино"
+high,name_not_reflected_in_content,458,"Екопътека ""Каньона на водопадите"" - Смолян",Смолян,Смолян,"none of the core name tokens appear in description/summary: каньона, водопадите, смолян"
+high,name_not_reflected_in_content,470,"Южнородопска или ""Дяволска"" екопътека",Смолян,Борино,"none of the core name tokens appear in description/summary: южнородопска, дяволска"
+high,name_not_reflected_in_content,480,"Екопътека ""Тракийски могили""",Софийска,Копривщица,"none of the core name tokens appear in description/summary: тракииски, могили"
+high,name_not_reflected_in_content,499,Спортно-информационна алея за хора с увреждания на опорно-двигателния апарат,София,София,"none of the core name tokens appear in description/summary: увреждания, опорно, двигателния, апарат"
+high,name_not_reflected_in_content,501,"Екопътека ""Пъ3тека на здравето""",София-град,Банкя,none of the core name tokens appear in description/summary: пъ3тека
+high,name_not_reflected_in_content,509,Странджанска горска пътека,Странджа,Стоилово,"none of the core name tokens appear in description/summary: странджанска, горска"
+high,name_not_reflected_in_content,512,"Екопътека ""Горската пътека""",Тетевен,Тетевен,none of the core name tokens appear in description/summary: горската
+high,name_not_reflected_in_content,514,Трънска екопътека,Трън,Трън,none of the core name tokens appear in description/summary: трънска
+high,name_not_reflected_in_content,518,"Екопътека ""Тайните водопади""",Хасково,Малко Градище,"none of the core name tokens appear in description/summary: таините, водопади"

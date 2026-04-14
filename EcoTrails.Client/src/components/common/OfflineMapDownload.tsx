@@ -44,12 +44,12 @@ export function OfflineMapDownload({ trailId, mapBounds }: OfflineMapDownloadPro
           {isDownloading ? (
             <>
               <XCircle size={16} color="#ef4444" />
-              <span className="offline-map-download__action-text">Cancel Download</span>
+              <span className="offline-map-download__action-text">Спри изтеглянето</span>
             </>
           ) : (
             <>
               <Download size={16} color="#4ecca3" />
-              <span className="offline-map-download__action-text">Download Offline Map</span>
+              <span className="offline-map-download__action-text">Изтегли офлайн карта</span>
             </>
           )}
         </button>
@@ -84,6 +84,10 @@ export function OfflineMapDownload({ trailId, mapBounds }: OfflineMapDownloadPro
           {error}
         </p>
       )}
+
+      <p style={{ color: 'rgba(248, 251, 255, 0.82)', fontSize: '13px', margin: 0 }}>
+        Офлайн картата се пази локално в този браузър. За телефон отвори приложението на телефона и изтегли картата и там.
+      </p>
     </div>
   );
 }

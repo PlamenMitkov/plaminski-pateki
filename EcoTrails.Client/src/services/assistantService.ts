@@ -60,6 +60,20 @@ export interface AssistantChatResponse {
   quickActions: AssistantQuickAction[];
 }
 
+export interface AssistantFeedbackRequest {
+  sessionId: string;
+  messageId: string;
+  isPositive: boolean;
+}
+
+export interface AssistantFeedbackResponse {
+  recorded: boolean;
+  sessionId: string;
+  messageId: string;
+  sentiment: 'up' | 'down' | string;
+  recordedAt: string;
+}
+
 export interface AssistantEnrichRequest {
   limit?: number;
   overwriteExisting?: boolean;
@@ -92,6 +106,11 @@ export interface AssistantSessionMessageResponse {
 export async function requestAssistantReply(request: AssistantChatRequest): Promise<AssistantChatResponse> {
   const { signal, ...payload } = request;
   const response = await apiClient.post<AssistantChatResponse>('/assistant/chat', payload, { signal });
+  return response.data;
+}
+
+export async function submitAssistantFeedback(request: AssistantFeedbackRequest): Promise<AssistantFeedbackResponse> {
+  const response = await apiClient.post<AssistantFeedbackResponse>('/assistant/feedback', request);
   return response.data;
 }
 

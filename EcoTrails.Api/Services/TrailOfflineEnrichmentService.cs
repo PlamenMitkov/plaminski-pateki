@@ -23,6 +23,15 @@ public sealed partial class TrailOfflineEnrichmentService(
     private static readonly TimeSpan SourcePreviewCacheDuration = TimeSpan.FromHours(24);
     private static readonly TimeSpan AlertsCacheDuration = TimeSpan.FromHours(24);
     private static readonly JsonSerializerOptions SnapshotJsonOptions = new(JsonSerializerDefaults.Web);
+    private static readonly string[] PreferredDatasetFiles = ["ecoupdated.json", "eco.json"];
+    private static readonly HashSet<string> PlaceholderRegions = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "Пловдив",
+        "София",
+        "Смолян",
+        "България",
+        "Неуточнено"
+    };
 
     [GeneratedRegex("<title[^>]*>(.*?)</title>", RegexOptions.IgnoreCase | RegexOptions.Singleline)]
     private static partial Regex TitleRegex();
@@ -150,10 +159,10 @@ public sealed partial class TrailOfflineEnrichmentService(
             return [];
         }
 
-        var jsonPath = Path.Combine(workspaceRoot, "eco.json");
-        if (!File.Exists(jsonPath))
+        var jsonPath = ResolveDatasetPath(workspaceRoot);
+        if (jsonPath is null)
         {
-            logger.LogWarning("eco.json was not found at {Path}", jsonPath);
+            logger.LogWarning("No eco dataset file was found. Checked: {Files}", string.Join(", ", PreferredDatasetFiles));
             return [];
         }
 
@@ -162,7 +171,7 @@ public sealed partial class TrailOfflineEnrichmentService(
 
         if (!document.RootElement.TryGetProperty("eco_trails", out var trailsElement) || trailsElement.ValueKind != JsonValueKind.Array)
         {
-            logger.LogWarning("eco.json does not contain a valid eco_trails array");
+            logger.LogWarning("{JsonPath} does not contain a valid eco_trails array", jsonPath);
             return [];
         }
 
@@ -177,9 +186,7 @@ public sealed partial class TrailOfflineEnrichmentService(
 
             var nearestTown = GetNestedString(trailElement, "location", "nearest_town");
             var region = GetNestedString(trailElement, "location", "region");
-            var location = !string.IsNullOrWhiteSpace(nearestTown)
-                ? nearestTown
-                : (!string.IsNullOrWhiteSpace(region) ? region : "Неуточнено");
+            var location = ResolveLocation(name, nearestTown, region);
 
             var metadata = new EcoTrailMetadata
             {
@@ -208,6 +215,20 @@ public sealed partial class TrailOfflineEnrichmentService(
         });
 
         return index;
+    }
+
+    private static string? ResolveDatasetPath(string workspaceRoot)
+    {
+        foreach (var fileName in PreferredDatasetFiles)
+        {
+            var fullPath = Path.Combine(workspaceRoot, fileName);
+            if (File.Exists(fullPath))
+            {
+                return fullPath;
+            }
+        }
+
+        return null;
     }
 
     private async Task<TrailOfflineEnrichmentItem?> TryGetSnapshotFromDatabaseAsync(int trailId, CancellationToken cancellationToken)
@@ -458,9 +479,24 @@ public sealed partial class TrailOfflineEnrichmentService(
         return $"{name.Trim()}|{location.Trim()}";
     }
 
+    private static string ResolveLocation(string trailName, string nearestTown, string region)
+    {
+        if (!string.IsNullOrWhiteSpace(nearestTown))
+        {
+            return nearestTown;
+        }
+
+        if (!string.IsNullOrWhiteSpace(region) && !PlaceholderRegions.Contains(region.Trim()))
+        {
+            return region;
+        }
+
+        return !string.IsNullOrWhiteSpace(trailName) ? trailName.Trim() : "Неуточнено";
+    }
+
     private static string? ExtractHtmlValue(Regex regex, string html)
     {
-        var match = regex().Match(html);
+        var match = regex.Match(html);
         if (!match.Success || match.Groups.Count < 2)
         {
             return null;

@@ -1,0 +1,1857 @@
+severity,category,trail_id,trail_name,region,nearest_town,details
+high,contact_email_region_mismatch,1,"Екопътека ""Ерантис"" – Киреево",Видин,Киреево,"contact email suggests Plovdiv, but record region is 'Видин'"
+high,contact_email_region_mismatch,2,"Екопътека ""Етър-Соколски манастир""",Габрово,Етър,"contact email suggests Plovdiv, but record region is 'Габрово'"
+high,contact_email_region_mismatch,3,"Екопътека ""Збегове"" – Белоградчик",Видин,Белоградчик,"contact email suggests Plovdiv, but record region is 'Видин'"
+high,contact_email_region_mismatch,4,"Екопътека Заслон ""Опасен зъб"" – Тетевен",Ловеч,Тетевен,"contact email suggests Plovdiv, but record region is 'Ловеч'"
+high,contact_email_region_mismatch,5,"Екопътека до ""Първия войнишки паметник"" - с. Алдомировци",Алдомировци,Алдомировци,"contact email suggests Plovdiv, but record region is 'Алдомировци'"
+high,contact_email_region_mismatch,6,"Водопад ""Лястовичи вир""",Асеновград,Долнослав,"contact email suggests Plovdiv, but record region is 'Асеновград'"
+high,contact_email_region_mismatch,7,Местност за пикник Орешак,Балчик,Орешак,"contact email suggests Plovdiv, but record region is 'Балчик'"
+high,contact_email_region_mismatch,8,Местност Бялата чешма – Самуилово,Беласица,Самуилово,"contact email suggests Plovdiv, but record region is 'Беласица'"
+high,contact_email_region_mismatch,9,Хайдушки водопади (екопътека),Берковица,Берковица,"contact email suggests Plovdiv, but record region is 'Берковица'"
+high,contact_email_region_mismatch,24,"Скално образование ""Камината"" – Бов",Бов,Бов,"contact email suggests Plovdiv, but record region is 'Бов'"
+high,contact_email_region_mismatch,26,"Екопътека ""Пещера и изворите на р. Младежка""",Бургас,Младежко,"contact email suggests Plovdiv, but record region is 'Бургас'"
+high,contact_email_region_mismatch,27,"Екопътека ""По следите на миналото"" – Приморско",Бургас,Приморско,"contact email suggests Plovdiv, but record region is 'Бургас'"
+high,contact_email_region_mismatch,28,"Екопътека ""По следите на римляните"" – Приморско",Бургас,Приморско,"contact email suggests Plovdiv, but record region is 'Бургас'"
+high,contact_email_region_mismatch,29,"Екопътека ""Пътят на ясния месец""",Бургас,Бръшлян,"contact email suggests Plovdiv, but record region is 'Бургас'"
+high,contact_email_region_mismatch,30,Дивите кактуси на Синеморец,Бургаска област,Синеморец,"contact email suggests Plovdiv, but record region is 'Бургаска област'"
+high,contact_email_region_mismatch,34,"Екопътека ""Хотнишки водопад""",Велико Търново,Хотница,"contact email suggests Plovdiv, but record region is 'Велико Търново'"
+high,contact_email_region_mismatch,35,Екопътека до Преображенския манастир,Велико Търново,Велико Търново,"contact email suggests Plovdiv, but record region is 'Велико Търново'"
+high,contact_email_region_mismatch,36,Еменски каньон,Велико Търново,Емен,"contact email suggests Plovdiv, but record region is 'Велико Търново'"
+high,contact_email_region_mismatch,37,Негованска екопътека – Емен,Велико Търново,Емен,"contact email suggests Plovdiv, but record region is 'Велико Търново'"
+high,contact_email_region_mismatch,38,Хотнишка екопътека,Велико Търново,Хотница,"contact email suggests Plovdiv, but record region is 'Велико Търново'"
+high,contact_email_region_mismatch,39,"Христовски водопад ""Руховци"" (екопътека)",Велико Търново,Христовци,"contact email suggests Plovdiv, but record region is 'Велико Търново'"
+high,contact_email_region_mismatch,40,Еко стадион Пишмана,Велико Търновска област,Велико Търново,"contact email suggests Plovdiv, but record region is 'Велико Търновска област'"
+high,contact_email_region_mismatch,41,"Екопътека ""Планиница""",Видин,Белоградчик,"contact email suggests Plovdiv, but record region is 'Видин'"
+high,contact_email_region_mismatch,42,Местност Божурица – Видин,Видин,Видин,"contact email suggests Plovdiv, but record region is 'Видин'"
+high,contact_email_region_mismatch,43,"""Пътеката на здравето"" – Кладница",Витоша,Кладница,"contact email suggests Plovdiv, but record region is 'Витоша'"
+high,contact_email_region_mismatch,44,Нископланинска обиколна пътека (НОП) Витоша,Витоша,София,"contact email suggests Plovdiv, but record region is 'Витоша'"
+high,contact_email_region_mismatch,45,"Панорамна алея ""Галунка""",Витоша,"Бистрица, Железница","contact email suggests Plovdiv, but record region is 'Витоша'"
+high,contact_email_region_mismatch,46,Подход от кв. Бояна,Витоша,Бояна,"contact email suggests Plovdiv, but record region is 'Витоша'"
+high,contact_email_region_mismatch,47,Подход от кв. Драгалевци,Витоша,Драгалевци,"contact email suggests Plovdiv, but record region is 'Витоша'"
+high,contact_email_region_mismatch,48,Подход от кв. Княжево,Витоша,Княжево,"contact email suggests Plovdiv, but record region is 'Витоша'"
+high,contact_email_region_mismatch,49,Подход от м. Златни мостове,Витоша,Златни мостове,"contact email suggests Plovdiv, but record region is 'Витоша'"
+high,contact_email_region_mismatch,50,Подход от м. Ярема,Витоша,Ярема,"contact email suggests Plovdiv, but record region is 'Витоша'"
+high,contact_email_region_mismatch,51,Подход от с. Бистрица,Витоша,Бистрица,"contact email suggests Plovdiv, but record region is 'Витоша'"
+high,contact_email_region_mismatch,52,Подход от с. Боснек,Витоша,Боснек,"contact email suggests Plovdiv, but record region is 'Витоша'"
+high,contact_email_region_mismatch,53,Подход от с. Владая,Витоша,Владая,"contact email suggests Plovdiv, but record region is 'Витоша'"
+high,contact_email_region_mismatch,54,Подход от с. Железница,Витоша,Железница,"contact email suggests Plovdiv, but record region is 'Витоша'"
+high,contact_email_region_mismatch,55,Подход от с. Кладница,Витоша,Кладница,"contact email suggests Plovdiv, but record region is 'Витоша'"
+high,contact_email_region_mismatch,56,Подход от с. Рударци,Витоша,Рударци,"contact email suggests Plovdiv, but record region is 'Витоша'"
+high,contact_email_region_mismatch,57,Подход от с. Чуйпетлово,Витоша,Чуйпетлово,"contact email suggests Plovdiv, but record region is 'Витоша'"
+high,contact_email_region_mismatch,58,Подход от с. Ярлово,Витоша,Ярлово,"contact email suggests Plovdiv, but record region is 'Витоша'"
+high,contact_email_region_mismatch,59,"Пътека ""Сила и живот""",Витоша,Симеоново,"contact email suggests Plovdiv, but record region is 'Витоша'"
+high,contact_email_region_mismatch,60,Среднопланинска обиколна пътека (СОП),Витоша,София,"contact email suggests Plovdiv, but record region is 'Витоша'"
+high,contact_email_region_mismatch,61,Торфищна информационна алея,Витоша,София,"contact email suggests Plovdiv, but record region is 'Витоша'"
+high,contact_email_region_mismatch,64,Врачанска екопътека,Врачанска област,Враца,"contact email suggests Plovdiv, but record region is 'Врачанска област'"
+high,contact_email_region_mismatch,65,Горска пътека на приказките,Врачанска област,Враца,"contact email suggests Plovdiv, but record region is 'Врачанска област'"
+high,contact_email_region_mismatch,66,"Водопад ""Боров Камък"", Врачанска екопътека",Врачански Балкан,Враца,"contact email suggests Plovdiv, but record region is 'Врачански Балкан'"
+high,contact_email_region_mismatch,67,Врачанска екопътека – Згориград,Врачански Балкан,село Згориград,"contact email suggests Plovdiv, but record region is 'Врачански Балкан'"
+high,contact_email_region_mismatch,68,Исторически маршрут „Антична и средновековна Вратица”,Врачански Балкан,Враца,"contact email suggests Plovdiv, but record region is 'Врачански Балкан'"
+high,contact_email_region_mismatch,69,Исторически маршрут „По стъпките на Ботевата чета”,Врачански Балкан,Враца,"contact email suggests Plovdiv, but record region is 'Врачански Балкан'"
+high,contact_email_region_mismatch,70,Местност КАРИЕРАТА – къмпинг над с. Згориград,Врачански Балкан,Згориград,"contact email suggests Plovdiv, but record region is 'Врачански Балкан'"
+high,contact_email_region_mismatch,71,Наследствена пътека с. Очин дол,Врачански Балкан,Очин дол,"contact email suggests Plovdiv, but record region is 'Врачански Балкан'"
+high,contact_email_region_mismatch,72,Познавателен маршрут „Белоглавият лешояд в ПП Врачански Балкан”,Врачански Балкан,Долно Озирово,"contact email suggests Plovdiv, but record region is 'Врачански Балкан'"
+high,contact_email_region_mismatch,73,Познавателен маршрут „Враца – пещера Леденика”,Врачански Балкан,Враца,"contact email suggests Plovdiv, but record region is 'Врачански Балкан'"
+high,contact_email_region_mismatch,74,Познавателен маршрут „Карст и биологично разнообразие”,Врачански Балкан,Враца,"contact email suggests Plovdiv, but record region is 'Врачански Балкан'"
+high,contact_email_region_mismatch,75,Познавателен маршрут „Планинарство за начинаещи”,Врачански Балкан,Враца,"contact email suggests Plovdiv, but record region is 'Врачански Балкан'"
+high,contact_email_region_mismatch,76,Спортно-туристически маршрут „Горска пътека на здравето“,Врачански Балкан,Враца,"contact email suggests Plovdiv, but record region is 'Врачански Балкан'"
+high,contact_email_region_mismatch,77,"Екопътека ""Иванчова поляна""",Вършец,Вършец,"contact email suggests Plovdiv, but record region is 'Вършец'"
+high,contact_email_region_mismatch,85,"Екопъ3тека ""Римският път""",Габрово,Боженци,"contact email suggests Plovdiv, but record region is 'Габрово'"
+high,contact_email_region_mismatch,86,"Екопътека ""Витата стена""",Габрово,Габрово,"contact email suggests Plovdiv, but record region is 'Габрово'"
+high,contact_email_region_mismatch,87,"Екопътека ""Градище-Кметовци""",Габрово,Габрово,"contact email suggests Plovdiv, but record region is 'Габрово'"
+high,contact_email_region_mismatch,88,"Екопътека ""Градище-пазителката на прохода""",Габрово,Габрово,"contact email suggests Plovdiv, but record region is 'Габрово'"
+high,contact_email_region_mismatch,89,"Екопътека ""Люляци–Дебел дял""",Габрово,Габрово,"contact email suggests Plovdiv, but record region is 'Габрово'"
+high,contact_email_region_mismatch,90,"Екопътека ""Могила""",Габрово,Дряново,"contact email suggests Plovdiv, but record region is 'Габрово'"
+high,contact_email_region_mismatch,91,"Екопътека ""Узана""",Габрово,Узана,"contact email suggests Plovdiv, but record region is 'Габрово'"
+high,contact_email_region_mismatch,92,"Екопътека Трявна - АИР ""Боженци""",Габрово,Трявна,"contact email suggests Plovdiv, but record region is 'Габрово'"
+high,contact_email_region_mismatch,94,Дряновска екопътека,Габровска област,Дряново,"contact email suggests Plovdiv, but record region is 'Габровска област'"
+high,contact_email_region_mismatch,95,Екопътека Via Ferrata,Габровска област,Дряново,"contact email suggests Plovdiv, but record region is 'Габровска област'"
+high,contact_email_region_mismatch,96,"Екопътека ""Камъка"" - Горна Оряховица",Горна Оряховица,Горна Оряховица,"contact email suggests Plovdiv, but record region is 'Горна Оряховица'"
+high,contact_email_region_mismatch,99,Ботаническа алея за незрящи,Дендрариум,София,"contact email suggests Plovdiv, but record region is 'Дендрариум'"
+high,contact_email_region_mismatch,100,"Екопътека и Скален феномен ""Марков камък"" – Елена",Елена,Елена,"contact email suggests Plovdiv, but record region is 'Елена'"
+high,contact_email_region_mismatch,101,"Екопътека ""Екот от камбанен звън"" – Рибарица",Етрополе,Етрополе,"contact email suggests Plovdiv, but record region is 'Етрополе'"
+high,contact_email_region_mismatch,102,"Екопътека ""Горица""",Западна Рила,Овчарци,"contact email suggests Plovdiv, but record region is 'Западна Рила'"
+high,contact_email_region_mismatch,103,"Екопътека ""Горица"" (Овчарченски водопад)",Западна Рила,Овчарци,"contact email suggests Plovdiv, but record region is 'Западна Рила'"
+high,contact_email_region_mismatch,104,Копренска екопътека,Западна Стара планина,Копиловци,"contact email suggests Plovdiv, but record region is 'Западна Стара планина'"
+high,contact_email_region_mismatch,105,"Водопади ""Дуплево"", ""Скакалото"" и ""Костен камък"" - с.Орехово",Западни Родопи,село Орехово,"contact email suggests Plovdiv, but record region is 'Западни Родопи'"
+high,contact_email_region_mismatch,106,Екопътека до Киселчовски водопад,Западни Родопи,Киселчово,"contact email suggests Plovdiv, but record region is 'Западни Родопи'"
+high,contact_email_region_mismatch,107,Вазова екопътека,Искърско дефиле,Заселе,"contact email suggests Plovdiv, but record region is 'Искърско дефиле'"
+high,contact_email_region_mismatch,108,"Водопад ""Вазова скакля"", Вазова екопътека",Искърско дефиле,Гара Бов,"contact email suggests Plovdiv, but record region is 'Искърско дефиле'"
+high,contact_email_region_mismatch,109,"Туристическа пътека ""Под Камико""",Искърско дефиле,Гара Бов,"contact email suggests Plovdiv, but record region is 'Искърско дефиле'"
+high,contact_email_region_mismatch,110,"Тракийски слънца и екопътека ""Дрънчи дупка""",Карлово,Мелница,"contact email suggests Plovdiv, but record region is 'Карлово'"
+high,contact_email_region_mismatch,111,"Екопътека ""Божения""",Красен-Божичен,Божичен,"contact email suggests Plovdiv, but record region is 'Красен-Божичен'"
+high,contact_email_region_mismatch,112,"Екопътека ""Пътят на Сърцето""",Кърджали,Борово,"contact email suggests Plovdiv, but record region is 'Кърджали'"
+high,contact_email_region_mismatch,122,"Екопътека ""Гложене - Гложенски манастир - пещера Моровица""",Ловеч,Гложене,"contact email suggests Plovdiv, but record region is 'Ловеч'"
+high,contact_email_region_mismatch,123,"Екопътека ""Нагоре към Слънцето""",Ловеч,Бабинци,"contact email suggests Plovdiv, but record region is 'Ловеч'"
+high,contact_email_region_mismatch,124,"Екопътека ""Опасният зъб""",Ловеч,Тетевен,"contact email suggests Plovdiv, but record region is 'Ловеч'"
+high,contact_email_region_mismatch,125,"Екопътека ""По стъпките на балканджиите"" – Априлци",Ловеч,Априлци,"contact email suggests Plovdiv, but record region is 'Ловеч'"
+high,contact_email_region_mismatch,126,"Екопътека ""Под пръските на водопада""",Ловеч,Тетевен,"contact email suggests Plovdiv, but record region is 'Ловеч'"
+high,contact_email_region_mismatch,127,"Екопътека ""През очите на времето - история и природа""",Ловеч,Крушуна,"contact email suggests Plovdiv, but record region is 'Ловеч'"
+high,contact_email_region_mismatch,128,"Екопътека ""Станина дупка""",Ловеч,Тетевен,"contact email suggests Plovdiv, but record region is 'Ловеч'"
+high,contact_email_region_mismatch,129,Екопътека – Ведерник,Ловеч,Ведерник,"contact email suggests Plovdiv, but record region is 'Ловеч'"
+high,contact_email_region_mismatch,130,Крушунска екопътека,Ловеч,Крушуна,"contact email suggests Plovdiv, but record region is 'Ловеч'"
+high,contact_email_region_mismatch,131,Местност за отдих Мийковци,Ловеч,Мийковци,"contact email suggests Plovdiv, but record region is 'Ловеч'"
+high,contact_email_region_mismatch,132,Местност за пикник с. Малко Чочовени,Ловеч,Малко Чочовени,"contact email suggests Plovdiv, but record region is 'Ловеч'"
+high,contact_email_region_mismatch,133,Геопътека Задънен дол,Ловешка област,Луковит,"contact email suggests Plovdiv, but record region is 'Ловешка област'"
+high,contact_email_region_mismatch,134,Екопътека Искър-Панега,Луковит,Луковит,"contact email suggests Plovdiv, but record region is 'Луковит'"
+high,contact_email_region_mismatch,135,"Екопътека ""Белите скали"" – Лютиброд",Лютиброд,Лютиброд,"contact email suggests Plovdiv, but record region is 'Лютиброд'"
+high,contact_email_region_mismatch,137,"Екопътека ""Хайдушки водопади""",Монтана,Берковица,"contact email suggests Plovdiv, but record region is 'Монтана'"
+high,contact_email_region_mismatch,138,"Водопад ""Бабско пръскало""","Национален парк ""Централен Балкан""",Калофер,"contact email suggests Plovdiv, but record region is 'Национален парк ""Централен Балкан""'"
+high,contact_email_region_mismatch,139,"Екопътека ""Калето"" - Обзор",Обзор,Обзор,"contact email suggests Plovdiv, but record region is 'Обзор'"
+high,contact_email_region_mismatch,140,Геокомплекс Зарапово,Област Велико Търново,Павликени,"contact email suggests Plovdiv, but record region is 'Област Велико Търново'"
+high,contact_email_region_mismatch,141,"Екопътека ""Беглика""",Пазарджишка област,,"contact email suggests Plovdiv, but record region is 'Пазарджишка област'"
+high,contact_email_region_mismatch,145,Православен мемориален кръст „Памет и вяра”,Пирин,Благоевград,"contact email suggests Plovdiv, but record region is 'Пирин'"
+high,contact_email_region_mismatch,146,"Пътека за крепост ""Беаднос""",Пирин,Беден,"contact email suggests Plovdiv, but record region is 'Пирин'"
+high,contact_email_region_mismatch,147,Високопланинска обиколна пътека (ВОП),Планина Витоша,София,"contact email suggests Plovdiv, but record region is 'Планина Витоша'"
+high,contact_email_region_mismatch,148,"Екопътека ""Никопол Римски път - Скална църква""",Плевен,Никопол,"contact email suggests Plovdiv, but record region is 'Плевен'"
+high,contact_email_region_mismatch,149,"Екопътека ""Попската скала""",Плевен,Плевен,"contact email suggests Plovdiv, but record region is 'Плевен'"
+high,contact_email_region_mismatch,150,"Екопътека ""Черне3лка""",Плевен,Горталово,"contact email suggests Plovdiv, but record region is 'Плевен'"
+high,contact_email_region_mismatch,151,"""Зелената пътека"" - Бачковски манастир",Пловдив,Бачковски манастир,"contact email suggests Plovdiv, but record region is 'Пловдив'"
+high,contact_email_region_mismatch,218,"Екопътека ""Комин дере"" – Лъки",Пловдив,Лъки,"contact email suggests Plovdiv, but record region is 'Пловдив'"
+high,contact_email_region_mismatch,219,"Екопътека ""Манастира""",Пловдив,Перущица,"contact email suggests Plovdiv, but record region is 'Пловдив'"
+high,contact_email_region_mismatch,220,"Екопътека ""По пътя на героите""",Пловдив,Перущица,"contact email suggests Plovdiv, but record region is 'Пловдив'"
+high,contact_email_region_mismatch,221,"Екопътека ""Равнища""",Пловдив,Равнища,"contact email suggests Plovdiv, but record region is 'Пловдив'"
+high,contact_email_region_mismatch,222,"Екопътека ""Стара Река"" – Стеврек",Пловдив,Стеврек,"contact email suggests Plovdiv, but record region is 'Пловдив'"
+high,contact_email_region_mismatch,223,"Екопътека ""Стражка могила""",Пловдив,Страж,"contact email suggests Plovdiv, but record region is 'Пловдив'"
+high,contact_email_region_mismatch,224,"Екопътека ""с. Белица-Пещерата""",Благоевград,Белица,"contact email suggests Plovdiv, but record region is 'Благоевград'"
+high,contact_email_region_mismatch,225,"Екопътека ""с.Белица - Кръстова гора""",Благоевград,Белица,"contact email suggests Plovdiv, but record region is 'Благоевград'"
+high,contact_email_region_mismatch,407,Екопътека Бяла река (Калоферска),Пловдивска област,Калофер,"contact email suggests Plovdiv, but record region is 'Пловдивска област'"
+high,contact_email_region_mismatch,408,"Туристическа пътека ""По поречието на р.Бебреш при с.Своде""",Правец,Своде,"contact email suggests Plovdiv, but record region is 'Правец'"
+high,contact_email_region_mismatch,409,Разходка до Голак,Разложка котловина,Разлог,"contact email suggests Plovdiv, but record region is 'Разложка котловина'"
+high,contact_email_region_mismatch,410,"""Пътека на приказките"" – Паничище",Рила,Паничище,"contact email suggests Plovdiv, but record region is 'Рила'"
+high,contact_email_region_mismatch,411,Екопътека до местност Самоковището,Рила,Дупница,"contact email suggests Plovdiv, but record region is 'Рила'"
+high,contact_email_region_mismatch,412,"Екопътека и Водопади ""Бохемия"" – Рила",Рила,Рила,"contact email suggests Plovdiv, but record region is 'Рила'"
+high,contact_email_region_mismatch,413,"Пътека ""Към царството на еделвайса""",Рила,Разлог,"contact email suggests Plovdiv, but record region is 'Рила'"
+high,contact_email_region_mismatch,414,Пътека на глухаря,Рила,Добърско,"contact email suggests Plovdiv, but record region is 'Рила'"
+high,contact_email_region_mismatch,415,Пътека на рилската иглика,Рила,Добърско,"contact email suggests Plovdiv, but record region is 'Рила'"
+high,contact_email_region_mismatch,416,Пътеката на Дивата коза,Рила,Баня,"contact email suggests Plovdiv, but record region is 'Рила'"
+high,contact_email_region_mismatch,417,Самодивска пътека,Рила,Бачево,"contact email suggests Plovdiv, but record region is 'Рила'"
+high,contact_email_region_mismatch,418,Хайдушка пътека с.Годлево – връх Равник,Рила,Годлево,"contact email suggests Plovdiv, but record region is 'Рила'"
+high,contact_email_region_mismatch,419,Веломаршрут село Смилян - село Чеплят,Родопи,Рудозем,"contact email suggests Plovdiv, but record region is 'Родопи'"
+high,contact_email_region_mismatch,420,Връх Драгойна,Родопи,село Драгойново,"contact email suggests Plovdiv, but record region is 'Родопи'"
+high,contact_email_region_mismatch,421,"Екопътека ""Драгиева чешма"" – Чавдар",Родопи,Чавдар,"contact email suggests Plovdiv, but record region is 'Родопи'"
+high,contact_email_region_mismatch,422,"Екопътека ""Лисичево - Чурал""",Родопи,Девин,"contact email suggests Plovdiv, but record region is 'Родопи'"
+high,contact_email_region_mismatch,423,"Екопътека ""Лява река - Предела""",Родопи,Лява река,"contact email suggests Plovdiv, but record region is 'Родопи'"
+high,contact_email_region_mismatch,424,Екопътека „Каньонът на водопадите“,Родопи,Смолян,"contact email suggests Plovdiv, but record region is 'Родопи'"
+high,contact_email_region_mismatch,425,Екопътека „Торнал е Тодьо“ – с. Момчиловци,Родопи,Момчиловци,"contact email suggests Plovdiv, but record region is 'Родопи'"
+high,contact_email_region_mismatch,426,Изворите на река Въча – Меандрите на Буйновска река,Родопи,Буйново,"contact email suggests Plovdiv, but record region is 'Родопи'"
+high,contact_email_region_mismatch,427,Калдъръмената пътека – Рожен,Родопи,Рожен,"contact email suggests Plovdiv, but record region is 'Родопи'"
+high,contact_email_region_mismatch,428,Канинската екопътека – Гърмен,Родопи,Ковачевица,"contact email suggests Plovdiv, but record region is 'Родопи'"
+high,contact_email_region_mismatch,429,Маршрут гр. Батак – х. Техеран – вр. Баташки снежник,Родопи,Батак,"contact email suggests Plovdiv, but record region is 'Родопи'"
+high,contact_email_region_mismatch,430,Маршрут крепост Козник – м. Главата,Родопи,Рудозем,"contact email suggests Plovdiv, but record region is 'Родопи'"
+high,contact_email_region_mismatch,431,Маршрут с. Орехово – Дяволска дупка,Родопи,Орехово,"contact email suggests Plovdiv, but record region is 'Родопи'"
+high,contact_email_region_mismatch,432,Маршрут с. Пловдивци – с. Мочура – Циганско градище – с. Пловдивци,Родопи,Пловдивци,"contact email suggests Plovdiv, but record region is 'Родопи'"
+high,contact_email_region_mismatch,433,Маршрут с. Рибница – крепост Козник,Родопи,Рибница,"contact email suggests Plovdiv, but record region is 'Родопи'"
+high,contact_email_region_mismatch,434,Маршрут язовирна стена Доспат – СОМАТ,Родопи,Доспат,"contact email suggests Plovdiv, but record region is 'Родопи'"
+high,contact_email_region_mismatch,435,Местност Съдилището – Мочура,Родопи,Мочура,"contact email suggests Plovdiv, but record region is 'Родопи'"
+high,contact_email_region_mismatch,436,"Пещера ""Голубовица 2"" с Виа Ферата",Родопи,Кошница,"contact email suggests Plovdiv, but record region is 'Родопи'"
+high,contact_email_region_mismatch,437,Познавателен маршрут „Музей на гората”,Родопи,Батак,"contact email suggests Plovdiv, but record region is 'Родопи'"
+high,contact_email_region_mismatch,438,Природен феномен „Гергева скала”,Родопи,Бачево,"contact email suggests Plovdiv, but record region is 'Родопи'"
+high,contact_email_region_mismatch,439,Смилян – с. Змиево – местност Аламушница – с. Смилян,Родопи,Смилян,"contact email suggests Plovdiv, but record region is 'Родопи'"
+high,contact_email_region_mismatch,440,Трансгранична родопска екопътека Хвойна – Ставруполи,Родопи,Хвойна,"contact email suggests Plovdiv, but record region is 'Родопи'"
+high,contact_email_region_mismatch,441,"Екопътека ""Кечи Кая"" - Рибница",Рудозем,Рибница,"contact email suggests Plovdiv, but record region is 'Рудозем'"
+high,contact_email_region_mismatch,442,"Екопътека ""Бъзовец""",Русе,Бъзовец,"contact email suggests Plovdiv, but record region is 'Русе'"
+high,contact_email_region_mismatch,444,"Ивановски скален манастир ""Свети Архангел Михаил""",Русенски лом,Иваново,"contact email suggests Plovdiv, but record region is 'Русенски лом'"
+high,contact_email_region_mismatch,445,"Екопътека ""Лаго""",Самоков,Самоков,"contact email suggests Plovdiv, but record region is 'Самоков'"
+high,contact_email_region_mismatch,446,"Екопътека ""Знамето"" – с. Младен",Севлиево,Севлиево,"contact email suggests Plovdiv, but record region is 'Севлиево'"
+high,contact_email_region_mismatch,447,"Екопътека ""Бели Искър""",Село Бели Искър,Самоков,"contact email suggests Plovdiv, but record region is 'Село Бели Искър'"
+high,contact_email_region_mismatch,448,"Водопад ""Мангъро""",Село Скрът,Скрът,"contact email suggests Plovdiv, but record region is 'Село Скрът'"
+high,contact_email_region_mismatch,449,"Резерват ""Сребърна""",Силистра,Сребърна,"contact email suggests Plovdiv, but record region is 'Силистра'"
+high,contact_email_region_mismatch,450,Местност Карандила – Сливен,Сините камъни,Сливен,"contact email suggests Plovdiv, but record region is 'Сините камъни'"
+high,contact_email_region_mismatch,451,Местност Тютюнлюка – Сливен,Сините камъни,Сливен,"contact email suggests Plovdiv, but record region is 'Сините камъни'"
+high,contact_email_region_mismatch,452,"""Синия вир"" – Сливен",Сливен,Сливен,"contact email suggests Plovdiv, but record region is 'Сливен'"
+high,contact_email_region_mismatch,453,Хайдушка пътека гр.Сливен – Карандила – Кушбунар,Сливен,Сливен,"contact email suggests Plovdiv, but record region is 'Сливен'"
+high,contact_email_region_mismatch,456,"Водопад ""Орфей"" и каньона на водопадите - Смолян",Смолян,Смолян,"contact email suggests Smolyan, but record region is 'Смолян'"
+high,contact_email_region_mismatch,458,"Екопътека ""Каньона на водопадите"" - Смолян",Смолян,Смолян,"contact email suggests Smolyan, but record region is 'Смолян'"
+high,contact_email_region_mismatch,459,"Екопътека ""Невястата""",Смолян,Смолян,"contact email suggests Smolyan, but record region is 'Смолян'"
+high,contact_email_region_mismatch,460,"Екопътека ""Св Неделя""",Смолян,Златоград,"contact email suggests Smolyan, but record region is 'Смолян'"
+high,contact_email_region_mismatch,461,"Екопътека ""Свети дух""",Смолян,Манастир,"contact email suggests Smolyan, but record region is 'Смолян'"
+high,contact_email_region_mismatch,462,"Екопътека ""Сърница Ай""",Смолян,Сърница,"contact email suggests Smolyan, but record region is 'Смолян'"
+high,contact_email_region_mismatch,463,"Екопътека ""Трите Смолянски езера""",Смолян,Смолян,"contact email suggests Smolyan, but record region is 'Смолян'"
+high,contact_email_region_mismatch,464,"Екопътека ""Храстево""",Смолян,Девин,"contact email suggests Smolyan, but record region is 'Смолян'"
+high,contact_email_region_mismatch,465,"Екопътека ""Царичина""",Смолян,Царичина,"contact email suggests Smolyan, but record region is 'Смолян'"
+high,contact_email_region_mismatch,466,Загражденска екопътека,Смолян,Загражден,"contact email suggests Smolyan, but record region is 'Смолян'"
+high,contact_email_region_mismatch,467,Римски мост – Любча,Смолян,Любча,"contact email suggests Smolyan, but record region is 'Смолян'"
+high,contact_email_region_mismatch,468,Скален масив Невястата (Турлука),Смолян,Смолян,"contact email suggests Smolyan, but record region is 'Смолян'"
+high,contact_email_region_mismatch,470,"Южнородопска или ""Дяволска"" екопътека",Смолян,Борино,"contact email suggests Smolyan, but record region is 'Смолян'"
+high,contact_email_region_mismatch,473,Дяволския мост и водопада,Смолянска област,Борино,"contact email suggests Plovdiv, but record region is 'Смолянска област'"
+high,contact_email_region_mismatch,474,"Екопътека ""12-та застава""",Смолянска област,Барутин,"contact email suggests Plovdiv, but record region is 'Смолянска област'"
+high,contact_email_region_mismatch,475,"Екопътека ""Барутин - вр. Чуката - Касъка""",Смолянска област,Доспат,"contact email suggests Plovdiv, but record region is 'Смолянска област'"
+high,contact_email_region_mismatch,476,"Екопътека ""Паметник Арабаконак до из3вора на река Бебреш""",Софийска,Арабаконак,"contact email suggests Plovdiv, but record region is 'Софийска'"
+high,contact_email_region_mismatch,477,"Екопътека ""Параклис"" – с. Врабево",Софийска,Врабево,"contact email suggests Plovdiv, but record region is 'Софийска'"
+high,contact_email_region_mismatch,478,"Екопътека ""Под Камико""",Софийска,Гара Бов,"contact email suggests Plovdiv, but record region is 'Софийска'"
+high,contact_email_region_mismatch,479,"Екопътека ""Седмовратица""",Софийска,Карлуково,"contact email suggests Plovdiv, but record region is 'Софийска'"
+high,contact_email_region_mismatch,480,"Екопътека ""Тракийски могили""",Софийска,Копривщица,"contact email suggests Plovdiv, but record region is 'Софийска'"
+high,contact_email_region_mismatch,481,Екопътека Червени камък - с. Челопеч,Софийска,Челопеч,"contact email suggests Plovdiv, but record region is 'Софийска'"
+high,contact_email_region_mismatch,482,"Екопътека с. Мърчаево - местност ""Церова поляна""",Софийска,Мърчаево,"contact email suggests Plovdiv, but record region is 'Софийска'"
+high,contact_email_region_mismatch,483,Директни изкачвания на Черни връх,Софийска област,София,"contact email suggests Plovdiv, but record region is 'Софийска област'"
+high,contact_email_region_mismatch,484,Екопътека Бележката,Софийска област,Етрополе,"contact email suggests Plovdiv, but record region is 'Софийска област'"
+high,contact_email_region_mismatch,485,"Туристическа екопътека ""Тульово""",Софийска област,Тульово,"contact email suggests Plovdiv, but record region is 'Софийска област'"
+high,contact_email_region_mismatch,496,"Екопътека ""Лозенската планина""",София,Долни Лозен,"contact email suggests Plovdiv, but record region is 'София'"
+high,contact_email_region_mismatch,499,Спортно-информационна алея за хора с увреждания на опорно-двигателния апарат,София,София,"contact email suggests Plovdiv, but record region is 'София'"
+high,contact_email_region_mismatch,501,"Екопътека ""Пъ3тека на здравето""",София-град,Банкя,"contact email suggests Plovdiv, but record region is 'София-град'"
+high,contact_email_region_mismatch,502,"Екопътека ""Пътека през вековете""",Стара Загора,Бузовград,"contact email suggests Plovdiv, but record region is 'Стара Загора'"
+high,contact_email_region_mismatch,503,"Резерват ""Камещица"" – ждрело ""Боазът""",Стара Загора,Енина,"contact email suggests Plovdiv, but record region is 'Стара Загора'"
+high,contact_email_region_mismatch,504,"Екопътека ""Бяла река"" край Калофер",Стара Планина,Калофер,"contact email suggests Plovdiv, but record region is 'Стара Планина'"
+high,contact_email_region_mismatch,505,"Екопътека до Водопад ""Скока""",Стара Планина,Веселиново,"contact email suggests Plovdiv, but record region is 'Стара Планина'"
+high,contact_email_region_mismatch,506,"Калоферски мегалити ""Драмовете""",Стара Планина,Калофер,"contact email suggests Plovdiv, but record region is 'Стара Планина'"
+high,contact_email_region_mismatch,507,Каменишки водопади,Стара Планина,Камена,"contact email suggests Plovdiv, but record region is 'Стара Планина'"
+high,contact_email_region_mismatch,508,Пейката на любовта,Стара Планина,Дряново,"contact email suggests Plovdiv, but record region is 'Стара Планина'"
+high,contact_email_region_mismatch,509,Странджанска горска пътека,Странджа,Стоилово,"contact email suggests Plovdiv, but record region is 'Странджа'"
+high,contact_email_region_mismatch,510,"Екопътека ""Климент""",Същинска Средна гора,Климент,"contact email suggests Plovdiv, but record region is 'Същинска Средна гора'"
+high,contact_email_region_mismatch,512,"Екопътека ""Горската пътека""",Тетевен,Тетевен,"contact email suggests Plovdiv, but record region is 'Тетевен'"
+high,contact_email_region_mismatch,513,Тетевенски водопад „Скока“,Тетевен,Тетевен,"contact email suggests Plovdiv, but record region is 'Тетевен'"
+high,contact_email_region_mismatch,514,Трънска екопътека,Трън,Трън,"contact email suggests Plovdiv, but record region is 'Трън'"
+high,contact_email_region_mismatch,515,"Водопад ""Видимско пръскало""",Туристически регион Балкания,Априлци,"contact email suggests Plovdiv, but record region is 'Туристически регион Балкания'"
+high,contact_email_region_mismatch,516,Екопътека Голямата река,Търговище,Попово,"contact email suggests Plovdiv, but record region is 'Търговище'"
+high,contact_email_region_mismatch,517,"Екопътека ""Боян Ботево – Улу дере – Орлови скали""",Хасково,Боян Ботево,"contact email suggests Plovdiv, but record region is 'Хасково'"
+high,contact_email_region_mismatch,518,"Екопътека ""Тайните водопади""",Хасково,Малко Градище,"contact email suggests Plovdiv, but record region is 'Хасково'"
+high,contact_email_region_mismatch,519,"Чипровски водопад, Екопътека Демяница",Чипровци,Чипровци,"contact email suggests Plovdiv, but record region is 'Чипровци'"
+high,contact_email_region_mismatch,520,Връх Миджур,"Чупренска планина, Стара планина",село Горни Лом,"contact email suggests Plovdiv, but record region is 'Чупренска планина, Стара планина'"
+high,contact_email_region_mismatch,521,"Екопътека ""Мадарски конник""",Шумен,Мадара,"contact email suggests Plovdiv, but record region is 'Шумен'"
+high,contact_email_region_mismatch,522,"Водопад ""Сини вир"" – Ковачевица",Югозападна България,Ковачевица,"contact email suggests Plovdiv, but record region is 'Югозападна България'"
+high,contact_email_region_mismatch,523,Водопад Казанджи дере,с.Мугла,Мугла,"contact email suggests Plovdiv, but record region is 'с.Мугла'"
+high,generic_description,401,"на Чучулигите
+271. \* Екопътека",Пловдив,,description starts with generic placeholder wording
+high,generic_description,421,"Екопътека ""Драгиева чешма"" – Чавдар",Родопи,Чавдар,description starts with generic placeholder wording
+high,generic_description,424,Екопътека „Каньонът на водопадите“,Родопи,Смолян,description starts with generic placeholder wording
+high,generic_description,441,"Екопътека ""Кечи Кая"" - Рибница",Рудозем,Рибница,description starts with generic placeholder wording
+high,generic_description,445,"Екопътека ""Лаго""",Самоков,Самоков,description starts with generic placeholder wording
+high,generic_description,446,"Екопътека ""Знамето"" – с. Младен",Севлиево,Севлиево,description starts with generic placeholder wording
+high,generic_description,447,"Екопътека ""Бели Искър""",Село Бели Искър,Самоков,description starts with generic placeholder wording
+high,generic_description,459,"Екопътека ""Невястата""",Смолян,Смолян,description starts with generic placeholder wording
+high,generic_description,461,"Екопътека ""Свети дух""",Смолян,Манастир,description starts with generic placeholder wording
+high,generic_description,463,"Екопътека ""Трите Смолянски езера""",Смолян,Смолян,description starts with generic placeholder wording
+high,generic_description,470,"Южнородопска или ""Дяволска"" екопътека",Смолян,Борино,description starts with generic placeholder wording
+high,generic_description,475,"Екопътека ""Барутин - вр. Чуката - Касъка""",Смолянска област,Доспат,description starts with generic placeholder wording
+high,generic_description,477,"Екопътека ""Параклис"" – с. Врабево",Софийска,Врабево,description starts with generic placeholder wording
+high,generic_description,479,"Екопътека ""Седмовратица""",Софийска,Карлуково,description starts with generic placeholder wording
+high,generic_description,481,Екопътека Червени камък - с. Челопеч,Софийска,Челопеч,description starts with generic placeholder wording
+high,generic_description,482,"Екопътека с. Мърчаево - местност ""Церова поляна""",Софийска,Мърчаево,description starts with generic placeholder wording
+high,generic_description,510,"Екопътека ""Климент""",Същинска Средна гора,Климент,description starts with generic placeholder wording
+high,generic_description,513,Тетевенски водопад „Скока“,Тетевен,Тетевен,description starts with generic placeholder wording
+high,generic_description,514,Трънска екопътека,Трън,Трън,description starts with generic placeholder wording
+high,generic_description,516,Екопътека Голямата река,Търговище,Попово,description starts with generic placeholder wording
+high,generic_description,518,"Екопътека ""Тайните водопади""",Хасково,Малко Градище,description starts with generic placeholder wording
+high,generic_description,519,"Чипровски водопад, Екопътека Демяница",Чипровци,Чипровци,description starts with generic placeholder wording
+high,generic_description,521,"Екопътека ""Мадарски конник""",Шумен,Мадара,description starts with generic placeholder wording
+high,name_not_reflected_in_content,17,"Екопътека ""Властелинът на планините""",Благоевград,Белица,none of the core name tokens appear in description/summary: властелинът
+high,name_not_reflected_in_content,27,"Екопътека ""По следите на миналото"" – Приморско",Бургас,Приморско,"none of the core name tokens appear in description/summary: следите, миналото, приморско"
+high,name_not_reflected_in_content,29,"Екопътека ""Пътят на ясния месец""",Бургас,Бръшлян,"none of the core name tokens appear in description/summary: ясния, месец"
+high,name_not_reflected_in_content,38,Хотнишка екопътека,Велико Търново,Хотница,none of the core name tokens appear in description/summary: хотнишка
+high,name_not_reflected_in_content,60,Среднопланинска обиколна пътека (СОП),Витоша,София,none of the core name tokens appear in description/summary: среднопланинска
+high,name_not_reflected_in_content,61,Торфищна информационна алея,Витоша,София,none of the core name tokens appear in description/summary: торфищна
+high,name_not_reflected_in_content,62,Врацата,Враца,,none of the core name tokens appear in description/summary: врацата
+high,name_not_reflected_in_content,65,Горска пътека на приказките,Врачанска област,Враца,"none of the core name tokens appear in description/summary: горска, приказките"
+high,name_not_reflected_in_content,69,Исторически маршрут „По стъпките на Ботевата чета”,Врачански Балкан,Враца,"none of the core name tokens appear in description/summary: исторически, стъпките, ботевата"
+high,name_not_reflected_in_content,76,Спортно-туристически маршрут „Горска пътека на здравето“,Врачански Балкан,Враца,"none of the core name tokens appear in description/summary: туристически, горска"
+high,name_not_reflected_in_content,80,E3 Етап 6: Тетевен - Чулово,Габрово,Габрово,"none of the core name tokens appear in description/summary: тетевен, чулово"
+high,name_not_reflected_in_content,81,E3 Етап 7: Чулово - Боян,Габрово,Габрово,none of the core name tokens appear in description/summary: чулово
+high,name_not_reflected_in_content,85,"Екопъ3тека ""Римският път""",Габрово,Боженци,"none of the core name tokens appear in description/summary: екопъ3тека, римският"
+high,name_not_reflected_in_content,91,"Екопътека ""Узана""",Габрово,Узана,none of the core name tokens appear in description/summary: узана
+high,name_not_reflected_in_content,99,Ботаническа алея за незрящи,Дендрариум,София,"none of the core name tokens appear in description/summary: ботаническа, незрящи"
+high,name_not_reflected_in_content,111,"Екопътека ""Божения""",Красен-Божичен,Божичен,none of the core name tokens appear in description/summary: божения
+high,name_not_reflected_in_content,112,"Екопътека ""Пътят на Сърцето""",Кърджали,Борово,none of the core name tokens appear in description/summary: сърцето
+high,name_not_reflected_in_content,123,"Екопътека ""Нагоре към Слънцето""",Ловеч,Бабинци,"none of the core name tokens appear in description/summary: нагоре, слънцето"
+high,name_not_reflected_in_content,124,"Екопътека ""Опасният зъб""",Ловеч,Тетевен,none of the core name tokens appear in description/summary: опасният
+high,name_not_reflected_in_content,126,"Екопътека ""Под пръските на водопада""",Ловеч,Тетевен,"none of the core name tokens appear in description/summary: пръските, водопада"
+high,name_not_reflected_in_content,149,"Екопътека ""Попската скала""",Плевен,Плевен,"none of the core name tokens appear in description/summary: попската, скала"
+high,name_not_reflected_in_content,150,"Екопътека ""Черне3лка""",Плевен,Горталово,none of the core name tokens appear in description/summary: черне3лка
+high,name_not_reflected_in_content,157,Алея на билките,Пловдив,,none of the core name tokens appear in description/summary: билките
+high,name_not_reflected_in_content,159,Ардинци,Кърджали,Ардино,none of the core name tokens appear in description/summary: ардинци
+high,name_not_reflected_in_content,163,Бабин пласт,Пловдив,,"none of the core name tokens appear in description/summary: бабин, пласт"
+high,name_not_reflected_in_content,164,Бабини Видини кули,Видин,Видин,"none of the core name tokens appear in description/summary: бабини, видини"
+high,name_not_reflected_in_content,170,Беглика,Пловдив,,none of the core name tokens appear in description/summary: беглика
+high,name_not_reflected_in_content,171,Беглика рали,Пловдив,,none of the core name tokens appear in description/summary: беглика
+high,name_not_reflected_in_content,205,Горна земя,Пловдив,,none of the core name tokens appear in description/summary: горна
+high,name_not_reflected_in_content,208,Двете реки,Пловдив,,none of the core name tokens appear in description/summary: двете
+high,name_not_reflected_in_content,214,Дуранкулак,Пловдив,,none of the core name tokens appear in description/summary: дуранкулак
+high,name_not_reflected_in_content,215,Дървото на живота,Пловдив,,"none of the core name tokens appear in description/summary: дървото, живота"
+high,name_not_reflected_in_content,220,"Екопътека ""По пътя на героите""",Пловдив,Перущица,none of the core name tokens appear in description/summary: героите
+high,name_not_reflected_in_content,244,Каньона на водопадите,Пловдив,,"none of the core name tokens appear in description/summary: каньона, водопадите"
+high,name_not_reflected_in_content,248,Карандила,Пловдив,,none of the core name tokens appear in description/summary: карандила
+high,name_not_reflected_in_content,250,Кечика Кая,Пловдив,,none of the core name tokens appear in description/summary: кечика
+high,name_not_reflected_in_content,254,Княжевска пътека,Пловдив,,none of the core name tokens appear in description/summary: княжевска
+high,name_not_reflected_in_content,264,Крушунски водопади,Пловдив,,"none of the core name tokens appear in description/summary: крушунски, водопади"
+high,name_not_reflected_in_content,266,Кървавата скала,Пловдив,,"none of the core name tokens appear in description/summary: кървавата, скала"
+high,name_not_reflected_in_content,271,Лозенски манастир,Пловдив,,none of the core name tokens appear in description/summary: лозенски
+high,name_not_reflected_in_content,276,Малко Търново,Пловдив,,"none of the core name tokens appear in description/summary: малко, търново"
+high,name_not_reflected_in_content,281,Меаните,Пловдив,,none of the core name tokens appear in description/summary: меаните
+high,name_not_reflected_in_content,284,Мечи стъпки,Пловдив,,none of the core name tokens appear in description/summary: стъпки
+high,name_not_reflected_in_content,289,Невястата,Пловдив,,none of the core name tokens appear in description/summary: невястата
+high,name_not_reflected_in_content,298,Петрова нива,Пловдив,,none of the core name tokens appear in description/summary: петрова
+high,name_not_reflected_in_content,303,Поляната,Пловдив,,none of the core name tokens appear in description/summary: поляната
+high,name_not_reflected_in_content,304,Поморие,Пловдив,,none of the core name tokens appear in description/summary: поморие
+high,name_not_reflected_in_content,305,Понтийски път,Пловдив,,none of the core name tokens appear in description/summary: понтииски
+high,name_not_reflected_in_content,307,Правешка екопътека,Пловдив,,none of the core name tokens appear in description/summary: правешка
+high,name_not_reflected_in_content,310,Резово,Пловдив,,none of the core name tokens appear in description/summary: резово
+high,name_not_reflected_in_content,317,Рупите,Пловдив,,none of the core name tokens appear in description/summary: рупите
+high,name_not_reflected_in_content,325,Симеоновски езера,Пловдив,,"none of the core name tokens appear in description/summary: симеоновски, езера"
+high,name_not_reflected_in_content,337,Странджански дъб,Пловдив,,none of the core name tokens appear in description/summary: странджански
+high,name_not_reflected_in_content,343,Торфено бранище,Пловдив,,"none of the core name tokens appear in description/summary: торфено, бранище"
+high,name_not_reflected_in_content,352,Хайдушка песен,Пловдив,,"none of the core name tokens appear in description/summary: хаидушка, песен"
+high,name_not_reflected_in_content,353,Хайдушка поляна,Пловдив,,"none of the core name tokens appear in description/summary: хаидушка, поляна"
+high,name_not_reflected_in_content,357,Царството на зелениката,Пловдив,,"none of the core name tokens appear in description/summary: царството, зелениката"
+high,name_not_reflected_in_content,358,Централен Балкан,Пловдив,,none of the core name tokens appear in description/summary: централен
+high,name_not_reflected_in_content,369,Шейтан дере,Пловдив,,none of the core name tokens appear in description/summary: шеитан
+high,name_not_reflected_in_content,401,"на Чучулигите
+271. \* Екопътека",Пловдив,,none of the core name tokens appear in description/summary: чучулигите
+high,name_not_reflected_in_content,402,"на балканската дива коза
+243. \* Екопътека",Пловдив,,none of the core name tokens appear in description/summary: балканската
+high,name_not_reflected_in_content,406,"на партизаните (историческа)
+222. \* Екопътека",Пловдив,,none of the core name tokens appear in description/summary: партизаните
+high,name_not_reflected_in_content,407,Екопътека Бяла река (Калоферска),Пловдивска област,Калофер,none of the core name tokens appear in description/summary: калоферска
+high,name_not_reflected_in_content,413,"Пътека ""Към царството на еделвайса""",Рила,Разлог,"none of the core name tokens appear in description/summary: царството, еделваиса"
+high,name_not_reflected_in_content,417,Самодивска пътека,Рила,Бачево,none of the core name tokens appear in description/summary: самодивска
+high,name_not_reflected_in_content,424,Екопътека „Каньонът на водопадите“,Родопи,Смолян,"none of the core name tokens appear in description/summary: каньонът, водопадите"
+high,name_not_reflected_in_content,437,Познавателен маршрут „Музей на гората”,Родопи,Батак,"none of the core name tokens appear in description/summary: познавателен, музеи, гората"
+high,name_not_reflected_in_content,440,Трансгранична родопска екопътека Хвойна – Ставруполи,Родопи,Хвойна,"none of the core name tokens appear in description/summary: трансгранична, родопска, хвоина, ставруполи"
+high,name_not_reflected_in_content,452,"""Синия вир"" – Сливен",Сливен,Сливен,"none of the core name tokens appear in description/summary: синия, сливен"
+high,name_not_reflected_in_content,457,"Дяволската пътека (Борино)
+11. \* Екопътека",Смолян,,"none of the core name tokens appear in description/summary: дяволската, борино"
+high,name_not_reflected_in_content,458,"Екопътека ""Каньона на водопадите"" - Смолян",Смолян,Смолян,"none of the core name tokens appear in description/summary: каньона, водопадите, смолян"
+high,name_not_reflected_in_content,470,"Южнородопска или ""Дяволска"" екопътека",Смолян,Борино,"none of the core name tokens appear in description/summary: южнородопска, дяволска"
+high,name_not_reflected_in_content,480,"Екопътека ""Тракийски могили""",Софийска,Копривщица,"none of the core name tokens appear in description/summary: тракииски, могили"
+high,name_not_reflected_in_content,499,Спортно-информационна алея за хора с увреждания на опорно-двигателния апарат,София,София,"none of the core name tokens appear in description/summary: увреждания, опорно, двигателния, апарат"
+high,name_not_reflected_in_content,501,"Екопътека ""Пъ3тека на здравето""",София-град,Банкя,none of the core name tokens appear in description/summary: пъ3тека
+high,name_not_reflected_in_content,509,Странджанска горска пътека,Странджа,Стоилово,"none of the core name tokens appear in description/summary: странджанска, горска"
+high,name_not_reflected_in_content,512,"Екопътека ""Горската пътека""",Тетевен,Тетевен,none of the core name tokens appear in description/summary: горската
+high,name_not_reflected_in_content,514,Трънска екопътека,Трън,Трън,none of the core name tokens appear in description/summary: трънска
+high,name_not_reflected_in_content,518,"Екопътека ""Тайните водопади""",Хасково,Малко Градище,"none of the core name tokens appear in description/summary: таините, водопади"
+high,placeholder_source,182,Божевски водопад,Пловдив,,source uses placeholder value
+high,placeholder_source,266,Кървавата скала,Пловдив,,source uses placeholder value
+high,placeholder_source,281,Меаните,Пловдив,,source uses placeholder value
+high,placeholder_source,284,Мечи стъпки,Пловдив,,source uses placeholder value
+high,placeholder_source,290,Обесен камък,Пловдив,,source uses placeholder value
+high,placeholder_source,291,Окопна манастир,Пловдив,,source uses placeholder value
+high,placeholder_source,308,Пътека,Пловдив,,source uses placeholder value
+high,synthetic_without_sources,3,"Екопътека ""Збегове"" – Белоградчик",Видин,Белоградчик,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,4,"Екопътека Заслон ""Опасен зъб"" – Тетевен",Ловеч,Тетевен,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,5,"Екопътека до ""Първия войнишки паметник"" - с. Алдомировци",Алдомировци,Алдомировци,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,8,Местност Бялата чешма – Самуилово,Беласица,Самуилово,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,9,Хайдушки водопади (екопътека),Берковица,Берковица,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,17,"Екопътека ""Властелинът на планините""",Благоевград,Белица,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,18,"Екопътека ""Влахи""",Благоевград,Влахи,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,19,"Екопътека ""Кръстът"" – Благоевград",Благоевград,Благоевград,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,21,"Екопътека ""Пътеката на дивата коза""",Благоевград,"Баня, Добърско",ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,22,"Екопътека ""Римски мост""",Благоевград,Бръщен,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,23,"Екопътека ""Тай3ните на водата"" и водопад ""Срамежливеца""",Благоевград,Коларово,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,36,Еменски каньон,Велико Търново,Емен,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,39,"Христовски водопад ""Руховци"" (екопътека)",Велико Търново,Христовци,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,44,Нископланинска обиколна пътека (НОП) Витоша,Витоша,София,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,46,Подход от кв. Бояна,Витоша,Бояна,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,47,Подход от кв. Драгалевци,Витоша,Драгалевци,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,48,Подход от кв. Княжево,Витоша,Княжево,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,49,Подход от м. Златни мостове,Витоша,Златни мостове,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,50,Подход от м. Ярема,Витоша,Ярема,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,51,Подход от с. Бистрица,Витоша,Бистрица,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,52,Подход от с. Боснек,Витоша,Боснек,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,54,Подход от с. Железница,Витоша,Железница,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,55,Подход от с. Кладница,Витоша,Кладница,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,59,"Пътека ""Сила и живот""",Витоша,Симеоново,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,64,Врачанска екопътека,Врачанска област,Враца,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,65,Горска пътека на приказките,Врачанска област,Враца,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,71,Наследствена пътека с. Очин дол,Врачански Балкан,Очин дол,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,77,"Екопътека ""Иванчова поляна""",Вършец,Вършец,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,85,"Екопъ3тека ""Римският път""",Габрово,Боженци,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,97,Алея на туриста до м. Струилица – Девин,Девин,Струилица,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,101,"Екопътека ""Екот от камбанен звън"" – Рибарица",Етрополе,Етрополе,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,102,"Екопътека ""Горица""",Западна Рила,Овчарци,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,103,"Екопътека ""Горица"" (Овчарченски водопад)",Западна Рила,Овчарци,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,105,"Водопади ""Дуплево"", ""Скакалото"" и ""Костен камък"" - с.Орехово",Западни Родопи,село Орехово,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,106,Екопътека до Киселчовски водопад,Западни Родопи,Киселчово,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,107,Вазова екопътека,Искърско дефиле,Заселе,ai_enriched is true but metadata.sources_urls is missing
+high,synthetic_without_sources,151,"""Зелената пътека"" - Бачковски манастир",Пловдив,Бачковски манастир,ai_enriched is true but metadata.sources_urls is missing
+low,missing_photo_url,10,E4 Етап 10: Вихрен - Банско,Благоевград,Благоевград,photo_url is missing
+low,missing_photo_url,11,E4 Етап 11: Банско - Славянка планина,Благоевград,Благоевград,photo_url is missing
+low,missing_photo_url,12,E4 Етап 12: Славянка връх - Мелник,Благоевград,Благоевград,photo_url is missing
+low,missing_photo_url,13,E4 Етап 8: Мусала - Пирин национален парк,Благоевград,Благоевград,photo_url is missing
+low,missing_photo_url,14,E4 Етап 9: Пирин - връх Вихрен,Благоевград,Благоевград,photo_url is missing
+low,missing_photo_url,15,Долина на река Благоевградска Бистрица,Благоевград,,photo_url is missing
+low,missing_photo_url,25,E3 Етап 10: Шипка - Емине връх,Велико Търново,Велико Търново,photo_url is missing
+low,missing_photo_url,31,Red Dot Trail - Витоша,България,,photo_url is missing
+low,missing_photo_url,32,Боров камък - Враца,България,,photo_url is missing
+low,missing_photo_url,33,Триградско ждрело - Смолян,България,,photo_url is missing
+low,missing_photo_url,62,Врацата,Враца,,photo_url is missing
+low,missing_photo_url,78,E3 Етап 4: Витиня - Кардиново,Габрово,Габрово,photo_url is missing
+low,missing_photo_url,79,E3 Етап 5: Кардиново - Тетевен,Габрово,Габрово,photo_url is missing
+low,missing_photo_url,80,E3 Етап 6: Тетевен - Чулово,Габрово,Габрово,photo_url is missing
+low,missing_photo_url,81,E3 Етап 7: Чулово - Боян,Габрово,Габрово,photo_url is missing
+low,missing_photo_url,82,E3 Етап 8: Боян - Розова долина,Габрово,Габрово,photo_url is missing
+low,missing_photo_url,83,E3 Етап 9: Розова долина - Шипка,Габрово,Габрово,photo_url is missing
+low,missing_photo_url,84,E8 Етап 8: Костенец - Чепино,Габрово,Габрово,photo_url is missing
+low,missing_photo_url,93,Тетевенска баба,Габрово,,photo_url is missing
+low,missing_photo_url,113,E4 Етап 3: Перелик - Рила манастир,Кюстендил,Кюстендил,photo_url is missing
+low,missing_photo_url,114,E4 Етап 4: Рила манастир - Седемте Рилски езера,Кюстендил,Кюстендил,photo_url is missing
+low,missing_photo_url,115,E4 Етап 5: Озеро - връх Маричини езера,Кюстендил,Кюстендил,photo_url is missing
+low,missing_photo_url,116,E8 Етап 1: Рила манастир - Врелото,Кюстендил,Кюстендил,photo_url is missing
+low,missing_photo_url,117,E8 Етап 2: Врелото - Рилска пустиня,Кюстендил,Кюстендил,photo_url is missing
+low,missing_photo_url,118,E8 Етап 3: Рилска пустиня - Урдини езера,Кюстендил,Кюстендил,photo_url is missing
+low,missing_photo_url,119,E8 Етап 4: Урдини езера - връх Стобски пирамиди,Кюстендил,Кюстендил,photo_url is missing
+low,missing_photo_url,120,E3 Етап 2: Петрохан - Лакатник,Ловеч,Ловеч,photo_url is missing
+low,missing_photo_url,121,E3 Етап 3: Лакатник - Витиня,Ловеч,Ловеч,photo_url is missing
+low,missing_photo_url,136,E3 Етап 1: Ком връх - Петрохан,Монтана,Монтана,photo_url is missing
+low,missing_photo_url,152,Агушеви конаци,Пловдив,,photo_url is missing
+low,missing_photo_url,153,Академика,София,София,photo_url is missing
+low,missing_photo_url,154,Аладжа манастир,Варна,Варна,photo_url is missing
+low,missing_photo_url,155,Албутински манастир,Видин,Градец,photo_url is missing
+low,missing_photo_url,156,Алеко,София,София,photo_url is missing
+low,missing_photo_url,157,Алея на билките,Пловдив,,photo_url is missing
+low,missing_photo_url,158,Али ботуш,Благоевград,Парил,photo_url is missing
+low,missing_photo_url,159,Ардинци,Кърджали,Ардино,photo_url is missing
+low,missing_photo_url,160,Аркутино,Бургас,Приморско,photo_url is missing
+low,missing_photo_url,161,Атанасовско езеро,Бургас,Бургас,photo_url is missing
+low,missing_photo_url,162,Баба Вида,Видин,Видин,photo_url is missing
+low,missing_photo_url,163,Бабин пласт,Пловдив,,photo_url is missing
+low,missing_photo_url,164,Бабини Видини кули,Видин,Видин,photo_url is missing
+low,missing_photo_url,165,Бабско пръскало,Стара Загора,Тъжа,photo_url is missing
+low,missing_photo_url,166,Байкушевата мура,Пловдив,,photo_url is missing
+low,missing_photo_url,167,Балчик,Пловдив,,photo_url is missing
+low,missing_photo_url,168,Батак,Пловдив,Батак,photo_url is missing
+low,missing_photo_url,169,Беглик таш,Пловдив,,photo_url is missing
+low,missing_photo_url,170,Беглика,Пловдив,,photo_url is missing
+low,missing_photo_url,171,Беглика рали,Пловдив,,photo_url is missing
+low,missing_photo_url,172,Беклемето,Ловеч,Троян,photo_url is missing
+low,missing_photo_url,173,Беласица,Благоевград,Петрич,photo_url is missing
+low,missing_photo_url,174,Бели Искър,София,Бели Искър,photo_url is missing
+low,missing_photo_url,175,Белинташ,Пловдив,,photo_url is missing
+low,missing_photo_url,176,Белмекен,Пловдив,,photo_url is missing
+low,missing_photo_url,177,Белоградчишки скали,Видин,Белоградчик,photo_url is missing
+low,missing_photo_url,178,Биосферен резерват,Пловдив,,photo_url is missing
+low,missing_photo_url,179,Бистрица,Пловдив,Бистрица,photo_url is missing
+low,missing_photo_url,180,Бистришко бранище,Пловдив,,photo_url is missing
+low,missing_photo_url,181,Бодрост,Пловдив,,photo_url is missing
+low,missing_photo_url,182,Божевски водопад,Пловдив,,photo_url is missing
+low,missing_photo_url,183,Божият мост,Пловдив,,photo_url is missing
+low,missing_photo_url,184,Болата,Пловдив,,photo_url is missing
+low,missing_photo_url,185,Ботев връх,Пловдив,,photo_url is missing
+low,missing_photo_url,186,Бродилово,Пловдив,,photo_url is missing
+low,missing_photo_url,187,Бузлуджа,Пловдив,,photo_url is missing
+low,missing_photo_url,188,Буйновско ждрело,Пловдив,,photo_url is missing
+low,missing_photo_url,189,Буная,Пловдив,,photo_url is missing
+low,missing_photo_url,190,Българи,Бургас,Българи,photo_url is missing
+low,missing_photo_url,191,Бяла река,Пловдив,Калофер,photo_url is missing
+low,missing_photo_url,192,В царството на зелениката,Пловдив,,photo_url is missing
+low,missing_photo_url,193,Варовитец,Пловдив,,photo_url is missing
+low,missing_photo_url,194,Велека,Бургас,Синеморец,photo_url is missing
+low,missing_photo_url,195,Видимско пръскало,Ловеч,Априлци,photo_url is missing
+low,missing_photo_url,196,Вкаменената сватба,Пловдив,,photo_url is missing
+low,missing_photo_url,197,Врабча,Перник,Врабча,photo_url is missing
+low,missing_photo_url,198,Вратцата,Пловдив,,photo_url is missing
+low,missing_photo_url,199,Врелото,Пловдив,,photo_url is missing
+low,missing_photo_url,200,Вълчи камък,Пловдив,,photo_url is missing
+low,missing_photo_url,201,Геопарк Искър-Панега,Ловеч,Луковит,photo_url is missing
+low,missing_photo_url,202,Гложенски манастир,Ловеч,Гложене,photo_url is missing
+low,missing_photo_url,203,Голяма Сюткя,Пловдив,,photo_url is missing
+low,missing_photo_url,204,Горица,Кюстендил,Овчарци,photo_url is missing
+low,missing_photo_url,205,Горна земя,Пловдив,,photo_url is missing
+low,missing_photo_url,206,Градище,Пловдив,,photo_url is missing
+low,missing_photo_url,207,Граматиково,Пловдив,,photo_url is missing
+low,missing_photo_url,208,Двете реки,Пловдив,,photo_url is missing
+low,missing_photo_url,209,Деветашка пещера,Пловдив,,photo_url is missing
+low,missing_photo_url,210,Дерменка,Пловдив,,photo_url is missing
+low,missing_photo_url,211,Долмените,Пловдив,,photo_url is missing
+low,missing_photo_url,212,Доспат,Пловдив,Доспат,photo_url is missing
+low,missing_photo_url,213,Драгоманско блато,Пловдив,,photo_url is missing
+low,missing_photo_url,214,Дуранкулак,Пловдив,,photo_url is missing
+low,missing_photo_url,215,Дървото на живота,Пловдив,,photo_url is missing
+low,missing_photo_url,216,Дяволски мост,Пловдив,,photo_url is missing
+low,missing_photo_url,217,Дяволското гърло,Пловдив,,photo_url is missing
+low,missing_photo_url,226,Енина,Пловдив,Енина,photo_url is missing
+low,missing_photo_url,227,Етрополски водопад,София,Етрополе,photo_url is missing
+low,missing_photo_url,228,Жеравна,Пловдив,,photo_url is missing
+low,missing_photo_url,229,Златна Панега,Пловдив,,photo_url is missing
+low,missing_photo_url,230,Златни пясъци,Пловдив,,photo_url is missing
+low,missing_photo_url,231,Златните мостове,Пловдив,,photo_url is missing
+low,missing_photo_url,232,Златолист,Пловдив,,photo_url is missing
+low,missing_photo_url,233,Ивановски скални църкви,Пловдив,,photo_url is missing
+low,missing_photo_url,234,Изворите на Младежка,Пловдив,,photo_url is missing
+low,missing_photo_url,235,Изворите на река Въча,Пловдив,,photo_url is missing
+low,missing_photo_url,236,Индипаска,Пловдив,,photo_url is missing
+low,missing_photo_url,237,Искър-Панега,Пловдив,,photo_url is missing
+low,missing_photo_url,238,Кадемлийско пръскало,Пловдив,,photo_url is missing
+low,missing_photo_url,239,Казанджи дере,Пловдив,,photo_url is missing
+low,missing_photo_url,240,Калиакра,Пловдив,,photo_url is missing
+low,missing_photo_url,241,Каменни гъби,Пловдив,,photo_url is missing
+low,missing_photo_url,242,Камчийски пясъци,Пловдив,,photo_url is missing
+low,missing_photo_url,243,Камчия,Пловдив,,photo_url is missing
+low,missing_photo_url,244,Каньона на водопадите,Пловдив,,photo_url is missing
+low,missing_photo_url,245,Каньонът на река Герзовица,Пловдив,,photo_url is missing
+low,missing_photo_url,247,Караджов камък,Пловдив,,photo_url is missing
+low,missing_photo_url,248,Карандила,Пловдив,,photo_url is missing
+low,missing_photo_url,249,Картала,Пловдив,,photo_url is missing
+low,missing_photo_url,250,Кечика Кая,Пловдив,,photo_url is missing
+low,missing_photo_url,251,Кикиш,Пловдив,,photo_url is missing
+low,missing_photo_url,252,Кирилова поляна,Пловдив,,photo_url is missing
+low,missing_photo_url,253,Киселчово,Пловдив,Киселчово,photo_url is missing
+low,missing_photo_url,254,Княжевска пътека,Пловдив,,photo_url is missing
+low,missing_photo_url,255,Кобилино бранище,Пловдив,,photo_url is missing
+low,missing_photo_url,256,Кожух планина,Пловдив,,photo_url is missing
+low,missing_photo_url,257,Козя стена,Пловдив,,photo_url is missing
+low,missing_photo_url,258,Комините,Пловдив,,photo_url is missing
+low,missing_photo_url,259,Копитото – Момина скала,Пловдив,,photo_url is missing
+low,missing_photo_url,260,Копрен,Пловдив,,photo_url is missing
+low,missing_photo_url,261,Кости,Пловдив,,photo_url is missing
+low,missing_photo_url,262,Костина,Пловдив,,photo_url is missing
+low,missing_photo_url,263,Котел,Пловдив,,photo_url is missing
+low,missing_photo_url,264,Крушунски водопади,Пловдив,,photo_url is missing
+low,missing_photo_url,265,Кръстова гора,Пловдив,,photo_url is missing
+low,missing_photo_url,266,Кървавата скала,Пловдив,,photo_url is missing
+low,missing_photo_url,267,Лакатнишки скали,Пловдив,,photo_url is missing
+low,missing_photo_url,268,Леденика,Пловдив,,photo_url is missing
+low,missing_photo_url,269,Лешнишки водопад,Пловдив,,photo_url is missing
+low,missing_photo_url,270,Лисиците,Пловдив,,photo_url is missing
+low,missing_photo_url,271,Лозенски манастир,Пловдив,,photo_url is missing
+low,missing_photo_url,272,Ломски каньон,Пловдив,,photo_url is missing
+low,missing_photo_url,273,Лъвската глава,Пловдив,,photo_url is missing
+low,missing_photo_url,274,Мадарски конник,Пловдив,,photo_url is missing
+low,missing_photo_url,275,Мазалат,Пловдив,,photo_url is missing
+low,missing_photo_url,276,Малко Търново,Пловдив,,photo_url is missing
+low,missing_photo_url,277,Мальовица,Пловдив,,photo_url is missing
+low,missing_photo_url,278,Марциганица,Пловдив,,photo_url is missing
+low,missing_photo_url,279,Маслен нос,Пловдив,,photo_url is missing
+low,missing_photo_url,280,Меандри на Арда,Пловдив,,photo_url is missing
+low,missing_photo_url,281,Меаните,Пловдив,,photo_url is missing
+low,missing_photo_url,282,Медвен,Пловдив,,photo_url is missing
+low,missing_photo_url,283,Мелнишки пирамиди,Пловдив,,photo_url is missing
+low,missing_photo_url,284,Мечи стъпки,Пловдив,,photo_url is missing
+low,missing_photo_url,285,Минерални бани,Пловдив,,photo_url is missing
+low,missing_photo_url,286,Мишкова нива,Пловдив,,photo_url is missing
+low,missing_photo_url,287,Момчил юнак,Пловдив,,photo_url is missing
+low,missing_photo_url,288,Момчилова крепост,Пловдив,,photo_url is missing
+low,missing_photo_url,289,Невястата,Пловдив,,photo_url is missing
+low,missing_photo_url,290,Обесен камък,Пловдив,,photo_url is missing
+low,missing_photo_url,291,Окопна манастир,Пловдив,,photo_url is missing
+low,missing_photo_url,292,Ореляк,Пловдив,,photo_url is missing
+low,missing_photo_url,293,Орлови скали,Пловдив,,photo_url is missing
+low,missing_photo_url,294,Орлово око,Пловдив,,photo_url is missing
+low,missing_photo_url,295,Парилско седло,Пловдив,,photo_url is missing
+low,missing_photo_url,296,Пеещи скали,Пловдив,,photo_url is missing
+low,missing_photo_url,297,Перперикон,Пловдив,,photo_url is missing
+low,missing_photo_url,298,Петрова нива,Пловдив,,photo_url is missing
+low,missing_photo_url,299,Пещера Песнопой,Пловдив,,photo_url is missing
+low,missing_photo_url,300,Поглед към девет планини,Пловдив,,photo_url is missing
+low,missing_photo_url,301,Пода,Пловдив,,photo_url is missing
+low,missing_photo_url,302,Поломие,Пловдив,,photo_url is missing
+low,missing_photo_url,303,Поляната,Пловдив,,photo_url is missing
+low,missing_photo_url,304,Поморие,Пловдив,,photo_url is missing
+low,missing_photo_url,305,Понтийски път,Пловдив,,photo_url is missing
+low,missing_photo_url,306,Попови ливади,Пловдив,,photo_url is missing
+low,missing_photo_url,307,Правешка екопътека,Пловдив,,photo_url is missing
+low,missing_photo_url,308,Пътека,Пловдив,,photo_url is missing
+low,missing_photo_url,309,Райското пръскало,Пловдив,,photo_url is missing
+low,missing_photo_url,310,Резово,Пловдив,,photo_url is missing
+low,missing_photo_url,311,Рибарица,Пловдив,,photo_url is missing
+low,missing_photo_url,312,Рибни езера,Пловдив,,photo_url is missing
+low,missing_photo_url,313,Рилски манастир,Пловдив,,photo_url is missing
+low,missing_photo_url,314,Ритлите,Пловдив,,photo_url is missing
+low,missing_photo_url,315,Роженски манастир,Пловдив,,photo_url is missing
+low,missing_photo_url,316,Ропотамо,Пловдив,,photo_url is missing
+low,missing_photo_url,317,Рупите,Пловдив,,photo_url is missing
+low,missing_photo_url,318,Русалка,Пловдив,,photo_url is missing
+low,missing_photo_url,319,Самуилова крепост,Пловдив,,photo_url is missing
+low,missing_photo_url,320,Сандански,Пловдив,,photo_url is missing
+low,missing_photo_url,321,Света Петка,Пловдив,,photo_url is missing
+low,missing_photo_url,322,Светлина,Пловдив,,photo_url is missing
+low,missing_photo_url,323,Седемте рилски езера,Пловдив,,photo_url is missing
+low,missing_photo_url,324,Силистар,Пловдив,,photo_url is missing
+low,missing_photo_url,325,Симеоновски езера,Пловдив,,photo_url is missing
+low,missing_photo_url,326,Сините камъни,Пловдив,,photo_url is missing
+low,missing_photo_url,327,Синия вир,Пловдив,,photo_url is missing
+low,missing_photo_url,328,Скакавица,Пловдив,,photo_url is missing
+low,missing_photo_url,329,Скакля,Пловдив,,photo_url is missing
+low,missing_photo_url,330,Скални манастири,Пловдив,,photo_url is missing
+low,missing_photo_url,331,Скални църкви,Пловдив,,photo_url is missing
+low,missing_photo_url,332,Славянка,Пловдив,,photo_url is missing
+low,missing_photo_url,333,Соколна,Пловдив,,photo_url is missing
+low,missing_photo_url,334,Соколски манастир,Пловдив,,photo_url is missing
+low,missing_photo_url,335,Стената,Пловдив,,photo_url is missing
+low,missing_photo_url,336,Стобски пирамиди,Пловдив,,photo_url is missing
+low,missing_photo_url,337,Странджански дъб,Пловдив,,photo_url is missing
+low,missing_photo_url,338,Струилица – Калето – Лъката,Пловдив,,photo_url is missing
+low,missing_photo_url,339,Сухото езеро,Пловдив,,photo_url is missing
+low,missing_photo_url,340,Сърница,Пловдив,Сърница,photo_url is missing
+low,missing_photo_url,341,Табашката пещера,Пловдив,,photo_url is missing
+low,missing_photo_url,342,Татул,Пловдив,,photo_url is missing
+low,missing_photo_url,343,Торфено бранище,Пловдив,,photo_url is missing
+low,missing_photo_url,344,Трански ждрело,Пловдив,,photo_url is missing
+low,missing_photo_url,345,Триглав,Пловдив,,photo_url is missing
+low,missing_photo_url,346,Триградско ждрело,Пловдив,,photo_url is missing
+low,missing_photo_url,347,Трите чуки,Пловдив,,photo_url is missing
+low,missing_photo_url,348,Тъжа,Пловдив,,photo_url is missing
+low,missing_photo_url,349,Тъмната гора,Пловдив,,photo_url is missing
+low,missing_photo_url,350,Узунбуджак,Пловдив,,photo_url is missing
+low,missing_photo_url,351,Урдини езера,Пловдив,,photo_url is missing
+low,missing_photo_url,352,Хайдушка песен,Пловдив,,photo_url is missing
+low,missing_photo_url,353,Хайдушка поляна,Пловдив,,photo_url is missing
+low,missing_photo_url,354,Хайдушки поляни,Пловдив,,photo_url is missing
+low,missing_photo_url,355,Хайдушки чуки,Пловдив,,photo_url is missing
+low,missing_photo_url,356,Халката,Пловдив,,photo_url is missing
+low,missing_photo_url,357,Царството на зелениката,Пловдив,,photo_url is missing
+low,missing_photo_url,358,Централен Балкан,Пловдив,,photo_url is missing
+low,missing_photo_url,359,Цигов чарк,Пловдив,,photo_url is missing
+low,missing_photo_url,360,Чаирски езера,Пловдив,,photo_url is missing
+low,missing_photo_url,361,Черепишки манастир,Пловдив,,photo_url is missing
+low,missing_photo_url,362,Чернелка,Пловдив,,photo_url is missing
+low,missing_photo_url,363,Черни връх,Пловдив,,photo_url is missing
+low,missing_photo_url,364,Чипровски водопад,Пловдив,,photo_url is missing
+low,missing_photo_url,365,Чифлик,Пловдив,,photo_url is missing
+low,missing_photo_url,366,Чудните мостове,Пловдив,,photo_url is missing
+low,missing_photo_url,367,Чуйпетлово,Пловдив,Чуйпетлово,photo_url is missing
+low,missing_photo_url,368,Шабла,Пловдив,,photo_url is missing
+low,missing_photo_url,369,Шейтан дере,Пловдив,,photo_url is missing
+low,missing_photo_url,370,Шипка,Пловдив,,photo_url is missing
+low,missing_photo_url,371,Шипково,Пловдив,,photo_url is missing
+low,missing_photo_url,372,Широка поляна,Пловдив,,photo_url is missing
+low,missing_photo_url,373,Шуменско плато,Пловдив,,photo_url is missing
+low,missing_photo_url,374,Юмрукчал,Пловдив,,photo_url is missing
+low,missing_photo_url,375,Юндола,Пловдив,,photo_url is missing
+low,missing_photo_url,376,Ябланица,Пловдив,,photo_url is missing
+low,missing_photo_url,377,Ябланишко ждрело,Пловдив,,photo_url is missing
+low,missing_photo_url,378,Ягодинска пещера,Пловдив,,photo_url is missing
+low,missing_photo_url,379,Яйлата,Пловдив,,photo_url is missing
+low,missing_photo_url,380,"до Кирилова поляна
+259. \* Екопътека",Пловдив,,photo_url is missing
+low,missing_photo_url,381,"до Муратово езеро
+247. \* Екопътека",Пловдив,,photo_url is missing
+low,missing_photo_url,382,"до Стрелча (Минерални извори)
+295. \* Екопътека",Пловдив,,photo_url is missing
+low,missing_photo_url,383,"до Тевно езеро
+253. \* Екопътека",Пловдив,,photo_url is missing
+low,missing_photo_url,384,"до водопад Женското пръскало
+277. \* Екопътека",Пловдив,,photo_url is missing
+low,missing_photo_url,385,"до връх Богдан
+293. \* Екопътека",Пловдив,,photo_url is missing
+low,missing_photo_url,386,"до връх Вежен
+289. \* Екопътека",Пловдив,,photo_url is missing
+low,missing_photo_url,387,"до връх Вихрен (класически маршрут)
+245. \* Екопътека",Пловдив,,photo_url is missing
+low,missing_photo_url,388,"до връх Могила
+214. \* Екопътека",Пловдив,,photo_url is missing
+low,missing_photo_url,389,"до връх Половрак
+344. \* Екопътека",Пловдив,,photo_url is missing
+low,missing_photo_url,390,до крепостта,Пловдив,,photo_url is missing
+low,missing_photo_url,391,до пещера,Пловдив,,photo_url is missing
+low,missing_photo_url,392,"към в. Свобода
+228. \* Екопътека",Пловдив,,photo_url is missing
+low,missing_photo_url,393,"към водопад Кадемлийско пръскало
+269. \* Екопътека",Пловдив,,photo_url is missing
+low,missing_photo_url,394,"към х. Безводно
+230. \* Екопътека",Пловдив,,photo_url is missing
+low,missing_photo_url,395,"към хижа Рай (от Паниците)
+283. \* Екопътека",Пловдив,,photo_url is missing
+low,missing_photo_url,396,"към хижа Рибни езера
+249. \* Екопътека",Пловдив,,photo_url is missing
+low,missing_photo_url,397,"към хижа Синаница
+241. \* Екопътека",Пловдив,,photo_url is missing
+low,missing_photo_url,398,"на Дунавските рибари
+326. \* Екопътека",Пловдив,,photo_url is missing
+low,missing_photo_url,399,"на Рилската иглика
+237. \* Екопътека",Пловдив,,photo_url is missing
+low,missing_photo_url,400,"на Свободата (Шипка)
+279. \* Екопътека",Пловдив,,photo_url is missing
+low,missing_photo_url,401,"на Чучулигите
+271. \* Екопътека",Пловдив,,photo_url is missing
+low,missing_photo_url,402,"на балканската дива коза
+243. \* Екопътека",Пловдив,,photo_url is missing
+low,missing_photo_url,403,"на билките (Бродилово)
+302. \* Екопътека",Пловдив,,photo_url is missing
+low,missing_photo_url,404,на здравето,Пловдив,,photo_url is missing
+low,missing_photo_url,405,"на миньора (Росен)
+308. \* Екопътека",Пловдив,,photo_url is missing
+low,missing_photo_url,406,"на партизаните (историческа)
+222. \* Екопътека",Пловдив,,photo_url is missing
+low,missing_photo_url,443,Русенски Лом,Русе,,photo_url is missing
+low,missing_photo_url,454,E8 Етап 9: Чепино - триградско ждрело,Смолян,Смолян,photo_url is missing
+low,missing_photo_url,455,E8 Етап 10: Триградско ждрело - Смолян,Смолян,Смолян,photo_url is missing
+low,missing_photo_url,457,"Дяволската пътека (Борино)
+11. \* Екопътека",Смолян,,photo_url is missing
+low,missing_photo_url,469,Смолянски езера,Смолян,,photo_url is missing
+low,missing_photo_url,471,"на занаятите (Златоград)
+216. \* Екопътека",Смолян,,photo_url is missing
+low,missing_photo_url,472,"на здравето (Девин)
+203. \* Екопътека",Смолян,,photo_url is missing
+low,missing_photo_url,486,E4 Етап 1: Витоша - Княжево - Жиголово,София,София,photo_url is missing
+low,missing_photo_url,487,E4 Етап 2: Жиголово - Перелик,София,София,photo_url is missing
+low,missing_photo_url,488,E4 Етап 6: Маричини езера - Боровец,София,София,photo_url is missing
+low,missing_photo_url,489,E4 Етап 7: Боровец - връх Мусала,София,София,photo_url is missing
+low,missing_photo_url,490,E8 Етап 5: Стоб - Пасарел,София,София,photo_url is missing
+low,missing_photo_url,491,E8 Етап 7: Лозен - Костенец,София,София,photo_url is missing
+low,missing_photo_url,492,E8 Етап 6: Пасарел - връх Лозен,София,София,photo_url is missing
+low,missing_photo_url,493,Боянски водопад,София,,photo_url is missing
+low,missing_photo_url,494,Боянско езеро,София,,photo_url is missing
+low,missing_photo_url,495,Драгалевци – Черни връх,София,,photo_url is missing
+low,missing_photo_url,497,Кладница – Селимица,София,,photo_url is missing
+low,missing_photo_url,498,Към Самоков,София,,photo_url is missing
+low,missing_photo_url,500,"към езеро Окото (Пирин)
+239. \* Екопътека",София,,photo_url is missing
+low,missing_photo_url,511,"Вазова екопътека (Гара Бов)
+3. \* Екопътека",Теменуга,,photo_url is missing
+low,summary_mismatch,2,"Екопътека ""Етър-Соколски манастир""",Габрово,Етър,metadata.short_summary differs from short_summary
+low,summary_mismatch,7,Местност за пикник Орешак,Балчик,Орешак,metadata.short_summary differs from short_summary
+low,summary_mismatch,10,E4 Етап 10: Вихрен - Банско,Благоевград,Благоевград,metadata.short_summary differs from short_summary
+low,summary_mismatch,15,Долина на река Благоевградска Бистрица,Благоевград,,metadata.short_summary differs from short_summary
+low,summary_mismatch,16,"Екопътека ""Белица - Кръстова гора""",Благоевград,Белица,metadata.short_summary differs from short_summary
+low,summary_mismatch,31,Red Dot Trail - Витоша,България,,metadata.short_summary differs from short_summary
+low,summary_mismatch,32,Боров камък - Враца,България,,metadata.short_summary differs from short_summary
+low,summary_mismatch,93,Тетевенска баба,Габрово,,metadata.short_summary differs from short_summary
+low,summary_mismatch,152,Агушеви конаци,Пловдив,,metadata.short_summary differs from short_summary
+low,summary_mismatch,153,Академика,София,София,metadata.short_summary differs from short_summary
+low,summary_mismatch,154,Аладжа манастир,Варна,Варна,metadata.short_summary differs from short_summary
+low,summary_mismatch,155,Албутински манастир,Видин,Градец,metadata.short_summary differs from short_summary
+low,summary_mismatch,190,Българи,Бургас,Българи,metadata.short_summary differs from short_summary
+low,summary_mismatch,191,Бяла река,Пловдив,Калофер,metadata.short_summary differs from short_summary
+low,summary_mismatch,192,В царството на зелениката,Пловдив,,metadata.short_summary differs from short_summary
+low,summary_mismatch,193,Варовитец,Пловдив,,metadata.short_summary differs from short_summary
+low,summary_mismatch,194,Велека,Бургас,Синеморец,metadata.short_summary differs from short_summary
+low,summary_mismatch,195,Видимско пръскало,Ловеч,Априлци,metadata.short_summary differs from short_summary
+medium,missing_length_km,1,"Екопътека ""Ерантис"" – Киреево",Видин,Киреево,trail_details.length_km is missing
+medium,missing_length_km,2,"Екопътека ""Етър-Соколски манастир""",Габрово,Етър,trail_details.length_km is missing
+medium,missing_length_km,3,"Екопътека ""Збегове"" – Белоградчик",Видин,Белоградчик,trail_details.length_km is missing
+medium,missing_length_km,4,"Екопътека Заслон ""Опасен зъб"" – Тетевен",Ловеч,Тетевен,trail_details.length_km is missing
+medium,missing_length_km,5,"Екопътека до ""Първия войнишки паметник"" - с. Алдомировци",Алдомировци,Алдомировци,trail_details.length_km is missing
+medium,missing_length_km,7,Местност за пикник Орешак,Балчик,Орешак,trail_details.length_km is missing
+medium,missing_length_km,8,Местност Бялата чешма – Самуилово,Беласица,Самуилово,trail_details.length_km is missing
+medium,missing_length_km,9,Хайдушки водопади (екопътека),Берковица,Берковица,trail_details.length_km is missing
+medium,missing_length_km,15,Долина на река Благоевградска Бистрица,Благоевград,,trail_details.length_km is missing
+medium,missing_length_km,16,"Екопътека ""Белица - Кръстова гора""",Благоевград,Белица,trail_details.length_km is missing
+medium,missing_length_km,20,"Екопътека ""Мелник - Роженски манастир""",Благоевград,Мелник,trail_details.length_km is missing
+medium,missing_length_km,21,"Екопътека ""Пътеката на дивата коза""",Благоевград,"Баня, Добърско",trail_details.length_km is missing
+medium,missing_length_km,23,"Екопътека ""Тай3ните на водата"" и водопад ""Срамежливеца""",Благоевград,Коларово,trail_details.length_km is missing
+medium,missing_length_km,24,"Скално образование ""Камината"" – Бов",Бов,Бов,trail_details.length_km is missing
+medium,missing_length_km,30,Дивите кактуси на Синеморец,Бургаска област,Синеморец,trail_details.length_km is missing
+medium,missing_length_km,35,Екопътека до Преображенския манастир,Велико Търново,Велико Търново,trail_details.length_km is missing
+medium,missing_length_km,36,Еменски каньон,Велико Търново,Емен,trail_details.length_km is missing
+medium,missing_length_km,39,"Христовски водопад ""Руховци"" (екопътека)",Велико Търново,Христовци,trail_details.length_km is missing
+medium,missing_length_km,40,Еко стадион Пишмана,Велико Търновска област,Велико Търново,trail_details.length_km is missing
+medium,missing_length_km,41,"Екопътека ""Планиница""",Видин,Белоградчик,trail_details.length_km is missing
+medium,missing_length_km,44,Нископланинска обиколна пътека (НОП) Витоша,Витоша,София,trail_details.length_km is missing
+medium,missing_length_km,46,Подход от кв. Бояна,Витоша,Бояна,trail_details.length_km is missing
+medium,missing_length_km,47,Подход от кв. Драгалевци,Витоша,Драгалевци,trail_details.length_km is missing
+medium,missing_length_km,48,Подход от кв. Княжево,Витоша,Княжево,trail_details.length_km is missing
+medium,missing_length_km,49,Подход от м. Златни мостове,Витоша,Златни мостове,trail_details.length_km is missing
+medium,missing_length_km,50,Подход от м. Ярема,Витоша,Ярема,trail_details.length_km is missing
+medium,missing_length_km,51,Подход от с. Бистрица,Витоша,Бистрица,trail_details.length_km is missing
+medium,missing_length_km,52,Подход от с. Боснек,Витоша,Боснек,trail_details.length_km is missing
+medium,missing_length_km,53,Подход от с. Владая,Витоша,Владая,trail_details.length_km is missing
+medium,missing_length_km,54,Подход от с. Железница,Витоша,Железница,trail_details.length_km is missing
+medium,missing_length_km,55,Подход от с. Кладница,Витоша,Кладница,trail_details.length_km is missing
+medium,missing_length_km,56,Подход от с. Рударци,Витоша,Рударци,trail_details.length_km is missing
+medium,missing_length_km,57,Подход от с. Чуйпетлово,Витоша,Чуйпетлово,trail_details.length_km is missing
+medium,missing_length_km,58,Подход от с. Ярлово,Витоша,Ярлово,trail_details.length_km is missing
+medium,missing_length_km,60,Среднопланинска обиколна пътека (СОП),Витоша,София,trail_details.length_km is missing
+medium,missing_length_km,62,Врацата,Враца,,trail_details.length_km is missing
+medium,missing_length_km,63,"Екопътека ""Тектонски грабен Калето""",Враца,Реселец,trail_details.length_km is missing
+medium,missing_length_km,65,Горска пътека на приказките,Врачанска област,Враца,trail_details.length_km is missing
+medium,missing_length_km,68,Исторически маршрут „Антична и средновековна Вратица”,Врачански Балкан,Враца,trail_details.length_km is missing
+medium,missing_length_km,69,Исторически маршрут „По стъпките на Ботевата чета”,Врачански Балкан,Враца,trail_details.length_km is missing
+medium,missing_length_km,70,Местност КАРИЕРАТА – къмпинг над с. Згориград,Врачански Балкан,Згориград,trail_details.length_km is missing
+medium,missing_length_km,71,Наследствена пътека с. Очин дол,Врачански Балкан,Очин дол,trail_details.length_km is missing
+medium,missing_length_km,72,Познавателен маршрут „Белоглавият лешояд в ПП Врачански Балкан”,Врачански Балкан,Долно Озирово,trail_details.length_km is missing
+medium,missing_length_km,73,Познавателен маршрут „Враца – пещера Леденика”,Врачански Балкан,Враца,trail_details.length_km is missing
+medium,missing_length_km,74,Познавателен маршрут „Карст и биологично разнообразие”,Врачански Балкан,Враца,trail_details.length_km is missing
+medium,missing_length_km,75,Познавателен маршрут „Планинарство за начинаещи”,Врачански Балкан,Враца,trail_details.length_km is missing
+medium,missing_length_km,76,Спортно-туристически маршрут „Горска пътека на здравето“,Врачански Балкан,Враца,trail_details.length_km is missing
+medium,missing_length_km,91,"Екопътека ""Узана""",Габрово,Узана,trail_details.length_km is missing
+medium,missing_length_km,92,"Екопътека Трявна - АИР ""Боженци""",Габрово,Трявна,trail_details.length_km is missing
+medium,missing_length_km,93,Тетевенска баба,Габрово,,trail_details.length_km is missing
+medium,missing_length_km,94,Дряновска екопътека,Габровска област,Дряново,trail_details.length_km is missing
+medium,missing_length_km,95,Екопътека Via Ferrata,Габровска област,Дряново,trail_details.length_km is missing
+medium,missing_length_km,96,"Екопътека ""Камъка"" - Горна Оряховица",Горна Оряховица,Горна Оряховица,trail_details.length_km is missing
+medium,missing_length_km,106,Екопътека до Киселчовски водопад,Западни Родопи,Киселчово,trail_details.length_km is missing
+medium,missing_length_km,107,Вазова екопътека,Искърско дефиле,Заселе,trail_details.length_km is missing
+medium,missing_length_km,112,"Екопътека ""Пътят на Сърцето""",Кърджали,Борово,trail_details.length_km is missing
+medium,missing_length_km,122,"Екопътека ""Гложене - Гложенски манастир - пещера Моровица""",Ловеч,Гложене,trail_details.length_km is missing
+medium,missing_length_km,124,"Екопътека ""Опасният зъб""",Ловеч,Тетевен,trail_details.length_km is missing
+medium,missing_length_km,131,Местност за отдих Мийковци,Ловеч,Мийковци,trail_details.length_km is missing
+medium,missing_length_km,132,Местност за пикник с. Малко Чочовени,Ловеч,Малко Чочовени,trail_details.length_km is missing
+medium,missing_length_km,134,Екопътека Искър-Панега,Луковит,Луковит,trail_details.length_km is missing
+medium,missing_length_km,141,"Екопътека ""Беглика""",Пазарджишка област,,trail_details.length_km is missing
+medium,missing_length_km,143,"Екопътека ""Поглед към девет планини""",Перник,Сирищник,trail_details.length_km is missing
+medium,missing_length_km,145,Православен мемориален кръст „Памет и вяра”,Пирин,Благоевград,trail_details.length_km is missing
+medium,missing_length_km,149,"Екопътека ""Попската скала""",Плевен,Плевен,trail_details.length_km is missing
+medium,missing_length_km,151,"""Зелената пътека"" - Бачковски манастир",Пловдив,Бачковски манастир,trail_details.length_km is missing
+medium,missing_length_km,152,Агушеви конаци,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,153,Академика,София,София,trail_details.length_km is missing
+medium,missing_length_km,154,Аладжа манастир,Варна,Варна,trail_details.length_km is missing
+medium,missing_length_km,155,Албутински манастир,Видин,Градец,trail_details.length_km is missing
+medium,missing_length_km,156,Алеко,София,София,trail_details.length_km is missing
+medium,missing_length_km,157,Алея на билките,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,158,Али ботуш,Благоевград,Парил,trail_details.length_km is missing
+medium,missing_length_km,159,Ардинци,Кърджали,Ардино,trail_details.length_km is missing
+medium,missing_length_km,160,Аркутино,Бургас,Приморско,trail_details.length_km is missing
+medium,missing_length_km,161,Атанасовско езеро,Бургас,Бургас,trail_details.length_km is missing
+medium,missing_length_km,162,Баба Вида,Видин,Видин,trail_details.length_km is missing
+medium,missing_length_km,163,Бабин пласт,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,164,Бабини Видини кули,Видин,Видин,trail_details.length_km is missing
+medium,missing_length_km,165,Бабско пръскало,Стара Загора,Тъжа,trail_details.length_km is missing
+medium,missing_length_km,166,Байкушевата мура,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,167,Балчик,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,168,Батак,Пловдив,Батак,trail_details.length_km is missing
+medium,missing_length_km,169,Беглик таш,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,170,Беглика,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,171,Беглика рали,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,173,Беласица,Благоевград,Петрич,trail_details.length_km is missing
+medium,missing_length_km,174,Бели Искър,София,Бели Искър,trail_details.length_km is missing
+medium,missing_length_km,175,Белинташ,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,176,Белмекен,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,177,Белоградчишки скали,Видин,Белоградчик,trail_details.length_km is missing
+medium,missing_length_km,178,Биосферен резерват,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,179,Бистрица,Пловдив,Бистрица,trail_details.length_km is missing
+medium,missing_length_km,180,Бистришко бранище,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,181,Бодрост,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,182,Божевски водопад,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,183,Божият мост,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,184,Болата,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,185,Ботев връх,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,186,Бродилово,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,187,Бузлуджа,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,188,Буйновско ждрело,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,189,Буная,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,190,Българи,Бургас,Българи,trail_details.length_km is missing
+medium,missing_length_km,192,В царството на зелениката,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,193,Варовитец,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,194,Велека,Бургас,Синеморец,trail_details.length_km is missing
+medium,missing_length_km,196,Вкаменената сватба,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,197,Врабча,Перник,Врабча,trail_details.length_km is missing
+medium,missing_length_km,198,Вратцата,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,199,Врелото,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,200,Вълчи камък,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,201,Геопарк Искър-Панега,Ловеч,Луковит,trail_details.length_km is missing
+medium,missing_length_km,202,Гложенски манастир,Ловеч,Гложене,trail_details.length_km is missing
+medium,missing_length_km,203,Голяма Сюткя,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,204,Горица,Кюстендил,Овчарци,trail_details.length_km is missing
+medium,missing_length_km,205,Горна земя,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,206,Градище,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,207,Граматиково,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,208,Двете реки,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,209,Деветашка пещера,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,210,Дерменка,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,211,Долмените,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,212,Доспат,Пловдив,Доспат,trail_details.length_km is missing
+medium,missing_length_km,213,Драгоманско блато,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,214,Дуранкулак,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,215,Дървото на живота,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,216,Дяволски мост,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,217,Дяволското гърло,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,223,"Екопътека ""Стражка могила""",Пловдив,Страж,trail_details.length_km is missing
+medium,missing_length_km,226,Енина,Пловдив,Енина,trail_details.length_km is missing
+medium,missing_length_km,227,Етрополски водопад,София,Етрополе,trail_details.length_km is missing
+medium,missing_length_km,228,Жеравна,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,229,Златна Панега,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,230,Златни пясъци,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,231,Златните мостове,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,232,Златолист,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,233,Ивановски скални църкви,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,234,Изворите на Младежка,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,235,Изворите на река Въча,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,236,Индипаска,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,237,Искър-Панега,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,238,Кадемлийско пръскало,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,239,Казанджи дере,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,240,Калиакра,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,241,Каменни гъби,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,242,Камчийски пясъци,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,243,Камчия,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,244,Каньона на водопадите,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,245,Каньонът на река Герзовица,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,247,Караджов камък,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,248,Карандила,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,249,Картала,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,250,Кечика Кая,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,251,Кикиш,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,252,Кирилова поляна,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,253,Киселчово,Пловдив,Киселчово,trail_details.length_km is missing
+medium,missing_length_km,254,Княжевска пътека,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,255,Кобилино бранище,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,256,Кожух планина,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,257,Козя стена,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,258,Комините,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,259,Копитото – Момина скала,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,260,Копрен,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,261,Кости,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,262,Костина,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,263,Котел,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,264,Крушунски водопади,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,265,Кръстова гора,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,266,Кървавата скала,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,267,Лакатнишки скали,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,268,Леденика,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,269,Лешнишки водопад,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,270,Лисиците,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,271,Лозенски манастир,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,272,Ломски каньон,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,273,Лъвската глава,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,274,Мадарски конник,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,275,Мазалат,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,276,Малко Търново,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,277,Мальовица,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,278,Марциганица,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,279,Маслен нос,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,280,Меандри на Арда,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,281,Меаните,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,282,Медвен,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,283,Мелнишки пирамиди,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,284,Мечи стъпки,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,285,Минерални бани,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,286,Мишкова нива,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,287,Момчил юнак,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,288,Момчилова крепост,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,289,Невястата,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,290,Обесен камък,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,291,Окопна манастир,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,292,Ореляк,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,293,Орлови скали,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,294,Орлово око,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,295,Парилско седло,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,296,Пеещи скали,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,297,Перперикон,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,298,Петрова нива,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,299,Пещера Песнопой,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,300,Поглед към девет планини,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,301,Пода,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,302,Поломие,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,303,Поляната,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,304,Поморие,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,305,Понтийски път,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,306,Попови ливади,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,307,Правешка екопътека,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,308,Пътека,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,309,Райското пръскало,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,310,Резово,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,311,Рибарица,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,312,Рибни езера,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,313,Рилски манастир,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,314,Ритлите,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,315,Роженски манастир,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,316,Ропотамо,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,317,Рупите,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,318,Русалка,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,319,Самуилова крепост,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,320,Сандански,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,321,Света Петка,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,322,Светлина,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,323,Седемте рилски езера,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,324,Силистар,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,325,Симеоновски езера,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,326,Сините камъни,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,327,Синия вир,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,328,Скакавица,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,329,Скакля,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,330,Скални манастири,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,331,Скални църкви,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,332,Славянка,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,333,Соколна,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,334,Соколски манастир,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,335,Стената,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,336,Стобски пирамиди,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,337,Странджански дъб,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,338,Струилица – Калето – Лъката,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,339,Сухото езеро,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,340,Сърница,Пловдив,Сърница,trail_details.length_km is missing
+medium,missing_length_km,341,Табашката пещера,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,342,Татул,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,343,Торфено бранище,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,344,Трански ждрело,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,345,Триглав,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,346,Триградско ждрело,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,347,Трите чуки,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,348,Тъжа,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,349,Тъмната гора,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,350,Узунбуджак,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,351,Урдини езера,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,352,Хайдушка песен,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,353,Хайдушка поляна,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,354,Хайдушки поляни,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,355,Хайдушки чуки,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,356,Халката,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,357,Царството на зелениката,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,358,Централен Балкан,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,359,Цигов чарк,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,360,Чаирски езера,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,361,Черепишки манастир,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,362,Чернелка,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,363,Черни връх,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,364,Чипровски водопад,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,365,Чифлик,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,366,Чудните мостове,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,367,Чуйпетлово,Пловдив,Чуйпетлово,trail_details.length_km is missing
+medium,missing_length_km,368,Шабла,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,369,Шейтан дере,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,370,Шипка,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,371,Шипково,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,372,Широка поляна,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,373,Шуменско плато,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,374,Юмрукчал,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,375,Юндола,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,376,Ябланица,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,377,Ябланишко ждрело,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,378,Ягодинска пещера,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,379,Яйлата,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,380,"до Кирилова поляна
+259. \* Екопътека",Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,381,"до Муратово езеро
+247. \* Екопътека",Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,382,"до Стрелча (Минерални извори)
+295. \* Екопътека",Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,383,"до Тевно езеро
+253. \* Екопътека",Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,384,"до водопад Женското пръскало
+277. \* Екопътека",Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,385,"до връх Богдан
+293. \* Екопътека",Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,386,"до връх Вежен
+289. \* Екопътека",Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,387,"до връх Вихрен (класически маршрут)
+245. \* Екопътека",Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,388,"до връх Могила
+214. \* Екопътека",Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,389,"до връх Половрак
+344. \* Екопътека",Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,390,до крепостта,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,391,до пещера,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,392,"към в. Свобода
+228. \* Екопътека",Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,393,"към водопад Кадемлийско пръскало
+269. \* Екопътека",Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,394,"към х. Безводно
+230. \* Екопътека",Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,395,"към хижа Рай (от Паниците)
+283. \* Екопътека",Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,396,"към хижа Рибни езера
+249. \* Екопътека",Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,397,"към хижа Синаница
+241. \* Екопътека",Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,398,"на Дунавските рибари
+326. \* Екопътека",Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,399,"на Рилската иглика
+237. \* Екопътека",Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,400,"на Свободата (Шипка)
+279. \* Екопътека",Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,401,"на Чучулигите
+271. \* Екопътека",Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,402,"на балканската дива коза
+243. \* Екопътека",Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,403,"на билките (Бродилово)
+302. \* Екопътека",Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,404,на здравето,Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,405,"на миньора (Росен)
+308. \* Екопътека",Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,406,"на партизаните (историческа)
+222. \* Екопътека",Пловдив,,trail_details.length_km is missing
+medium,missing_length_km,409,Разходка до Голак,Разложка котловина,Разлог,trail_details.length_km is missing
+medium,missing_length_km,410,"""Пътека на приказките"" – Паничище",Рила,Паничище,trail_details.length_km is missing
+medium,missing_length_km,413,"Пътека ""Към царството на еделвайса""",Рила,Разлог,trail_details.length_km is missing
+medium,missing_length_km,414,Пътека на глухаря,Рила,Добърско,trail_details.length_km is missing
+medium,missing_length_km,415,Пътека на рилската иглика,Рила,Добърско,trail_details.length_km is missing
+medium,missing_length_km,416,Пътеката на Дивата коза,Рила,Баня,trail_details.length_km is missing
+medium,missing_length_km,418,Хайдушка пътека с.Годлево – връх Равник,Рила,Годлево,trail_details.length_km is missing
+medium,missing_length_km,425,Екопътека „Торнал е Тодьо“ – с. Момчиловци,Родопи,Момчиловци,trail_details.length_km is missing
+medium,missing_length_km,426,Изворите на река Въча – Меандрите на Буйновска река,Родопи,Буйново,trail_details.length_km is missing
+medium,missing_length_km,427,Калдъръмената пътека – Рожен,Родопи,Рожен,trail_details.length_km is missing
+medium,missing_length_km,431,Маршрут с. Орехово – Дяволска дупка,Родопи,Орехово,trail_details.length_km is missing
+medium,missing_length_km,432,Маршрут с. Пловдивци – с. Мочура – Циганско градище – с. Пловдивци,Родопи,Пловдивци,trail_details.length_km is missing
+medium,missing_length_km,433,Маршрут с. Рибница – крепост Козник,Родопи,Рибница,trail_details.length_km is missing
+medium,missing_length_km,436,"Пещера ""Голубовица 2"" с Виа Ферата",Родопи,Кошница,trail_details.length_km is missing
+medium,missing_length_km,439,Смилян – с. Змиево – местност Аламушница – с. Смилян,Родопи,Смилян,trail_details.length_km is missing
+medium,missing_length_km,443,Русенски Лом,Русе,,trail_details.length_km is missing
+medium,missing_length_km,445,"Екопътека ""Лаго""",Самоков,Самоков,trail_details.length_km is missing
+medium,missing_length_km,449,"Резерват ""Сребърна""",Силистра,Сребърна,trail_details.length_km is missing
+medium,missing_length_km,450,Местност Карандила – Сливен,Сините камъни,Сливен,trail_details.length_km is missing
+medium,missing_length_km,451,Местност Тютюнлюка – Сливен,Сините камъни,Сливен,trail_details.length_km is missing
+medium,missing_length_km,452,"""Синия вир"" – Сливен",Сливен,Сливен,trail_details.length_km is missing
+medium,missing_length_km,453,Хайдушка пътека гр.Сливен – Карандила – Кушбунар,Сливен,Сливен,trail_details.length_km is missing
+medium,missing_length_km,457,"Дяволската пътека (Борино)
+11. \* Екопътека",Смолян,,trail_details.length_km is missing
+medium,missing_length_km,458,"Екопътека ""Каньона на водопадите"" - Смолян",Смолян,Смолян,trail_details.length_km is missing
+medium,missing_length_km,461,"Екопътека ""Свети дух""",Смолян,Манастир,trail_details.length_km is missing
+medium,missing_length_km,462,"Екопътека ""Сърница Ай""",Смолян,Сърница,trail_details.length_km is missing
+medium,missing_length_km,463,"Екопътека ""Трите Смолянски езера""",Смолян,Смолян,trail_details.length_km is missing
+medium,missing_length_km,465,"Екопътека ""Царичина""",Смолян,Царичина,trail_details.length_km is missing
+medium,missing_length_km,469,Смолянски езера,Смолян,,trail_details.length_km is missing
+medium,missing_length_km,471,"на занаятите (Златоград)
+216. \* Екопътека",Смолян,,trail_details.length_km is missing
+medium,missing_length_km,472,"на здравето (Девин)
+203. \* Екопътека",Смолян,,trail_details.length_km is missing
+medium,missing_length_km,477,"Екопътека ""Параклис"" – с. Врабево",Софийска,Врабево,trail_details.length_km is missing
+medium,missing_length_km,479,"Екопътека ""Седмовратица""",Софийска,Карлуково,trail_details.length_km is missing
+medium,missing_length_km,480,"Екопътека ""Тракийски могили""",Софийска,Копривщица,trail_details.length_km is missing
+medium,missing_length_km,483,Директни изкачвания на Черни връх,Софийска област,София,trail_details.length_km is missing
+medium,missing_length_km,485,"Туристическа екопътека ""Тульово""",Софийска област,Тульово,trail_details.length_km is missing
+medium,missing_length_km,493,Боянски водопад,София,,trail_details.length_km is missing
+medium,missing_length_km,494,Боянско езеро,София,,trail_details.length_km is missing
+medium,missing_length_km,495,Драгалевци – Черни връх,София,,trail_details.length_km is missing
+medium,missing_length_km,497,Кладница – Селимица,София,,trail_details.length_km is missing
+medium,missing_length_km,498,Към Самоков,София,,trail_details.length_km is missing
+medium,missing_length_km,500,"към езеро Окото (Пирин)
+239. \* Екопътека",София,,trail_details.length_km is missing
+medium,missing_length_km,502,"Екопътека ""Пътека през вековете""",Стара Загора,Бузовград,trail_details.length_km is missing
+medium,missing_length_km,503,"Резерват ""Камещица"" – ждрело ""Боазът""",Стара Загора,Енина,trail_details.length_km is missing
+medium,missing_length_km,506,"Калоферски мегалити ""Драмовете""",Стара Планина,Калофер,trail_details.length_km is missing
+medium,missing_length_km,507,Каменишки водопади,Стара Планина,Камена,trail_details.length_km is missing
+medium,missing_length_km,508,Пейката на любовта,Стара Планина,Дряново,trail_details.length_km is missing
+medium,missing_length_km,509,Странджанска горска пътека,Странджа,Стоилово,trail_details.length_km is missing
+medium,missing_length_km,511,"Вазова екопътека (Гара Бов)
+3. \* Екопътека",Теменуга,,trail_details.length_km is missing
+medium,missing_length_km,518,"Екопътека ""Тайните водопади""",Хасково,Малко Градище,trail_details.length_km is missing
+medium,missing_length_km,519,"Чипровски водопад, Екопътека Демяница",Чипровци,Чипровци,trail_details.length_km is missing
+medium,missing_length_km,521,"Екопътека ""Мадарски конник""",Шумен,Мадара,trail_details.length_km is missing
+medium,missing_nearest_town,15,Долина на река Благоевградска Бистрица,Благоевград,,location.nearest_town is missing
+medium,missing_nearest_town,31,Red Dot Trail - Витоша,България,,location.nearest_town is missing
+medium,missing_nearest_town,32,Боров камък - Враца,България,,location.nearest_town is missing
+medium,missing_nearest_town,33,Триградско ждрело - Смолян,България,,location.nearest_town is missing
+medium,missing_nearest_town,62,Врацата,Враца,,location.nearest_town is missing
+medium,missing_nearest_town,93,Тетевенска баба,Габрово,,location.nearest_town is missing
+medium,missing_nearest_town,141,"Екопътека ""Беглика""",Пазарджишка област,,location.nearest_town is missing
+medium,missing_nearest_town,152,Агушеви конаци,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,157,Алея на билките,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,163,Бабин пласт,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,166,Байкушевата мура,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,167,Балчик,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,169,Беглик таш,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,170,Беглика,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,171,Беглика рали,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,175,Белинташ,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,176,Белмекен,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,178,Биосферен резерват,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,180,Бистришко бранище,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,181,Бодрост,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,182,Божевски водопад,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,183,Божият мост,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,184,Болата,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,185,Ботев връх,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,186,Бродилово,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,187,Бузлуджа,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,188,Буйновско ждрело,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,189,Буная,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,192,В царството на зелениката,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,193,Варовитец,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,196,Вкаменената сватба,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,198,Вратцата,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,199,Врелото,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,200,Вълчи камък,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,203,Голяма Сюткя,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,205,Горна земя,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,206,Градище,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,207,Граматиково,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,208,Двете реки,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,209,Деветашка пещера,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,210,Дерменка,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,211,Долмените,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,213,Драгоманско блато,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,214,Дуранкулак,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,215,Дървото на живота,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,216,Дяволски мост,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,217,Дяволското гърло,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,228,Жеравна,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,229,Златна Панега,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,230,Златни пясъци,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,231,Златните мостове,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,232,Златолист,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,233,Ивановски скални църкви,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,234,Изворите на Младежка,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,235,Изворите на река Въча,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,236,Индипаска,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,237,Искър-Панега,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,238,Кадемлийско пръскало,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,239,Казанджи дере,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,240,Калиакра,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,241,Каменни гъби,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,242,Камчийски пясъци,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,243,Камчия,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,244,Каньона на водопадите,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,245,Каньонът на река Герзовица,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,247,Караджов камък,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,248,Карандила,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,249,Картала,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,250,Кечика Кая,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,251,Кикиш,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,252,Кирилова поляна,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,254,Княжевска пътека,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,255,Кобилино бранище,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,256,Кожух планина,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,257,Козя стена,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,258,Комините,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,259,Копитото – Момина скала,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,260,Копрен,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,261,Кости,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,262,Костина,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,263,Котел,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,264,Крушунски водопади,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,265,Кръстова гора,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,266,Кървавата скала,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,267,Лакатнишки скали,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,268,Леденика,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,269,Лешнишки водопад,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,270,Лисиците,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,271,Лозенски манастир,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,272,Ломски каньон,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,273,Лъвската глава,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,274,Мадарски конник,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,275,Мазалат,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,276,Малко Търново,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,277,Мальовица,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,278,Марциганица,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,279,Маслен нос,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,280,Меандри на Арда,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,281,Меаните,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,282,Медвен,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,283,Мелнишки пирамиди,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,284,Мечи стъпки,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,285,Минерални бани,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,286,Мишкова нива,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,287,Момчил юнак,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,288,Момчилова крепост,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,289,Невястата,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,290,Обесен камък,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,291,Окопна манастир,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,292,Ореляк,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,293,Орлови скали,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,294,Орлово око,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,295,Парилско седло,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,296,Пеещи скали,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,297,Перперикон,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,298,Петрова нива,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,299,Пещера Песнопой,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,300,Поглед към девет планини,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,301,Пода,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,302,Поломие,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,303,Поляната,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,304,Поморие,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,305,Понтийски път,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,306,Попови ливади,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,307,Правешка екопътека,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,308,Пътека,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,309,Райското пръскало,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,310,Резово,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,311,Рибарица,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,312,Рибни езера,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,313,Рилски манастир,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,314,Ритлите,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,315,Роженски манастир,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,316,Ропотамо,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,317,Рупите,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,318,Русалка,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,319,Самуилова крепост,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,320,Сандански,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,321,Света Петка,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,322,Светлина,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,323,Седемте рилски езера,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,324,Силистар,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,325,Симеоновски езера,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,326,Сините камъни,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,327,Синия вир,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,328,Скакавица,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,329,Скакля,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,330,Скални манастири,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,331,Скални църкви,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,332,Славянка,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,333,Соколна,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,334,Соколски манастир,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,335,Стената,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,336,Стобски пирамиди,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,337,Странджански дъб,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,338,Струилица – Калето – Лъката,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,339,Сухото езеро,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,341,Табашката пещера,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,342,Татул,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,343,Торфено бранище,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,344,Трански ждрело,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,345,Триглав,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,346,Триградско ждрело,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,347,Трите чуки,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,348,Тъжа,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,349,Тъмната гора,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,350,Узунбуджак,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,351,Урдини езера,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,352,Хайдушка песен,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,353,Хайдушка поляна,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,354,Хайдушки поляни,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,355,Хайдушки чуки,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,356,Халката,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,357,Царството на зелениката,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,358,Централен Балкан,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,359,Цигов чарк,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,360,Чаирски езера,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,361,Черепишки манастир,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,362,Чернелка,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,363,Черни връх,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,364,Чипровски водопад,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,365,Чифлик,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,366,Чудните мостове,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,368,Шабла,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,369,Шейтан дере,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,370,Шипка,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,371,Шипково,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,372,Широка поляна,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,373,Шуменско плато,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,374,Юмрукчал,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,375,Юндола,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,376,Ябланица,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,377,Ябланишко ждрело,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,378,Ягодинска пещера,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,379,Яйлата,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,380,"до Кирилова поляна
+259. \* Екопътека",Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,381,"до Муратово езеро
+247. \* Екопътека",Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,382,"до Стрелча (Минерални извори)
+295. \* Екопътека",Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,383,"до Тевно езеро
+253. \* Екопътека",Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,384,"до водопад Женското пръскало
+277. \* Екопътека",Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,385,"до връх Богдан
+293. \* Екопътека",Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,386,"до връх Вежен
+289. \* Екопътека",Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,387,"до връх Вихрен (класически маршрут)
+245. \* Екопътека",Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,388,"до връх Могила
+214. \* Екопътека",Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,389,"до връх Половрак
+344. \* Екопътека",Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,390,до крепостта,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,391,до пещера,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,392,"към в. Свобода
+228. \* Екопътека",Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,393,"към водопад Кадемлийско пръскало
+269. \* Екопътека",Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,394,"към х. Безводно
+230. \* Екопътека",Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,395,"към хижа Рай (от Паниците)
+283. \* Екопътека",Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,396,"към хижа Рибни езера
+249. \* Екопътека",Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,397,"към хижа Синаница
+241. \* Екопътека",Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,398,"на Дунавските рибари
+326. \* Екопътека",Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,399,"на Рилската иглика
+237. \* Екопътека",Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,400,"на Свободата (Шипка)
+279. \* Екопътека",Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,401,"на Чучулигите
+271. \* Екопътека",Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,402,"на балканската дива коза
+243. \* Екопътека",Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,403,"на билките (Бродилово)
+302. \* Екопътека",Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,404,на здравето,Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,405,"на миньора (Росен)
+308. \* Екопътека",Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,406,"на партизаните (историческа)
+222. \* Екопътека",Пловдив,,location.nearest_town is missing
+medium,missing_nearest_town,443,Русенски Лом,Русе,,location.nearest_town is missing
+medium,missing_nearest_town,457,"Дяволската пътека (Борино)
+11. \* Екопътека",Смолян,,location.nearest_town is missing
+medium,missing_nearest_town,469,Смолянски езера,Смолян,,location.nearest_town is missing
+medium,missing_nearest_town,471,"на занаятите (Златоград)
+216. \* Екопътека",Смолян,,location.nearest_town is missing
+medium,missing_nearest_town,472,"на здравето (Девин)
+203. \* Екопътека",Смолян,,location.nearest_town is missing
+medium,missing_nearest_town,493,Боянски водопад,София,,location.nearest_town is missing
+medium,missing_nearest_town,494,Боянско езеро,София,,location.nearest_town is missing
+medium,missing_nearest_town,495,Драгалевци – Черни връх,София,,location.nearest_town is missing
+medium,missing_nearest_town,497,Кладница – Селимица,София,,location.nearest_town is missing
+medium,missing_nearest_town,498,Към Самоков,София,,location.nearest_town is missing
+medium,missing_nearest_town,500,"към езеро Окото (Пирин)
+239. \* Екопътека",София,,location.nearest_town is missing
+medium,missing_nearest_town,511,"Вазова екопътека (Гара Бов)
+3. \* Екопътека",Теменуга,,location.nearest_town is missing
+medium,missing_short_summary,1,"Екопътека ""Ерантис"" – Киреево",Видин,Киреево,short_summary is empty
+medium,missing_short_summary,6,"Водопад ""Лястовичи вир""",Асеновград,Долнослав,short_summary is empty
+medium,missing_short_summary,11,E4 Етап 11: Банско - Славянка планина,Благоевград,Благоевград,short_summary is empty
+medium,missing_short_summary,12,E4 Етап 12: Славянка връх - Мелник,Благоевград,Благоевград,short_summary is empty
+medium,missing_short_summary,13,E4 Етап 8: Мусала - Пирин национален парк,Благоевград,Благоевград,short_summary is empty
+medium,missing_short_summary,14,E4 Етап 9: Пирин - връх Вихрен,Благоевград,Благоевград,short_summary is empty
+medium,missing_short_summary,20,"Екопътека ""Мелник - Роженски манастир""",Благоевград,Мелник,short_summary is empty
+medium,missing_short_summary,24,"Скално образование ""Камината"" – Бов",Бов,Бов,short_summary is empty
+medium,missing_short_summary,25,E3 Етап 10: Шипка - Емине връх,Велико Търново,Велико Търново,short_summary is empty
+medium,missing_short_summary,26,"Екопътека ""Пещера и изворите на р. Младежка""",Бургас,Младежко,short_summary is empty
+medium,missing_short_summary,27,"Екопътека ""По следите на миналото"" – Приморско",Бургас,Приморско,short_summary is empty
+medium,missing_short_summary,28,"Екопътека ""По следите на римляните"" – Приморско",Бургас,Приморско,short_summary is empty
+medium,missing_short_summary,29,"Екопътека ""Пътят на ясния месец""",Бургас,Бръшлян,short_summary is empty
+medium,missing_short_summary,30,Дивите кактуси на Синеморец,Бургаска област,Синеморец,short_summary is empty
+medium,missing_short_summary,33,Триградско ждрело - Смолян,България,,short_summary is empty
+medium,missing_short_summary,34,"Екопътека ""Хотнишки водопад""",Велико Търново,Хотница,short_summary is empty
+medium,missing_short_summary,35,Екопътека до Преображенския манастир,Велико Търново,Велико Търново,short_summary is empty
+medium,missing_short_summary,37,Негованска екопътека – Емен,Велико Търново,Емен,short_summary is empty
+medium,missing_short_summary,38,Хотнишка екопътека,Велико Търново,Хотница,short_summary is empty
+medium,missing_short_summary,40,Еко стадион Пишмана,Велико Търновска област,Велико Търново,short_summary is empty
+medium,missing_short_summary,41,"Екопътека ""Планиница""",Видин,Белоградчик,short_summary is empty
+medium,missing_short_summary,42,Местност Божурица – Видин,Видин,Видин,short_summary is empty
+medium,missing_short_summary,43,"""Пътеката на здравето"" – Кладница",Витоша,Кладница,short_summary is empty
+medium,missing_short_summary,45,"Панорамна алея ""Галунка""",Витоша,"Бистрица, Железница",short_summary is empty
+medium,missing_short_summary,53,Подход от с. Владая,Витоша,Владая,short_summary is empty
+medium,missing_short_summary,56,Подход от с. Рударци,Витоша,Рударци,short_summary is empty
+medium,missing_short_summary,57,Подход от с. Чуйпетлово,Витоша,Чуйпетлово,short_summary is empty
+medium,missing_short_summary,58,Подход от с. Ярлово,Витоша,Ярлово,short_summary is empty
+medium,missing_short_summary,60,Среднопланинска обиколна пътека (СОП),Витоша,София,short_summary is empty
+medium,missing_short_summary,61,Торфищна информационна алея,Витоша,София,short_summary is empty
+medium,missing_short_summary,62,Врацата,Враца,,short_summary is empty
+medium,missing_short_summary,63,"Екопътека ""Тектонски грабен Калето""",Враца,Реселец,short_summary is empty
+medium,missing_short_summary,66,"Водопад ""Боров Камък"", Врачанска екопътека",Врачански Балкан,Враца,short_summary is empty
+medium,missing_short_summary,67,Врачанска екопътека – Згориград,Врачански Балкан,село Згориград,short_summary is empty
+medium,missing_short_summary,68,Исторически маршрут „Антична и средновековна Вратица”,Врачански Балкан,Враца,short_summary is empty
+medium,missing_short_summary,69,Исторически маршрут „По стъпките на Ботевата чета”,Врачански Балкан,Враца,short_summary is empty
+medium,missing_short_summary,70,Местност КАРИЕРАТА – къмпинг над с. Згориград,Врачански Балкан,Згориград,short_summary is empty
+medium,missing_short_summary,72,Познавателен маршрут „Белоглавият лешояд в ПП Врачански Балкан”,Врачански Балкан,Долно Озирово,short_summary is empty
+medium,missing_short_summary,73,Познавателен маршрут „Враца – пещера Леденика”,Врачански Балкан,Враца,short_summary is empty
+medium,missing_short_summary,74,Познавателен маршрут „Карст и биологично разнообразие”,Врачански Балкан,Враца,short_summary is empty
+medium,missing_short_summary,75,Познавателен маршрут „Планинарство за начинаещи”,Врачански Балкан,Враца,short_summary is empty
+medium,missing_short_summary,76,Спортно-туристически маршрут „Горска пътека на здравето“,Врачански Балкан,Враца,short_summary is empty
+medium,missing_short_summary,78,E3 Етап 4: Витиня - Кардиново,Габрово,Габрово,short_summary is empty
+medium,missing_short_summary,79,E3 Етап 5: Кардиново - Тетевен,Габрово,Габрово,short_summary is empty
+medium,missing_short_summary,80,E3 Етап 6: Тетевен - Чулово,Габрово,Габрово,short_summary is empty
+medium,missing_short_summary,81,E3 Етап 7: Чулово - Боян,Габрово,Габрово,short_summary is empty
+medium,missing_short_summary,82,E3 Етап 8: Боян - Розова долина,Габрово,Габрово,short_summary is empty
+medium,missing_short_summary,83,E3 Етап 9: Розова долина - Шипка,Габрово,Габрово,short_summary is empty
+medium,missing_short_summary,84,E8 Етап 8: Костенец - Чепино,Габрово,Габрово,short_summary is empty
+medium,missing_short_summary,86,"Екопътека ""Витата стена""",Габрово,Габрово,short_summary is empty
+medium,missing_short_summary,87,"Екопътека ""Градище-Кметовци""",Габрово,Габрово,short_summary is empty
+medium,missing_short_summary,88,"Екопътека ""Градище-пазителката на прохода""",Габрово,Габрово,short_summary is empty
+medium,missing_short_summary,89,"Екопътека ""Люляци–Дебел дял""",Габрово,Габрово,short_summary is empty
+medium,missing_short_summary,90,"Екопътека ""Могила""",Габрово,Дряново,short_summary is empty
+medium,missing_short_summary,91,"Екопътека ""Узана""",Габрово,Узана,short_summary is empty
+medium,missing_short_summary,92,"Екопътека Трявна - АИР ""Боженци""",Габрово,Трявна,short_summary is empty
+medium,missing_short_summary,94,Дряновска екопътека,Габровска област,Дряново,short_summary is empty
+medium,missing_short_summary,95,Екопътека Via Ferrata,Габровска област,Дряново,short_summary is empty
+medium,missing_short_summary,96,"Екопътека ""Камъка"" - Горна Оряховица",Горна Оряховица,Горна Оряховица,short_summary is empty
+medium,missing_short_summary,98,"Екопътека ""Равня""",Девин,Девин,short_summary is empty
+medium,missing_short_summary,99,Ботаническа алея за незрящи,Дендрариум,София,short_summary is empty
+medium,missing_short_summary,100,"Екопътека и Скален феномен ""Марков камък"" – Елена",Елена,Елена,short_summary is empty
+medium,missing_short_summary,104,Копренска екопътека,Западна Стара планина,Копиловци,short_summary is empty
+medium,missing_short_summary,108,"Водопад ""Вазова скакля"", Вазова екопътека",Искърско дефиле,Гара Бов,short_summary is empty
+medium,missing_short_summary,109,"Туристическа пътека ""Под Камико""",Искърско дефиле,Гара Бов,short_summary is empty
+medium,missing_short_summary,110,"Тракийски слънца и екопътека ""Дрънчи дупка""",Карлово,Мелница,short_summary is empty
+medium,missing_short_summary,111,"Екопътека ""Божения""",Красен-Божичен,Божичен,short_summary is empty
+medium,missing_short_summary,112,"Екопътека ""Пътят на Сърцето""",Кърджали,Борово,short_summary is empty
+medium,missing_short_summary,113,E4 Етап 3: Перелик - Рила манастир,Кюстендил,Кюстендил,short_summary is empty
+medium,missing_short_summary,114,E4 Етап 4: Рила манастир - Седемте Рилски езера,Кюстендил,Кюстендил,short_summary is empty
+medium,missing_short_summary,115,E4 Етап 5: Озеро - връх Маричини езера,Кюстендил,Кюстендил,short_summary is empty
+medium,missing_short_summary,116,E8 Етап 1: Рила манастир - Врелото,Кюстендил,Кюстендил,short_summary is empty
+medium,missing_short_summary,117,E8 Етап 2: Врелото - Рилска пустиня,Кюстендил,Кюстендил,short_summary is empty
+medium,missing_short_summary,118,E8 Етап 3: Рилска пустиня - Урдини езера,Кюстендил,Кюстендил,short_summary is empty
+medium,missing_short_summary,119,E8 Етап 4: Урдини езера - връх Стобски пирамиди,Кюстендил,Кюстендил,short_summary is empty
+medium,missing_short_summary,120,E3 Етап 2: Петрохан - Лакатник,Ловеч,Ловеч,short_summary is empty
+medium,missing_short_summary,121,E3 Етап 3: Лакатник - Витиня,Ловеч,Ловеч,short_summary is empty
+medium,missing_short_summary,122,"Екопътека ""Гложене - Гложенски манастир - пещера Моровица""",Ловеч,Гложене,short_summary is empty
+medium,missing_short_summary,123,"Екопътека ""Нагоре към Слънцето""",Ловеч,Бабинци,short_summary is empty
+medium,missing_short_summary,124,"Екопътека ""Опасният зъб""",Ловеч,Тетевен,short_summary is empty
+medium,missing_short_summary,125,"Екопътека ""По стъпките на балканджиите"" – Априлци",Ловеч,Априлци,short_summary is empty
+medium,missing_short_summary,126,"Екопътека ""Под пръските на водопада""",Ловеч,Тетевен,short_summary is empty
+medium,missing_short_summary,127,"Екопътека ""През очите на времето - история и природа""",Ловеч,Крушуна,short_summary is empty
+medium,missing_short_summary,128,"Екопътека ""Станина дупка""",Ловеч,Тетевен,short_summary is empty
+medium,missing_short_summary,129,Екопътека – Ведерник,Ловеч,Ведерник,short_summary is empty
+medium,missing_short_summary,130,Крушунска екопътека,Ловеч,Крушуна,short_summary is empty
+medium,missing_short_summary,131,Местност за отдих Мийковци,Ловеч,Мийковци,short_summary is empty
+medium,missing_short_summary,132,Местност за пикник с. Малко Чочовени,Ловеч,Малко Чочовени,short_summary is empty
+medium,missing_short_summary,133,Геопътека Задънен дол,Ловешка област,Луковит,short_summary is empty
+medium,missing_short_summary,134,Екопътека Искър-Панега,Луковит,Луковит,short_summary is empty
+medium,missing_short_summary,135,"Екопътека ""Белите скали"" – Лютиброд",Лютиброд,Лютиброд,short_summary is empty
+medium,missing_short_summary,136,E3 Етап 1: Ком връх - Петрохан,Монтана,Монтана,short_summary is empty
+medium,missing_short_summary,137,"Екопътека ""Хайдушки водопади""",Монтана,Берковица,short_summary is empty
+medium,missing_short_summary,138,"Водопад ""Бабско пръскало""","Национален парк ""Централен Балкан""",Калофер,short_summary is empty
+medium,missing_short_summary,139,"Екопътека ""Калето"" - Обзор",Обзор,Обзор,short_summary is empty
+medium,missing_short_summary,140,Геокомплекс Зарапово,Област Велико Търново,Павликени,short_summary is empty
+medium,missing_short_summary,141,"Екопътека ""Беглика""",Пазарджишка област,,short_summary is empty
+medium,missing_short_summary,142,Алея на Боснешкия карст,Перник,Боснек,short_summary is empty
+medium,missing_short_summary,143,"Екопътека ""Поглед към девет планини""",Перник,Сирищник,short_summary is empty
+medium,missing_short_summary,144,Ждрелото на река Ерма,Перник,Трън,short_summary is empty
+medium,missing_short_summary,145,Православен мемориален кръст „Памет и вяра”,Пирин,Благоевград,short_summary is empty
+medium,missing_short_summary,146,"Пътека за крепост ""Беаднос""",Пирин,Беден,short_summary is empty
+medium,missing_short_summary,147,Високопланинска обиколна пътека (ВОП),Планина Витоша,София,short_summary is empty
+medium,missing_short_summary,148,"Екопътека ""Никопол Римски път - Скална църква""",Плевен,Никопол,short_summary is empty
+medium,missing_short_summary,149,"Екопътека ""Попската скала""",Плевен,Плевен,short_summary is empty
+medium,missing_short_summary,150,"Екопътека ""Черне3лка""",Плевен,Горталово,short_summary is empty
+medium,missing_short_summary,156,Алеко,София,София,short_summary is empty
+medium,missing_short_summary,157,Алея на билките,Пловдив,,short_summary is empty
+medium,missing_short_summary,158,Али ботуш,Благоевград,Парил,short_summary is empty
+medium,missing_short_summary,159,Ардинци,Кърджали,Ардино,short_summary is empty
+medium,missing_short_summary,160,Аркутино,Бургас,Приморско,short_summary is empty
+medium,missing_short_summary,161,Атанасовско езеро,Бургас,Бургас,short_summary is empty
+medium,missing_short_summary,162,Баба Вида,Видин,Видин,short_summary is empty
+medium,missing_short_summary,163,Бабин пласт,Пловдив,,short_summary is empty
+medium,missing_short_summary,164,Бабини Видини кули,Видин,Видин,short_summary is empty
+medium,missing_short_summary,165,Бабско пръскало,Стара Загора,Тъжа,short_summary is empty
+medium,missing_short_summary,166,Байкушевата мура,Пловдив,,short_summary is empty
+medium,missing_short_summary,167,Балчик,Пловдив,,short_summary is empty
+medium,missing_short_summary,168,Батак,Пловдив,Батак,short_summary is empty
+medium,missing_short_summary,169,Беглик таш,Пловдив,,short_summary is empty
+medium,missing_short_summary,170,Беглика,Пловдив,,short_summary is empty
+medium,missing_short_summary,171,Беглика рали,Пловдив,,short_summary is empty
+medium,missing_short_summary,172,Беклемето,Ловеч,Троян,short_summary is empty
+medium,missing_short_summary,173,Беласица,Благоевград,Петрич,short_summary is empty
+medium,missing_short_summary,174,Бели Искър,София,Бели Искър,short_summary is empty
+medium,missing_short_summary,175,Белинташ,Пловдив,,short_summary is empty
+medium,missing_short_summary,176,Белмекен,Пловдив,,short_summary is empty
+medium,missing_short_summary,177,Белоградчишки скали,Видин,Белоградчик,short_summary is empty
+medium,missing_short_summary,178,Биосферен резерват,Пловдив,,short_summary is empty
+medium,missing_short_summary,179,Бистрица,Пловдив,Бистрица,short_summary is empty
+medium,missing_short_summary,180,Бистришко бранище,Пловдив,,short_summary is empty
+medium,missing_short_summary,181,Бодрост,Пловдив,,short_summary is empty
+medium,missing_short_summary,182,Божевски водопад,Пловдив,,short_summary is empty
+medium,missing_short_summary,183,Божият мост,Пловдив,,short_summary is empty
+medium,missing_short_summary,184,Болата,Пловдив,,short_summary is empty
+medium,missing_short_summary,185,Ботев връх,Пловдив,,short_summary is empty
+medium,missing_short_summary,186,Бродилово,Пловдив,,short_summary is empty
+medium,missing_short_summary,187,Бузлуджа,Пловдив,,short_summary is empty
+medium,missing_short_summary,188,Буйновско ждрело,Пловдив,,short_summary is empty
+medium,missing_short_summary,189,Буная,Пловдив,,short_summary is empty
+medium,missing_short_summary,196,Вкаменената сватба,Пловдив,,short_summary is empty
+medium,missing_short_summary,197,Врабча,Перник,Врабча,short_summary is empty
+medium,missing_short_summary,198,Вратцата,Пловдив,,short_summary is empty
+medium,missing_short_summary,199,Врелото,Пловдив,,short_summary is empty
+medium,missing_short_summary,200,Вълчи камък,Пловдив,,short_summary is empty
+medium,missing_short_summary,201,Геопарк Искър-Панега,Ловеч,Луковит,short_summary is empty
+medium,missing_short_summary,202,Гложенски манастир,Ловеч,Гложене,short_summary is empty
+medium,missing_short_summary,203,Голяма Сюткя,Пловдив,,short_summary is empty
+medium,missing_short_summary,204,Горица,Кюстендил,Овчарци,short_summary is empty
+medium,missing_short_summary,205,Горна земя,Пловдив,,short_summary is empty
+medium,missing_short_summary,206,Градище,Пловдив,,short_summary is empty
+medium,missing_short_summary,207,Граматиково,Пловдив,,short_summary is empty
+medium,missing_short_summary,208,Двете реки,Пловдив,,short_summary is empty
+medium,missing_short_summary,209,Деветашка пещера,Пловдив,,short_summary is empty
+medium,missing_short_summary,210,Дерменка,Пловдив,,short_summary is empty
+medium,missing_short_summary,211,Долмените,Пловдив,,short_summary is empty
+medium,missing_short_summary,212,Доспат,Пловдив,Доспат,short_summary is empty
+medium,missing_short_summary,213,Драгоманско блато,Пловдив,,short_summary is empty
+medium,missing_short_summary,214,Дуранкулак,Пловдив,,short_summary is empty
+medium,missing_short_summary,215,Дървото на живота,Пловдив,,short_summary is empty
+medium,missing_short_summary,216,Дяволски мост,Пловдив,,short_summary is empty
+medium,missing_short_summary,217,Дяволското гърло,Пловдив,,short_summary is empty
+medium,missing_short_summary,218,"Екопътека ""Комин дере"" – Лъки",Пловдив,Лъки,short_summary is empty
+medium,missing_short_summary,219,"Екопътека ""Манастира""",Пловдив,Перущица,short_summary is empty
+medium,missing_short_summary,220,"Екопътека ""По пътя на героите""",Пловдив,Перущица,short_summary is empty
+medium,missing_short_summary,221,"Екопътека ""Равнища""",Пловдив,Равнища,short_summary is empty
+medium,missing_short_summary,222,"Екопътека ""Стара Река"" – Стеврек",Пловдив,Стеврек,short_summary is empty
+medium,missing_short_summary,223,"Екопътека ""Стражка могила""",Пловдив,Страж,short_summary is empty
+medium,missing_short_summary,224,"Екопътека ""с. Белица-Пещерата""",Благоевград,Белица,short_summary is empty
+medium,missing_short_summary,225,"Екопътека ""с.Белица - Кръстова гора""",Благоевград,Белица,short_summary is empty
+medium,missing_short_summary,226,Енина,Пловдив,Енина,short_summary is empty
+medium,missing_short_summary,227,Етрополски водопад,София,Етрополе,short_summary is empty
+medium,missing_short_summary,228,Жеравна,Пловдив,,short_summary is empty
+medium,missing_short_summary,229,Златна Панега,Пловдив,,short_summary is empty
+medium,missing_short_summary,230,Златни пясъци,Пловдив,,short_summary is empty
+medium,missing_short_summary,231,Златните мостове,Пловдив,,short_summary is empty
+medium,missing_short_summary,232,Златолист,Пловдив,,short_summary is empty
+medium,missing_short_summary,233,Ивановски скални църкви,Пловдив,,short_summary is empty
+medium,missing_short_summary,234,Изворите на Младежка,Пловдив,,short_summary is empty
+medium,missing_short_summary,235,Изворите на река Въча,Пловдив,,short_summary is empty
+medium,missing_short_summary,236,Индипаска,Пловдив,,short_summary is empty
+medium,missing_short_summary,237,Искър-Панега,Пловдив,,short_summary is empty
+medium,missing_short_summary,238,Кадемлийско пръскало,Пловдив,,short_summary is empty
+medium,missing_short_summary,239,Казанджи дере,Пловдив,,short_summary is empty
+medium,missing_short_summary,240,Калиакра,Пловдив,,short_summary is empty
+medium,missing_short_summary,241,Каменни гъби,Пловдив,,short_summary is empty
+medium,missing_short_summary,242,Камчийски пясъци,Пловдив,,short_summary is empty
+medium,missing_short_summary,243,Камчия,Пловдив,,short_summary is empty
+medium,missing_short_summary,244,Каньона на водопадите,Пловдив,,short_summary is empty
+medium,missing_short_summary,245,Каньонът на река Герзовица,Пловдив,,short_summary is empty
+medium,missing_short_summary,247,Караджов камък,Пловдив,,short_summary is empty
+medium,missing_short_summary,248,Карандила,Пловдив,,short_summary is empty
+medium,missing_short_summary,249,Картала,Пловдив,,short_summary is empty
+medium,missing_short_summary,250,Кечика Кая,Пловдив,,short_summary is empty
+medium,missing_short_summary,251,Кикиш,Пловдив,,short_summary is empty
+medium,missing_short_summary,252,Кирилова поляна,Пловдив,,short_summary is empty
+medium,missing_short_summary,253,Киселчово,Пловдив,Киселчово,short_summary is empty
+medium,missing_short_summary,254,Княжевска пътека,Пловдив,,short_summary is empty
+medium,missing_short_summary,255,Кобилино бранище,Пловдив,,short_summary is empty
+medium,missing_short_summary,256,Кожух планина,Пловдив,,short_summary is empty
+medium,missing_short_summary,257,Козя стена,Пловдив,,short_summary is empty
+medium,missing_short_summary,258,Комините,Пловдив,,short_summary is empty
+medium,missing_short_summary,259,Копитото – Момина скала,Пловдив,,short_summary is empty
+medium,missing_short_summary,260,Копрен,Пловдив,,short_summary is empty
+medium,missing_short_summary,261,Кости,Пловдив,,short_summary is empty
+medium,missing_short_summary,262,Костина,Пловдив,,short_summary is empty
+medium,missing_short_summary,263,Котел,Пловдив,,short_summary is empty
+medium,missing_short_summary,264,Крушунски водопади,Пловдив,,short_summary is empty
+medium,missing_short_summary,265,Кръстова гора,Пловдив,,short_summary is empty
+medium,missing_short_summary,266,Кървавата скала,Пловдив,,short_summary is empty
+medium,missing_short_summary,267,Лакатнишки скали,Пловдив,,short_summary is empty
+medium,missing_short_summary,268,Леденика,Пловдив,,short_summary is empty
+medium,missing_short_summary,269,Лешнишки водопад,Пловдив,,short_summary is empty
+medium,missing_short_summary,270,Лисиците,Пловдив,,short_summary is empty
+medium,missing_short_summary,271,Лозенски манастир,Пловдив,,short_summary is empty
+medium,missing_short_summary,272,Ломски каньон,Пловдив,,short_summary is empty
+medium,missing_short_summary,273,Лъвската глава,Пловдив,,short_summary is empty
+medium,missing_short_summary,274,Мадарски конник,Пловдив,,short_summary is empty
+medium,missing_short_summary,275,Мазалат,Пловдив,,short_summary is empty
+medium,missing_short_summary,276,Малко Търново,Пловдив,,short_summary is empty
+medium,missing_short_summary,277,Мальовица,Пловдив,,short_summary is empty
+medium,missing_short_summary,278,Марциганица,Пловдив,,short_summary is empty
+medium,missing_short_summary,279,Маслен нос,Пловдив,,short_summary is empty
+medium,missing_short_summary,280,Меандри на Арда,Пловдив,,short_summary is empty
+medium,missing_short_summary,281,Меаните,Пловдив,,short_summary is empty
+medium,missing_short_summary,282,Медвен,Пловдив,,short_summary is empty
+medium,missing_short_summary,283,Мелнишки пирамиди,Пловдив,,short_summary is empty
+medium,missing_short_summary,284,Мечи стъпки,Пловдив,,short_summary is empty
+medium,missing_short_summary,285,Минерални бани,Пловдив,,short_summary is empty
+medium,missing_short_summary,286,Мишкова нива,Пловдив,,short_summary is empty
+medium,missing_short_summary,287,Момчил юнак,Пловдив,,short_summary is empty
+medium,missing_short_summary,288,Момчилова крепост,Пловдив,,short_summary is empty
+medium,missing_short_summary,289,Невястата,Пловдив,,short_summary is empty
+medium,missing_short_summary,290,Обесен камък,Пловдив,,short_summary is empty
+medium,missing_short_summary,291,Окопна манастир,Пловдив,,short_summary is empty
+medium,missing_short_summary,292,Ореляк,Пловдив,,short_summary is empty
+medium,missing_short_summary,293,Орлови скали,Пловдив,,short_summary is empty
+medium,missing_short_summary,294,Орлово око,Пловдив,,short_summary is empty
+medium,missing_short_summary,295,Парилско седло,Пловдив,,short_summary is empty
+medium,missing_short_summary,296,Пеещи скали,Пловдив,,short_summary is empty
+medium,missing_short_summary,297,Перперикон,Пловдив,,short_summary is empty
+medium,missing_short_summary,298,Петрова нива,Пловдив,,short_summary is empty
+medium,missing_short_summary,299,Пещера Песнопой,Пловдив,,short_summary is empty
+medium,missing_short_summary,300,Поглед към девет планини,Пловдив,,short_summary is empty
+medium,missing_short_summary,301,Пода,Пловдив,,short_summary is empty
+medium,missing_short_summary,302,Поломие,Пловдив,,short_summary is empty
+medium,missing_short_summary,303,Поляната,Пловдив,,short_summary is empty
+medium,missing_short_summary,304,Поморие,Пловдив,,short_summary is empty
+medium,missing_short_summary,305,Понтийски път,Пловдив,,short_summary is empty
+medium,missing_short_summary,306,Попови ливади,Пловдив,,short_summary is empty
+medium,missing_short_summary,307,Правешка екопътека,Пловдив,,short_summary is empty
+medium,missing_short_summary,308,Пътека,Пловдив,,short_summary is empty
+medium,missing_short_summary,309,Райското пръскало,Пловдив,,short_summary is empty
+medium,missing_short_summary,310,Резово,Пловдив,,short_summary is empty
+medium,missing_short_summary,311,Рибарица,Пловдив,,short_summary is empty
+medium,missing_short_summary,312,Рибни езера,Пловдив,,short_summary is empty
+medium,missing_short_summary,313,Рилски манастир,Пловдив,,short_summary is empty
+medium,missing_short_summary,314,Ритлите,Пловдив,,short_summary is empty
+medium,missing_short_summary,315,Роженски манастир,Пловдив,,short_summary is empty
+medium,missing_short_summary,316,Ропотамо,Пловдив,,short_summary is empty
+medium,missing_short_summary,317,Рупите,Пловдив,,short_summary is empty
+medium,missing_short_summary,318,Русалка,Пловдив,,short_summary is empty
+medium,missing_short_summary,319,Самуилова крепост,Пловдив,,short_summary is empty
+medium,missing_short_summary,320,Сандански,Пловдив,,short_summary is empty
+medium,missing_short_summary,321,Света Петка,Пловдив,,short_summary is empty
+medium,missing_short_summary,322,Светлина,Пловдив,,short_summary is empty
+medium,missing_short_summary,323,Седемте рилски езера,Пловдив,,short_summary is empty
+medium,missing_short_summary,324,Силистар,Пловдив,,short_summary is empty
+medium,missing_short_summary,325,Симеоновски езера,Пловдив,,short_summary is empty
+medium,missing_short_summary,326,Сините камъни,Пловдив,,short_summary is empty
+medium,missing_short_summary,327,Синия вир,Пловдив,,short_summary is empty
+medium,missing_short_summary,328,Скакавица,Пловдив,,short_summary is empty
+medium,missing_short_summary,329,Скакля,Пловдив,,short_summary is empty
+medium,missing_short_summary,330,Скални манастири,Пловдив,,short_summary is empty
+medium,missing_short_summary,331,Скални църкви,Пловдив,,short_summary is empty
+medium,missing_short_summary,332,Славянка,Пловдив,,short_summary is empty
+medium,missing_short_summary,333,Соколна,Пловдив,,short_summary is empty
+medium,missing_short_summary,334,Соколски манастир,Пловдив,,short_summary is empty
+medium,missing_short_summary,335,Стената,Пловдив,,short_summary is empty
+medium,missing_short_summary,336,Стобски пирамиди,Пловдив,,short_summary is empty
+medium,missing_short_summary,337,Странджански дъб,Пловдив,,short_summary is empty
+medium,missing_short_summary,338,Струилица – Калето – Лъката,Пловдив,,short_summary is empty
+medium,missing_short_summary,339,Сухото езеро,Пловдив,,short_summary is empty
+medium,missing_short_summary,340,Сърница,Пловдив,Сърница,short_summary is empty
+medium,missing_short_summary,341,Табашката пещера,Пловдив,,short_summary is empty
+medium,missing_short_summary,342,Татул,Пловдив,,short_summary is empty
+medium,missing_short_summary,343,Торфено бранище,Пловдив,,short_summary is empty
+medium,missing_short_summary,344,Трански ждрело,Пловдив,,short_summary is empty
+medium,missing_short_summary,345,Триглав,Пловдив,,short_summary is empty
+medium,missing_short_summary,346,Триградско ждрело,Пловдив,,short_summary is empty
+medium,missing_short_summary,347,Трите чуки,Пловдив,,short_summary is empty
+medium,missing_short_summary,348,Тъжа,Пловдив,,short_summary is empty
+medium,missing_short_summary,349,Тъмната гора,Пловдив,,short_summary is empty
+medium,missing_short_summary,350,Узунбуджак,Пловдив,,short_summary is empty
+medium,missing_short_summary,351,Урдини езера,Пловдив,,short_summary is empty
+medium,missing_short_summary,352,Хайдушка песен,Пловдив,,short_summary is empty
+medium,missing_short_summary,353,Хайдушка поляна,Пловдив,,short_summary is empty
+medium,missing_short_summary,354,Хайдушки поляни,Пловдив,,short_summary is empty
+medium,missing_short_summary,355,Хайдушки чуки,Пловдив,,short_summary is empty
+medium,missing_short_summary,356,Халката,Пловдив,,short_summary is empty
+medium,missing_short_summary,357,Царството на зелениката,Пловдив,,short_summary is empty
+medium,missing_short_summary,358,Централен Балкан,Пловдив,,short_summary is empty
+medium,missing_short_summary,359,Цигов чарк,Пловдив,,short_summary is empty
+medium,missing_short_summary,360,Чаирски езера,Пловдив,,short_summary is empty
+medium,missing_short_summary,361,Черепишки манастир,Пловдив,,short_summary is empty
+medium,missing_short_summary,362,Чернелка,Пловдив,,short_summary is empty
+medium,missing_short_summary,363,Черни връх,Пловдив,,short_summary is empty
+medium,missing_short_summary,364,Чипровски водопад,Пловдив,,short_summary is empty
+medium,missing_short_summary,365,Чифлик,Пловдив,,short_summary is empty
+medium,missing_short_summary,366,Чудните мостове,Пловдив,,short_summary is empty
+medium,missing_short_summary,367,Чуйпетлово,Пловдив,Чуйпетлово,short_summary is empty
+medium,missing_short_summary,368,Шабла,Пловдив,,short_summary is empty
+medium,missing_short_summary,369,Шейтан дере,Пловдив,,short_summary is empty
+medium,missing_short_summary,370,Шипка,Пловдив,,short_summary is empty
+medium,missing_short_summary,371,Шипково,Пловдив,,short_summary is empty
+medium,missing_short_summary,372,Широка поляна,Пловдив,,short_summary is empty
+medium,missing_short_summary,373,Шуменско плато,Пловдив,,short_summary is empty
+medium,missing_short_summary,374,Юмрукчал,Пловдив,,short_summary is empty
+medium,missing_short_summary,375,Юндола,Пловдив,,short_summary is empty
+medium,missing_short_summary,376,Ябланица,Пловдив,,short_summary is empty
+medium,missing_short_summary,377,Ябланишко ждрело,Пловдив,,short_summary is empty
+medium,missing_short_summary,378,Ягодинска пещера,Пловдив,,short_summary is empty
+medium,missing_short_summary,379,Яйлата,Пловдив,,short_summary is empty
+medium,missing_short_summary,380,"до Кирилова поляна
+259. \* Екопътека",Пловдив,,short_summary is empty
+medium,missing_short_summary,381,"до Муратово езеро
+247. \* Екопътека",Пловдив,,short_summary is empty
+medium,missing_short_summary,382,"до Стрелча (Минерални извори)
+295. \* Екопътека",Пловдив,,short_summary is empty
+medium,missing_short_summary,383,"до Тевно езеро
+253. \* Екопътека",Пловдив,,short_summary is empty
+medium,missing_short_summary,384,"до водопад Женското пръскало
+277. \* Екопътека",Пловдив,,short_summary is empty
+medium,missing_short_summary,385,"до връх Богдан
+293. \* Екопътека",Пловдив,,short_summary is empty
+medium,missing_short_summary,386,"до връх Вежен
+289. \* Екопътека",Пловдив,,short_summary is empty
+medium,missing_short_summary,387,"до връх Вихрен (класически маршрут)
+245. \* Екопътека",Пловдив,,short_summary is empty
+medium,missing_short_summary,388,"до връх Могила
+214. \* Екопътека",Пловдив,,short_summary is empty
+medium,missing_short_summary,389,"до връх Половрак
+344. \* Екопътека",Пловдив,,short_summary is empty
+medium,missing_short_summary,390,до крепостта,Пловдив,,short_summary is empty
+medium,missing_short_summary,391,до пещера,Пловдив,,short_summary is empty
+medium,missing_short_summary,392,"към в. Свобода
+228. \* Екопътека",Пловдив,,short_summary is empty
+medium,missing_short_summary,393,"към водопад Кадемлийско пръскало
+269. \* Екопътека",Пловдив,,short_summary is empty
+medium,missing_short_summary,394,"към х. Безводно
+230. \* Екопътека",Пловдив,,short_summary is empty
+medium,missing_short_summary,395,"към хижа Рай (от Паниците)
+283. \* Екопътека",Пловдив,,short_summary is empty
+medium,missing_short_summary,396,"към хижа Рибни езера
+249. \* Екопътека",Пловдив,,short_summary is empty
+medium,missing_short_summary,397,"към хижа Синаница
+241. \* Екопътека",Пловдив,,short_summary is empty
+medium,missing_short_summary,398,"на Дунавските рибари
+326. \* Екопътека",Пловдив,,short_summary is empty
+medium,missing_short_summary,399,"на Рилската иглика
+237. \* Екопътека",Пловдив,,short_summary is empty
+medium,missing_short_summary,400,"на Свободата (Шипка)
+279. \* Екопътека",Пловдив,,short_summary is empty
+medium,missing_short_summary,401,"на Чучулигите
+271. \* Екопътека",Пловдив,,short_summary is empty
+medium,missing_short_summary,402,"на балканската дива коза
+243. \* Екопътека",Пловдив,,short_summary is empty
+medium,missing_short_summary,403,"на билките (Бродилово)
+302. \* Екопътека",Пловдив,,short_summary is empty
+medium,missing_short_summary,404,на здравето,Пловдив,,short_summary is empty
+medium,missing_short_summary,405,"на миньора (Росен)
+308. \* Екопътека",Пловдив,,short_summary is empty
+medium,missing_short_summary,406,"на партизаните (историческа)
+222. \* Екопътека",Пловдив,,short_summary is empty
+medium,missing_short_summary,407,Екопътека Бяла река (Калоферска),Пловдивска област,Калофер,short_summary is empty
+medium,missing_short_summary,408,"Туристическа пътека ""По поречието на р.Бебреш при с.Своде""",Правец,Своде,short_summary is empty
+medium,missing_short_summary,409,Разходка до Голак,Разложка котловина,Разлог,short_summary is empty
+medium,missing_short_summary,410,"""Пътека на приказките"" – Паничище",Рила,Паничище,short_summary is empty
+medium,missing_short_summary,411,Екопътека до местност Самоковището,Рила,Дупница,short_summary is empty
+medium,missing_short_summary,412,"Екопътека и Водопади ""Бохемия"" – Рила",Рила,Рила,short_summary is empty
+medium,missing_short_summary,413,"Пътека ""Към царството на еделвайса""",Рила,Разлог,short_summary is empty
+medium,missing_short_summary,414,Пътека на глухаря,Рила,Добърско,short_summary is empty
+medium,missing_short_summary,415,Пътека на рилската иглика,Рила,Добърско,short_summary is empty
+medium,missing_short_summary,416,Пътеката на Дивата коза,Рила,Баня,short_summary is empty
+medium,missing_short_summary,417,Самодивска пътека,Рила,Бачево,short_summary is empty
+medium,missing_short_summary,418,Хайдушка пътека с.Годлево – връх Равник,Рила,Годлево,short_summary is empty
+medium,missing_short_summary,419,Веломаршрут село Смилян - село Чеплят,Родопи,Рудозем,short_summary is empty
+medium,missing_short_summary,420,Връх Драгойна,Родопи,село Драгойново,short_summary is empty
+medium,missing_short_summary,421,"Екопътека ""Драгиева чешма"" – Чавдар",Родопи,Чавдар,short_summary is empty
+medium,missing_short_summary,422,"Екопътека ""Лисичево - Чурал""",Родопи,Девин,short_summary is empty
+medium,missing_short_summary,423,"Екопътека ""Лява река - Предела""",Родопи,Лява река,short_summary is empty
+medium,missing_short_summary,424,Екопътека „Каньонът на водопадите“,Родопи,Смолян,short_summary is empty
+medium,missing_short_summary,425,Екопътека „Торнал е Тодьо“ – с. Момчиловци,Родопи,Момчиловци,short_summary is empty
+medium,missing_short_summary,426,Изворите на река Въча – Меандрите на Буйновска река,Родопи,Буйново,short_summary is empty
+medium,missing_short_summary,427,Калдъръмената пътека – Рожен,Родопи,Рожен,short_summary is empty
+medium,missing_short_summary,428,Канинската екопътека – Гърмен,Родопи,Ковачевица,short_summary is empty
+medium,missing_short_summary,429,Маршрут гр. Батак – х. Техеран – вр. Баташки снежник,Родопи,Батак,short_summary is empty
+medium,missing_short_summary,430,Маршрут крепост Козник – м. Главата,Родопи,Рудозем,short_summary is empty
+medium,missing_short_summary,431,Маршрут с. Орехово – Дяволска дупка,Родопи,Орехово,short_summary is empty
+medium,missing_short_summary,432,Маршрут с. Пловдивци – с. Мочура – Циганско градище – с. Пловдивци,Родопи,Пловдивци,short_summary is empty
+medium,missing_short_summary,433,Маршрут с. Рибница – крепост Козник,Родопи,Рибница,short_summary is empty
+medium,missing_short_summary,434,Маршрут язовирна стена Доспат – СОМАТ,Родопи,Доспат,short_summary is empty
+medium,missing_short_summary,435,Местност Съдилището – Мочура,Родопи,Мочура,short_summary is empty
+medium,missing_short_summary,436,"Пещера ""Голубовица 2"" с Виа Ферата",Родопи,Кошница,short_summary is empty
+medium,missing_short_summary,437,Познавателен маршрут „Музей на гората”,Родопи,Батак,short_summary is empty
+medium,missing_short_summary,438,Природен феномен „Гергева скала”,Родопи,Бачево,short_summary is empty
+medium,missing_short_summary,439,Смилян – с. Змиево – местност Аламушница – с. Смилян,Родопи,Смилян,short_summary is empty
+medium,missing_short_summary,440,Трансгранична родопска екопътека Хвойна – Ставруполи,Родопи,Хвойна,short_summary is empty
+medium,missing_short_summary,441,"Екопътека ""Кечи Кая"" - Рибница",Рудозем,Рибница,short_summary is empty
+medium,missing_short_summary,442,"Екопътека ""Бъзовец""",Русе,Бъзовец,short_summary is empty
+medium,missing_short_summary,443,Русенски Лом,Русе,,short_summary is empty
+medium,missing_short_summary,444,"Ивановски скален манастир ""Свети Архангел Михаил""",Русенски лом,Иваново,short_summary is empty
+medium,missing_short_summary,445,"Екопътека ""Лаго""",Самоков,Самоков,short_summary is empty
+medium,missing_short_summary,446,"Екопътека ""Знамето"" – с. Младен",Севлиево,Севлиево,short_summary is empty
+medium,missing_short_summary,447,"Екопътека ""Бели Искър""",Село Бели Искър,Самоков,short_summary is empty
+medium,missing_short_summary,448,"Водопад ""Мангъро""",Село Скрът,Скрът,short_summary is empty
+medium,missing_short_summary,449,"Резерват ""Сребърна""",Силистра,Сребърна,short_summary is empty
+medium,missing_short_summary,450,Местност Карандила – Сливен,Сините камъни,Сливен,short_summary is empty
+medium,missing_short_summary,451,Местност Тютюнлюка – Сливен,Сините камъни,Сливен,short_summary is empty
+medium,missing_short_summary,452,"""Синия вир"" – Сливен",Сливен,Сливен,short_summary is empty
+medium,missing_short_summary,453,Хайдушка пътека гр.Сливен – Карандила – Кушбунар,Сливен,Сливен,short_summary is empty
+medium,missing_short_summary,454,E8 Етап 9: Чепино - триградско ждрело,Смолян,Смолян,short_summary is empty
+medium,missing_short_summary,455,E8 Етап 10: Триградско ждрело - Смолян,Смолян,Смолян,short_summary is empty
+medium,missing_short_summary,456,"Водопад ""Орфей"" и каньона на водопадите - Смолян",Смолян,Смолян,short_summary is empty
+medium,missing_short_summary,457,"Дяволската пътека (Борино)
+11. \* Екопътека",Смолян,,short_summary is empty
+medium,missing_short_summary,458,"Екопътека ""Каньона на водопадите"" - Смолян",Смолян,Смолян,short_summary is empty
+medium,missing_short_summary,459,"Екопътека ""Невястата""",Смолян,Смолян,short_summary is empty
+medium,missing_short_summary,460,"Екопътека ""Св Неделя""",Смолян,Златоград,short_summary is empty
+medium,missing_short_summary,461,"Екопътека ""Свети дух""",Смолян,Манастир,short_summary is empty
+medium,missing_short_summary,462,"Екопътека ""Сърница Ай""",Смолян,Сърница,short_summary is empty
+medium,missing_short_summary,463,"Екопътека ""Трите Смолянски езера""",Смолян,Смолян,short_summary is empty
+medium,missing_short_summary,464,"Екопътека ""Храстево""",Смолян,Девин,short_summary is empty
+medium,missing_short_summary,465,"Екопътека ""Царичина""",Смолян,Царичина,short_summary is empty
+medium,missing_short_summary,466,Загражденска екопътека,Смолян,Загражден,short_summary is empty
+medium,missing_short_summary,467,Римски мост – Любча,Смолян,Любча,short_summary is empty
+medium,missing_short_summary,468,Скален масив Невястата (Турлука),Смолян,Смолян,short_summary is empty
+medium,missing_short_summary,469,Смолянски езера,Смолян,,short_summary is empty
+medium,missing_short_summary,470,"Южнородопска или ""Дяволска"" екопътека",Смолян,Борино,short_summary is empty
+medium,missing_short_summary,471,"на занаятите (Златоград)
+216. \* Екопътека",Смолян,,short_summary is empty
+medium,missing_short_summary,472,"на здравето (Девин)
+203. \* Екопътека",Смолян,,short_summary is empty
+medium,missing_short_summary,473,Дяволския мост и водопада,Смолянска област,Борино,short_summary is empty
+medium,missing_short_summary,474,"Екопътека ""12-та застава""",Смолянска област,Барутин,short_summary is empty
+medium,missing_short_summary,475,"Екопътека ""Барутин - вр. Чуката - Касъка""",Смолянска област,Доспат,short_summary is empty
+medium,missing_short_summary,476,"Екопътека ""Паметник Арабаконак до из3вора на река Бебреш""",Софийска,Арабаконак,short_summary is empty
+medium,missing_short_summary,477,"Екопътека ""Параклис"" – с. Врабево",Софийска,Врабево,short_summary is empty
+medium,missing_short_summary,478,"Екопътека ""Под Камико""",Софийска,Гара Бов,short_summary is empty
+medium,missing_short_summary,479,"Екопътека ""Седмовратица""",Софийска,Карлуково,short_summary is empty
+medium,missing_short_summary,480,"Екопътека ""Тракийски могили""",Софийска,Копривщица,short_summary is empty
+medium,missing_short_summary,481,Екопътека Червени камък - с. Челопеч,Софийска,Челопеч,short_summary is empty
+medium,missing_short_summary,482,"Екопътека с. Мърчаево - местност ""Церова поляна""",Софийска,Мърчаево,short_summary is empty
+medium,missing_short_summary,483,Директни изкачвания на Черни връх,Софийска област,София,short_summary is empty
+medium,missing_short_summary,484,Екопътека Бележката,Софийска област,Етрополе,short_summary is empty
+medium,missing_short_summary,485,"Туристическа екопътека ""Тульово""",Софийска област,Тульово,short_summary is empty
+medium,missing_short_summary,486,E4 Етап 1: Витоша - Княжево - Жиголово,София,София,short_summary is empty
+medium,missing_short_summary,487,E4 Етап 2: Жиголово - Перелик,София,София,short_summary is empty
+medium,missing_short_summary,488,E4 Етап 6: Маричини езера - Боровец,София,София,short_summary is empty
+medium,missing_short_summary,489,E4 Етап 7: Боровец - връх Мусала,София,София,short_summary is empty
+medium,missing_short_summary,490,E8 Етап 5: Стоб - Пасарел,София,София,short_summary is empty
+medium,missing_short_summary,491,E8 Етап 7: Лозен - Костенец,София,София,short_summary is empty
+medium,missing_short_summary,492,E8 Етап 6: Пасарел - връх Лозен,София,София,short_summary is empty
+medium,missing_short_summary,493,Боянски водопад,София,,short_summary is empty
+medium,missing_short_summary,494,Боянско езеро,София,,short_summary is empty
+medium,missing_short_summary,495,Драгалевци – Черни връх,София,,short_summary is empty
+medium,missing_short_summary,496,"Екопътека ""Лозенската планина""",София,Долни Лозен,short_summary is empty
+medium,missing_short_summary,497,Кладница – Селимица,София,,short_summary is empty
+medium,missing_short_summary,498,Към Самоков,София,,short_summary is empty
+medium,missing_short_summary,499,Спортно-информационна алея за хора с увреждания на опорно-двигателния апарат,София,София,short_summary is empty
+medium,missing_short_summary,500,"към езеро Окото (Пирин)
+239. \* Екопътека",София,,short_summary is empty
+medium,missing_short_summary,501,"Екопътека ""Пъ3тека на здравето""",София-град,Банкя,short_summary is empty
+medium,missing_short_summary,502,"Екопътека ""Пътека през вековете""",Стара Загора,Бузовград,short_summary is empty
+medium,missing_short_summary,503,"Резерват ""Камещица"" – ждрело ""Боазът""",Стара Загора,Енина,short_summary is empty
+medium,missing_short_summary,504,"Екопътека ""Бяла река"" край Калофер",Стара Планина,Калофер,short_summary is empty
+medium,missing_short_summary,505,"Екопътека до Водопад ""Скока""",Стара Планина,Веселиново,short_summary is empty
+medium,missing_short_summary,506,"Калоферски мегалити ""Драмовете""",Стара Планина,Калофер,short_summary is empty
+medium,missing_short_summary,507,Каменишки водопади,Стара Планина,Камена,short_summary is empty
+medium,missing_short_summary,508,Пейката на любовта,Стара Планина,Дряново,short_summary is empty
+medium,missing_short_summary,509,Странджанска горска пътека,Странджа,Стоилово,short_summary is empty
+medium,missing_short_summary,510,"Екопътека ""Климент""",Същинска Средна гора,Климент,short_summary is empty
+medium,missing_short_summary,511,"Вазова екопътека (Гара Бов)
+3. \* Екопътека",Теменуга,,short_summary is empty
+medium,missing_short_summary,512,"Екопътека ""Горската пътека""",Тетевен,Тетевен,short_summary is empty
+medium,missing_short_summary,513,Тетевенски водопад „Скока“,Тетевен,Тетевен,short_summary is empty
+medium,missing_short_summary,514,Трънска екопътека,Трън,Трън,short_summary is empty
+medium,missing_short_summary,515,"Водопад ""Видимско пръскало""",Туристически регион Балкания,Априлци,short_summary is empty
+medium,missing_short_summary,516,Екопътека Голямата река,Търговище,Попово,short_summary is empty
+medium,missing_short_summary,517,"Екопътека ""Боян Ботево – Улу дере – Орлови скали""",Хасково,Боян Ботево,short_summary is empty
+medium,missing_short_summary,518,"Екопътека ""Тайните водопади""",Хасково,Малко Градище,short_summary is empty
+medium,missing_short_summary,519,"Чипровски водопад, Екопътека Демяница",Чипровци,Чипровци,short_summary is empty
+medium,missing_short_summary,520,Връх Миджур,"Чупренска планина, Стара планина",село Горни Лом,short_summary is empty
+medium,missing_short_summary,521,"Екопътека ""Мадарски конник""",Шумен,Мадара,short_summary is empty
+medium,missing_short_summary,522,"Водопад ""Сини вир"" – Ковачевица",Югозападна България,Ковачевица,short_summary is empty
+medium,missing_short_summary,523,Водопад Казанджи дере,с.Мугла,Мугла,short_summary is empty

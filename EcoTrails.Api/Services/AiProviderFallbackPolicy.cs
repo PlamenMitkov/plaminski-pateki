@@ -24,7 +24,10 @@ public sealed class AiProviderFallbackPolicy : IAiProviderFallbackPolicy
 
     public bool ShouldFallbackToSecondaryOpenAiModel(string primaryModel, AiProviderException exception)
     {
-        return exception.StatusCode == StatusCodes.Status404NotFound &&
+        return (exception.StatusCode == StatusCodes.Status404NotFound ||
+            exception.StatusCode == StatusCodes.Status429TooManyRequests ||
+            exception.StatusCode == StatusCodes.Status503ServiceUnavailable ||
+            exception.StatusCode >= StatusCodes.Status500InternalServerError) &&
                HasOpenAiApiKey() &&
                !string.IsNullOrWhiteSpace(ResolveOpenAiFallbackModel(primaryModel));
     }

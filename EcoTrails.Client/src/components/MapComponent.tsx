@@ -1,4 +1,5 @@
-import { MapContainer, Marker, Popup, TileLayer, useMapEvents } from 'react-leaflet';
+import { useEffect, useRef, type MutableRefObject } from 'react';
+import { MapContainer, Marker, Popup, TileLayer, useMap, useMapEvents } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-cluster';
 import L from 'leaflet';
 import { Link } from 'react-router-dom';
@@ -29,6 +30,41 @@ function MapViewSync({ onMapViewChange }: { onMapViewChange?: (center: [number, 
   return null;
 }
 
+function SelectedTrailFocus({
+  selectedTrailId,
+  trails,
+  markerRefs,
+}: {
+  selectedTrailId: number | null;
+  trails: Trail[];
+  markerRefs: MutableRefObject<Map<number, L.Marker>>;
+}) {
+  const map = useMap();
+
+  useEffect(() => {
+    if (!selectedTrailId) {
+      return;
+    }
+
+    const selected = trails.find((trail) => trail.id === selectedTrailId);
+    if (!selected || selected.latitude === null || selected.longitude === null) {
+      return;
+    }
+
+    const targetZoom = Math.max(map.getZoom(), 12);
+    map.flyTo([selected.latitude, selected.longitude], targetZoom, { duration: 0.7 });
+
+    const marker = markerRefs.current.get(selectedTrailId);
+    if (marker) {
+      window.setTimeout(() => {
+        marker.openPopup();
+      }, 250);
+    }
+  }, [map, markerRefs, selectedTrailId, trails]);
+
+  return null;
+}
+
 const createClusterCustomIcon = (cluster: any) => {
   const count = cluster.getChildCount();
   let size = 'small';
@@ -50,6 +86,8 @@ function MapComponent({
   initialZoom = 7,
   onMapViewChange,
 }: Props) {
+  const markerRefs = useRef<Map<number, L.Marker>>(new Map());
+
   const trailsWithCoordinates = trails.filter(
     (trail) => trail.latitude !== null && trail.longitude !== null,
   );
@@ -61,6 +99,11 @@ function MapComponent({
       style={{ height: '450px', width: '100%', borderRadius: '12px', marginBottom: '20px' }}
     >
       <MapViewSync onMapViewChange={onMapViewChange} />
+      <SelectedTrailFocus
+        selectedTrailId={selectedTrailId}
+        trails={trailsWithCoordinates}
+        markerRefs={markerRefs}
+      />
       <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
       <MarkerClusterGroup
         chunkedLoading
@@ -72,6 +115,14 @@ function MapComponent({
           <Marker
             key={trail.id}
             position={[trail.latitude!, trail.longitude!]}
+            ref={(marker) => {
+              if (marker) {
+                markerRefs.current.set(trail.id, marker);
+                return;
+              }
+
+              markerRefs.current.delete(trail.id);
+            }}
             eventHandlers={{
               click: () => onSelectTrail?.(trail.id),
             }}

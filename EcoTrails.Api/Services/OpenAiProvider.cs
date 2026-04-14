@@ -3,6 +3,7 @@ using System.Text.Json;
 using System.Runtime.CompilerServices;
 using EcoTrails.Api.Contracts;
 using Microsoft.Extensions.Options;
+using Polly.Timeout;
 
 namespace EcoTrails.Api.Services;
 
@@ -40,19 +41,37 @@ public sealed class OpenAiProvider(
         };
         httpRequest.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", apiKey);
 
-        using var response = await httpClient.SendAsync(httpRequest, cancellationToken);
-        if (!response.IsSuccessStatusCode)
+        HttpResponseMessage response;
+        try
         {
-            await HandleErrorAsync(response, model, cancellationToken);
+            response = await httpClient.SendAsync(httpRequest, cancellationToken);
+        }
+        catch (Exception ex) when (ex is TimeoutRejectedException || ex is TaskCanceledException || ex is HttpRequestException)
+        {
+            throw new AiProviderException(
+                503,
+                "AI услугата временно не отговаря. Опитайте отново след малко.",
+                $"OpenAI request timeout/unavailable for {model}.",
+                ex);
         }
 
-        var content = await response.Content.ReadAsStringAsync(cancellationToken);
-        using var document = JsonDocument.Parse(content);
-        return document.RootElement
-            .GetProperty("choices")[0]
-            .GetProperty("message")
-            .GetProperty("content")
-            .GetString()?.Trim() ?? string.Empty;
+        {
+            using (response)
+            {
+                if (!response.IsSuccessStatusCode)
+                {
+                    await HandleErrorAsync(response, model, cancellationToken);
+                }
+
+                var content = await response.Content.ReadAsStringAsync(cancellationToken);
+                using var document = JsonDocument.Parse(content);
+                return document.RootElement
+                    .GetProperty("choices")[0]
+                    .GetProperty("message")
+                    .GetProperty("content")
+                    .GetString()?.Trim() ?? string.Empty;
+            }
+        }
     }
 
     public async IAsyncEnumerable<string> StreamRequestAsync(
@@ -131,13 +150,19 @@ public sealed class OpenAiProvider(
     {
         var statusCode = (int)response.StatusCode;
         var correlationId = response.Headers.TryGetValues("x-request-id", out var values) ? values.FirstOrDefault() ?? "N/A" : "N/A";
+        var responseBody = await response.Content.ReadAsStringAsync(cancellationToken);
 
         logger.LogError(
-            "OpenAI API request failed. Status Code: {StatusCode}. Correlation ID: {CorrelationId}. Model: {Model}.",
-            response.StatusCode, correlationId, model);
+            "OpenAI API request failed. Status Code: {StatusCode}. Correlation ID: {CorrelationId}. Model: {Model}. Body: {Body}",
+            response.StatusCode, correlationId, model, responseBody);
 
         if (statusCode == 429) throw new AiProviderException(429, "AI услугата е претоварена.", "OpenAI 429.");
         if (statusCode == 404) throw new AiProviderException(404, "Моделът не е наличен.", $"OpenAI 404 for {model}.");
-        throw new InvalidOperationException("Проблем при комуникацията с AI услугата.");
+        if (statusCode == 503 || statusCode >= 500)
+        {
+            throw new AiProviderException(503, "AI услугата временно е недостъпна.", $"OpenAI {statusCode} for {model}.");
+        }
+
+        throw new AiProviderException(502, "Проблем при комуникацията с AI услугата.", $"OpenAI {statusCode} for {model}.");
     }
 }

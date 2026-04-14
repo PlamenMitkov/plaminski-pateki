@@ -14,6 +14,7 @@ import {
 } from 'recharts';
 import type { Trail } from '../types/trail';
 import FilterSidebar from '../components/home/FilterSidebar';
+import { DifficultyGauge } from '../components/common/DifficultyGauge';
 import { useAuthCapabilities } from '../hooks/useAuthCapabilities';
 import { useAssistant } from '../hooks/useAssistant';
 import { useTrails } from '../hooks/useTrails';
@@ -25,6 +26,7 @@ import {
   enrichTrailSemanticData,
   getAssistantSessionMessages,
   getMyAssistantSessions,
+  submitAssistantFeedback,
   type AssistantQuickAction,
   type AssistantSessionResponse,
 } from '../services/assistantService';
@@ -36,17 +38,18 @@ const LazyMapWidget = lazy(() => import('../components/home/MapWidget'));
 const ASSISTANT_SESSION_STORAGE_KEY = 'ecotrails:assistantSessionId';
 const ASSISTANT_ACTIONS_STORAGE_KEY = 'ecotrails:assistantQuickActionsBySession';
 const FORBIDDEN_NOTICE_KEY = 'ecotrails:forbiddenNotice';
+const ASSISTANT_FEEDBACK_STORAGE_KEY = 'ecotrails:assistantFeedback';
 
-type HomeTab = 'list' | 'map' | 'favorites' | 'assistant';
+type HomeTab = 'home' | 'list' | 'map' | 'favorites' | 'assistant';
 type SortBy = 'id' | 'name' | 'difficulty' | 'duration' | 'elevation';
 type SortDirection = 'asc' | 'desc';
 
 function parseTab(value: string | null): HomeTab {
-  if (value === 'map' || value === 'favorites' || value === 'assistant' || value === 'list') {
+  if (value === 'home' || value === 'map' || value === 'favorites' || value === 'assistant' || value === 'list') {
     return value;
   }
 
-  return 'list';
+  return 'home';
 }
 
 function parseBoolean(value: string | null, fallback = false): boolean {
@@ -107,164 +110,6 @@ function formatRouteCount(count: number): string {
   return count === 1 ? '1 маршрут' : `${count} маршрута`;
 }
 
-function buildTrailRouteNotes(trail: Trail): string[] {
-  const notes: string[] = [];
-
-  if (trail.difficulty <= 2) {
-    notes.push('Маршрутът е подходящ за начинаещи и семейства с умерено темпо.');
-  } else if (trail.difficulty >= 4) {
-    notes.push('Маршрутът е техничен: планирай ранно тръгване и резерв от време.');
-  } else {
-    notes.push('Маршрутът е със средна трудност и е подходящ за еднодневен преход.');
-  }
-
-  if (trail.durationInHours >= 6) {
-    notes.push('Препоръчителни са челник, храна за целия ден и допълнителен слой дрехи.');
-  } else if (trail.durationInHours <= 2) {
-    notes.push('Подходящ за кратък полудневен излет с лека екипировка.');
-  }
-
-  if (trail.elevationGain >= 900) {
-    notes.push('Денивелацията е висока: следи хидратацията и темпото при изкачване.');
-  } else if (trail.elevationGain <= 250) {
-    notes.push('Ниска денивелация: маршрутът е подходящ и за по-спокойно темпо.');
-  }
-
-  if (trail.latitude !== null && trail.longitude !== null) {
-    notes.push('GPS координатите са налични и могат да се ползват за офлайн навигация.');
-  } else {
-    notes.push('Липсват точни координати: добави алтернативно описание на достъпа.');
-  }
-
-  return notes;
-}
-
-type TrailForecast = {
-  trailId: number;
-  trailName: string;
-  location: string;
-  coordinates: {
-    latitude: number;
-    longitude: number;
-  };
-  source: string;
-  fetchedAt: string;
-  days: Array<{
-    date: string;
-    weatherCode: number | null;
-    minTempC: number | null;
-    maxTempC: number | null;
-    precipitationProbabilityMax: number | null;
-    windSpeedMax: number | null;
-  }>;
-};
-
-type BackendOfflineEnrichmentResponse = {
-  generatedAt: string;
-  requestedTrailCount: number;
-  enrichedTrailCount: number;
-  cachedTrailCount: number;
-  sourcePreviewCount: number;
-  sourcePreviewFailures: number;
-  weatherAlerts?: {
-    sourceName: string;
-    sourceUrl: string;
-    fetchedAt: string;
-    isOfficialSource: boolean;
-    alerts: string[];
-  };
-  trails: Array<{
-    trailId: number;
-    trailName: string;
-    location: string;
-    cachedAt: string;
-    sourceUrl?: string;
-    sourcePreview?: {
-      title?: string;
-      description?: string;
-      fetchedAt: string;
-    };
-    transport: {
-      publicTransport?: string;
-      parkingAvailable?: boolean;
-    };
-    accessibility: {
-      wheelchairAccessible?: boolean;
-      strollerFriendly?: boolean;
-      bicycleAllowed?: boolean;
-    };
-    safetyWarnings: string[];
-    nearbyAmenities: string[];
-    equipmentNeeded: string[];
-    suitabilityTags: string[];
-    bestMonths: string[];
-    winterAccessible?: boolean;
-    weatherDependent?: boolean;
-    webcamLinks: string[];
-    accessNotes: string[];
-  }>;
-};
-
-async function fetchTrailForecast(trail: Trail): Promise<TrailForecast | null> {
-  if (trail.latitude === null || trail.longitude === null) {
-    return null;
-  }
-
-  const query = new URLSearchParams({
-    latitude: String(trail.latitude),
-    longitude: String(trail.longitude),
-    daily:
-      'weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,wind_speed_10m_max',
-    forecast_days: '3',
-    timezone: 'auto',
-  });
-
-  const response = await fetch(`https://api.open-meteo.com/v1/forecast?${query.toString()}`);
-  if (!response.ok) {
-    throw new Error(`Open-Meteo error: ${response.status}`);
-  }
-
-  const payload = (await response.json()) as {
-    daily?: {
-      time?: string[];
-      weather_code?: number[];
-      temperature_2m_max?: number[];
-      temperature_2m_min?: number[];
-      precipitation_probability_max?: number[];
-      wind_speed_10m_max?: number[];
-    };
-  };
-
-  const dates = payload.daily?.time ?? [];
-  const codes = payload.daily?.weather_code ?? [];
-  const maxTemps = payload.daily?.temperature_2m_max ?? [];
-  const minTemps = payload.daily?.temperature_2m_min ?? [];
-  const precipitation = payload.daily?.precipitation_probability_max ?? [];
-  const wind = payload.daily?.wind_speed_10m_max ?? [];
-
-  const days = dates.map((date, index) => ({
-    date,
-    weatherCode: codes[index] ?? null,
-    minTempC: minTemps[index] ?? null,
-    maxTempC: maxTemps[index] ?? null,
-    precipitationProbabilityMax: precipitation[index] ?? null,
-    windSpeedMax: wind[index] ?? null,
-  }));
-
-  return {
-    trailId: trail.id,
-    trailName: trail.name,
-    location: trail.location,
-    coordinates: {
-      latitude: trail.latitude,
-      longitude: trail.longitude,
-    },
-    source: 'Open-Meteo',
-    fetchedAt: new Date().toISOString(),
-    days,
-  };
-}
-
 function HomePage() {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -274,7 +119,6 @@ function HomePage() {
     trails: fetchedTrails,
     isLoading,
     error,
-    setError,
     page,
     setPage,
     searchInput,
@@ -342,7 +186,6 @@ function HomePage() {
 
   const [isMapLoading, setIsMapLoading] = useState(false);
   const [accessNotice, setAccessNotice] = useState('');
-  const [isExporting, setIsExporting] = useState(false);
   const { authUser, refreshSession, clearAuth, isAdmin } = useAuthCapabilities();
   const [favoriteTrailsForStats, setFavoriteTrailsForStats] = useState<Trail[]>([]);
 
@@ -528,9 +371,7 @@ function HomePage() {
     }
   }, [mapFilteredTrails, selectedMapTrailId]);
 
-  const trails = shouldShowOnlyFavorites
-    ? fetchedTrails.filter((trail) => isFavorite(trail.id))
-    : fetchedTrails;
+  const trails = shouldShowOnlyFavorites ? mapFilteredTrails : fetchedTrails;
 
   const selectedMapTrail = selectedMapTrailId
     ? mapFilteredTrails.find((trail) => trail.id === selectedMapTrailId) ?? null
@@ -538,34 +379,6 @@ function HomePage() {
 
   const mapTrailsToShow =
     showOnlySelectedOnMap && selectedMapTrail ? [selectedMapTrail] : mapFilteredTrails;
-
-  const selectedFavoriteTrails = useMemo(
-    () => mapFilteredTrails.filter((trail) => isFavorite(trail.id)),
-    [isFavorite, mapFilteredTrails],
-  );
-
-  const forecastCandidateTrails = useMemo(() => {
-    const withCoordinates = mapFilteredTrails.filter(
-      (trail) => trail.latitude !== null && trail.longitude !== null,
-    );
-
-    const prioritized: Trail[] = [];
-    const seen = new Set<number>();
-    const pushUnique = (trail: Trail | null | undefined) => {
-      if (!trail || seen.has(trail.id)) {
-        return;
-      }
-
-      seen.add(trail.id);
-      prioritized.push(trail);
-    };
-
-    pushUnique(selectedMapTrail);
-    selectedFavoriteTrails.forEach(pushUnique);
-    withCoordinates.forEach(pushUnique);
-
-    return prioritized.slice(0, 10);
-  }, [mapFilteredTrails, selectedFavoriteTrails, selectedMapTrail]);
 
   const getWeatherLocationCandidate = useCallback((): string => {
     if (selectedMapTrail?.location?.trim()) {
@@ -595,7 +408,7 @@ function HomePage() {
         value: weatherLocation,
       },
       {
-        id: 'weather-now',
+        id: 'weather-prep',
         label: weatherLocation
           ? `Подготовка за преход около ${weatherLocation}`
           : 'Подготовка според времето',
@@ -607,7 +420,11 @@ function HomePage() {
   useEffect(() => {
     const nextParams = new URLSearchParams();
 
-    nextParams.set('tab', activeTab);
+    if (activeTab === 'home') {
+      nextParams.delete('tab');
+    } else {
+      nextParams.set('tab', activeTab);
+    }
     nextParams.set('page', String(page));
 
     if (search.trim() !== '') nextParams.set('search', search.trim());
@@ -713,7 +530,11 @@ function HomePage() {
 
   const openTab = (tab: HomeTab) => {
     const nextParams = new URLSearchParams(searchParams);
-    nextParams.set('tab', tab);
+    if (tab === 'home') {
+      nextParams.delete('tab');
+    } else {
+      nextParams.set('tab', tab);
+    }
     setSearchParams(nextParams, { replace: true });
     setPage(1);
   };
@@ -853,6 +674,14 @@ function HomePage() {
       return;
     }
 
+    if (action.id === 'weather-prep') {
+      const targetLocation = action.value?.trim() || getWeatherLocationCandidate();
+      const prepPrompt = `Дай конкретна подготовка за преход около ${targetLocation} според времето, терена, водата и нужната екипировка.`;
+      setAssistantPrompt(prepPrompt);
+      void generateAssistantReply(prepPrompt);
+      return;
+    }
+
     if (action.id === 'ask-prompt') {
       const followUpPrompt = action.value?.trim();
       if (!followUpPrompt) {
@@ -891,157 +720,6 @@ function HomePage() {
       setAssistantAdminError('Неуспешно обогатяване на семантични данни. Опитай отново.');
     } finally {
       setIsAssistantEnriching(false);
-    }
-  };
-
-  const exportOfflinePackage = async () => {
-    try {
-      setIsExporting(true);
-
-      const enrichmentTrailIds = mapFilteredTrails.slice(0, 200).map((trail) => trail.id);
-      const enrichmentErrors: string[] = [];
-      let backendEnrichment: BackendOfflineEnrichmentResponse | null = null;
-
-      if (enrichmentTrailIds.length > 0) {
-        try {
-          const enrichmentResponse = await apiClient.get<BackendOfflineEnrichmentResponse>(
-            '/trails/offline-enrichment',
-            {
-              params: {
-                ids: enrichmentTrailIds.join(','),
-              },
-            },
-          );
-
-          backendEnrichment = enrichmentResponse.data;
-        } catch (enrichmentError) {
-          console.error('Грешка при backend enrichment за офлайн пакет:', enrichmentError);
-          enrichmentErrors.push('Backend enrichment не е наличен за този експорт.');
-        }
-      }
-
-      const forecastResults = await Promise.allSettled(
-        forecastCandidateTrails.map((trail) => fetchTrailForecast(trail)),
-      );
-
-      const forecasts: TrailForecast[] = [];
-      const forecastErrors: string[] = [];
-
-      forecastResults.forEach((result, index) => {
-        const trail = forecastCandidateTrails[index];
-        if (result.status === 'fulfilled') {
-          if (result.value) {
-            forecasts.push(result.value);
-          }
-          return;
-        }
-
-        forecastErrors.push(`${trail.name}: ${String(result.reason)}`);
-      });
-
-      const routeNotes = mapFilteredTrails.map((trail) => ({
-        trailId: trail.id,
-        trailName: trail.name,
-        notes: buildTrailRouteNotes(trail),
-      }));
-
-      const favoriteTrailsById = new Map<number, Trail>();
-      selectedFavoriteTrails.forEach((trail) => {
-        favoriteTrailsById.set(trail.id, trail);
-      });
-      favoriteTrailsForStats.forEach((trail) => {
-        if (!favoriteTrailsById.has(trail.id)) {
-          favoriteTrailsById.set(trail.id, trail);
-        }
-      });
-
-      const selectedFavoriteTrailIds = Array.from(favoriteTrailsById.keys());
-      const selectedFavoriteTrailList = Array.from(favoriteTrailsById.values());
-
-      const offlinePackage = {
-        exportedAt: new Date().toISOString(),
-        exportType: 'offline-info-package',
-        app: 'EcoTrails.Client',
-        dataSources: {
-          trails: 'EcoTrails API /trails/export',
-          backendEnrichment: 'EcoTrails API /trails/offline-enrichment (24h cache + scraping)',
-          weatherForecast: 'Open-Meteo forecast API',
-        },
-        filters: {
-          search,
-          difficulty,
-          onlyWithCoords,
-          onlyFavorites: shouldShowOnlyFavorites,
-          sortBy,
-          sortDirection,
-        },
-        mapView: {
-          center: mapCenter,
-          zoom: mapZoom,
-          selectedTrailId: selectedMapTrailId,
-        },
-        summary: {
-          totalFilteredTrails: mapFilteredTrails.length,
-          exportedTrails: mapFilteredTrails.length,
-          selectedFavoriteTrailCount: selectedFavoriteTrailIds.length,
-          routeNotesCount: routeNotes.length,
-          backendEnrichmentTrailCount: backendEnrichment?.enrichedTrailCount ?? 0,
-          backendEnrichmentCachedTrailCount: backendEnrichment?.cachedTrailCount ?? 0,
-          backendEnrichmentPreviewFailures: backendEnrichment?.sourcePreviewFailures ?? 0,
-          backendLiveAlertCount: backendEnrichment?.weatherAlerts?.alerts.length ?? 0,
-          weatherForecastCount: forecasts.length,
-          weatherForecastErrors: forecastErrors.length,
-          enrichmentErrors: enrichmentErrors.length,
-        },
-        selectedFavorites: {
-          favoriteIds,
-          selectedFavoriteTrailIds,
-          trails: selectedFavoriteTrailList,
-        },
-        routeNotes,
-        backendEnrichment,
-        weatherForecast: {
-          generatedAt: new Date().toISOString(),
-          forecastDays: 3,
-          coverage: {
-            requestedTrails: forecastCandidateTrails.length,
-            successfulTrails: forecasts.length,
-            failedTrails: forecastErrors.length,
-          },
-          failures: forecastErrors,
-          trails: forecasts,
-        },
-        warnings: {
-          enrichmentErrors,
-          forecastErrors,
-        },
-        assistantContext: {
-          activeSessionId: assistantSessionId || null,
-          latestMessages: assistantMessages.slice(-8).map((message) => ({
-            role: message.role,
-            content: message.content,
-            timestamp: message.timestamp.toISOString(),
-          })),
-        },
-        trails: mapFilteredTrails,
-      };
-
-      const blob = new Blob([JSON.stringify(offlinePackage, null, 2)], {
-        type: 'application/json;charset=utf-8;',
-      });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `ecotrails-offline-${new Date().toISOString().slice(0, 10)}.json`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
-    } catch (exportError) {
-      console.error('Грешка при експорт на офлайн пакет:', exportError);
-      setError('Неуспешен експорт на офлайн пакет.');
-    } finally {
-      setIsExporting(false);
     }
   };
 
@@ -1093,6 +771,43 @@ function HomePage() {
     onOpenAssistantSession: (sessionId: string) => openAssistantSession(sessionId),
     onRequestDeleteSession: (sessionId: string) => requestDeleteAssistantSession(sessionId),
     onQuickAction: (action: AssistantQuickAction) => handleAssistantQuickAction(action),
+    onFeedback: (messageId: string, isPositive: boolean) => {
+      const persistFeedback = async () => {
+        try {
+          const raw = localStorage.getItem(ASSISTANT_FEEDBACK_STORAGE_KEY);
+          const parsed = raw
+            ? (JSON.parse(raw) as Record<string, { value: 'up' | 'down'; at: string; sessionId: string | null }>)
+            : {};
+
+          parsed[messageId] = {
+            value: isPositive ? 'up' : 'down',
+            at: new Date().toISOString(),
+            sessionId: assistantSessionId || null,
+          };
+
+          localStorage.setItem(ASSISTANT_FEEDBACK_STORAGE_KEY, JSON.stringify(parsed));
+
+          if (assistantSessionId) {
+            await submitAssistantFeedback({
+              sessionId: assistantSessionId,
+              messageId,
+              isPositive,
+            });
+          }
+
+          setAssistantAdminNotice(
+            isPositive
+              ? 'Благодарим за оценката. Маркирахме отговора като полезен.'
+              : 'Получихме обратна връзка. Ще използваме сигнала за подобрение на асистента.',
+          );
+        } catch (storageError) {
+          console.warn('Неуспешно запазване на AI обратна връзка:', storageError);
+          setAssistantAdminError('Неуспешно запазване на обратната връзка. Опитай отново.');
+        }
+      };
+
+      void persistFeedback();
+    },
   };
 
   if (isLoading) {
@@ -1193,6 +908,14 @@ function HomePage() {
       <div className="tabs-nav">
         <button
           type="button"
+          className={`tab-btn ${activeTab === 'home' ? 'active-tab' : ''}`}
+          onClick={() => openTab('home')}
+        >
+          <Mountain size={16} />
+          Начало
+        </button>
+        <button
+          type="button"
           className={`tab-btn ${activeTab === 'list' ? 'active-tab' : ''}`}
           onClick={() => openTab('list')}
         >
@@ -1225,45 +948,83 @@ function HomePage() {
         </button>
       </div>
 
-      <FilterSidebar
-        searchInput={searchInput}
-        difficulty={difficulty}
-        sortBy={sortBy}
-        sortDirection={sortDirection}
-        onlyWithCoords={onlyWithCoords}
-        shouldShowOnlyFavorites={shouldShowOnlyFavorites}
-        isExporting={isExporting}
-        isLoading={isLoading}
-        onSearchInputChange={(value) => setSearchInput(value)}
-        onApplySearch={applySearch}
-        onDifficultyChange={(value) => {
-          setPage(1);
-          setDifficulty(value);
-        }}
-        onSortByChange={(value) => {
-          setPage(1);
-          setSortBy(value);
-        }}
-        onSortDirectionChange={(value) => {
-          setPage(1);
-          setSortDirection(value);
-        }}
-        onClearFilters={clearFilters}
-        onToggleOnlyWithCoords={() => {
-          setPage(1);
-          setOnlyWithCoords((current) => !current);
-        }}
-        onToggleOnlyFavorites={() => {
-          setPage(1);
-          setShowOnlyFavorites((current) => !current);
-        }}
-        onExportOfflinePackage={() => void exportOfflinePackage()}
-      />
+      {activeTab === 'home' && (
+        <section className="home-welcome-panel">
+          <h2>Планирай следващата си разходка по-лесно</h2>
+          <p>
+            Избери как искаш да започнеш: разгледай пътеки, отвори картата, виж любимите или питай AI
+            асистента.
+          </p>
+          <div className="home-quick-actions">
+            <button type="button" className="primary-btn" onClick={() => openTab('list')}>
+              Виж всички пътеки
+            </button>
+            <button type="button" className="secondary-btn" onClick={() => openTab('map')}>
+              Отвори картата
+            </button>
+            <button type="button" className="secondary-btn" onClick={() => openTab('favorites')}>
+              Любими
+            </button>
+            <button type="button" className="secondary-btn" onClick={() => openTab('assistant')}>
+              AI асистент
+            </button>
+          </div>
+          <div className="home-stats-grid">
+            <article className="home-stat-card">
+              <span>Общо пътеки</span>
+              <strong>{formatTrailCount(totalCount)}</strong>
+            </article>
+            <article className="home-stat-card">
+              <span>С координати</span>
+              <strong>{mapFilteredTrails.filter((trail) => trail.latitude !== null && trail.longitude !== null).length}</strong>
+            </article>
+            <article className="home-stat-card">
+              <span>Любими</span>
+              <strong>{formatTrailCount(favoriteIds.length)}</strong>
+            </article>
+          </div>
+        </section>
+      )}
+
+      {activeTab !== 'home' && (
+        <FilterSidebar
+          searchInput={searchInput}
+          difficulty={difficulty}
+          sortBy={sortBy}
+          sortDirection={sortDirection}
+          onlyWithCoords={onlyWithCoords}
+          shouldShowOnlyFavorites={shouldShowOnlyFavorites}
+          isLoading={isLoading}
+          onSearchInputChange={(value) => setSearchInput(value)}
+          onApplySearch={applySearch}
+          onDifficultyChange={(value) => {
+            setPage(1);
+            setDifficulty(value);
+          }}
+          onSortByChange={(value) => {
+            setPage(1);
+            setSortBy(value);
+          }}
+          onSortDirectionChange={(value) => {
+            setPage(1);
+            setSortDirection(value);
+          }}
+          onClearFilters={clearFilters}
+          onToggleOnlyWithCoords={() => {
+            setPage(1);
+            setOnlyWithCoords((current) => !current);
+          }}
+          onToggleOnlyFavorites={() => {
+            setPage(1);
+            setShowOnlyFavorites((current) => !current);
+          }}
+        />
+      )}
 
       {accessNotice && <p className="status-text error">{accessNotice}</p>}
       {error && <p className="status-text error">{error}</p>}
       {isLoading && <p className="status-text">Зареждане...</p>}
-      {!error && (
+      {!error && activeTab !== 'home' && (
         <p className="status-text">
           Пътеки: страница {page} от {totalPages} (Общо {formatTrailCount(totalCount)}) · Карта:{' '}
           {isMapLoading ? 'зареждане...' : formatFilteredTrailCount(mapFilteredTrails.length)}
@@ -1361,6 +1122,7 @@ function HomePage() {
                 <p>
                   <strong>Трудност:</strong> {trail.difficulty}/5
                 </p>
+                <DifficultyGauge level={Math.min(Math.max(trail.difficulty, 1), 5) as 1 | 2 | 3 | 4 | 5} />
                 <p>
                   <strong>Продължителност:</strong> {trail.durationInHours} ч.
                 </p>

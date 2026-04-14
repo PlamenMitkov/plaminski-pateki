@@ -32,25 +32,47 @@ public class FavoritesRepository(AppDbContext context) : IFavoritesRepository
             .Select(item => item.Id)
             .ToListAsync(cancellationToken);
 
-        // Performance optimization: Using transaction to wrap ExecuteDeleteAsync and subsequent inserts
-        using var transaction = await context.Database.BeginTransactionAsync(cancellationToken);
+        if (context.Database.IsInMemory())
+        {
+            var existingFavorites = await context.UserFavoriteTrails
+                .Where(item => item.UserId == userId)
+                .ToListAsync(cancellationToken);
 
-        await context.UserFavoriteTrails
-            .Where(item => item.UserId == userId)
-            .ExecuteDeleteAsync(cancellationToken);
+            context.UserFavoriteTrails.RemoveRange(existingFavorites);
 
-        var newFavorites = validTrailIds
-            .Select(trailId => new UserFavoriteTrail
-            {
-                UserId = userId,
-                TrailId = trailId,
-                CreatedAt = DateTime.UtcNow
-            });
+            var inMemoryFavorites = validTrailIds
+                .Select(trailId => new UserFavoriteTrail
+                {
+                    UserId = userId,
+                    TrailId = trailId,
+                    CreatedAt = DateTime.UtcNow
+                });
 
-        await context.UserFavoriteTrails.AddRangeAsync(newFavorites, cancellationToken);
-        await context.SaveChangesAsync(cancellationToken);
+            await context.UserFavoriteTrails.AddRangeAsync(inMemoryFavorites, cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
+        }
+        else
+        {
+            // Keep transactional behavior for relational providers.
+            using var transaction = await context.Database.BeginTransactionAsync(cancellationToken);
 
-        await transaction.CommitAsync(cancellationToken);
+            await context.UserFavoriteTrails
+                .Where(item => item.UserId == userId)
+                .ExecuteDeleteAsync(cancellationToken);
+
+            var newFavorites = validTrailIds
+                .Select(trailId => new UserFavoriteTrail
+                {
+                    UserId = userId,
+                    TrailId = trailId,
+                    CreatedAt = DateTime.UtcNow
+                });
+
+            await context.UserFavoriteTrails.AddRangeAsync(newFavorites, cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
+
+            await transaction.CommitAsync(cancellationToken);
+        }
 
         return [.. validTrailIds.OrderBy(item => item)];
     }

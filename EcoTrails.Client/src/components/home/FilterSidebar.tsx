@@ -1,4 +1,4 @@
-import { Download, Heart, MapPin, Search } from 'lucide-react';
+import { Heart, MapPin, Search } from 'lucide-react';
 
 type SortBy = 'id' | 'name' | 'difficulty' | 'duration' | 'elevation';
 type SortDirection = 'asc' | 'desc';
@@ -10,7 +10,6 @@ interface FilterSidebarProps {
   sortDirection: SortDirection;
   onlyWithCoords: boolean;
   shouldShowOnlyFavorites: boolean;
-  isExporting: boolean;
   isLoading: boolean;
   onSearchInputChange: (value: string) => void;
   onApplySearch: () => void;
@@ -20,7 +19,6 @@ interface FilterSidebarProps {
   onClearFilters: () => void;
   onToggleOnlyWithCoords: () => void;
   onToggleOnlyFavorites: () => void;
-  onExportOfflinePackage: () => void;
 }
 
 function FilterSidebar({
@@ -30,7 +28,6 @@ function FilterSidebar({
   sortDirection,
   onlyWithCoords,
   shouldShowOnlyFavorites,
-  isExporting,
   isLoading,
   onSearchInputChange,
   onApplySearch,
@@ -40,7 +37,6 @@ function FilterSidebar({
   onClearFilters,
   onToggleOnlyWithCoords,
   onToggleOnlyFavorites,
-  onExportOfflinePackage,
 }: FilterSidebarProps) {
   return (
     <div className="toolbar">
@@ -48,10 +44,16 @@ function FilterSidebar({
         <input
           value={searchInput}
           onChange={(event) => onSearchInputChange(event.target.value)}
+          onKeyDown={(event) => {
+            if (event.key === 'Enter') {
+              event.preventDefault();
+              onApplySearch();
+            }
+          }}
           placeholder="Търси по име или локация"
           className="search-input"
         />
-        <button onClick={onApplySearch} className="primary-btn" type="button">
+        <button onClick={onApplySearch} className="primary-btn search-apply-btn" type="button">
           <Search size={16} />
           Търси
         </button>
@@ -114,15 +116,7 @@ function FilterSidebar({
           <Heart size={16} fill={shouldShowOnlyFavorites ? 'currentColor' : 'none'} />
           Покажи само любими
         </button>
-        <button
-          onClick={onExportOfflinePackage}
-          className="secondary-btn export-btn"
-          type="button"
-          disabled={isExporting || isLoading}
-        >
-          <Download size={16} />
-          {isExporting ? 'Експортиране...' : 'Офлайн пакет'}
-        </button>
+        {!isLoading && <span className="map-copy-status">Офлайн карта: таб "Карта", после избери пътека.</span>}
       </div>
     </div>
   );

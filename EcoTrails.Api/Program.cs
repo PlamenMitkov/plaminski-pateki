@@ -90,31 +90,42 @@ builder.Services.AddHttpClient<OpenRouteService>(httpClient =>
 builder.Services.AddHttpClient<IOpenAiProvider, OpenAiProvider>(httpClient =>
 {
     var options = builder.Configuration.GetSection("OpenAI").Get<OpenAiOptions>();
-    httpClient.BaseAddress = new Uri(options?.BaseUrl ?? "https://api.openai.com/v1/");
+    var baseUrl = options?.BaseUrl ?? "https://api.openai.com/v1/";
+    if (!baseUrl.EndsWith('/'))
+    {
+        baseUrl += "/";
+    }
+
+    httpClient.BaseAddress = new Uri(baseUrl);
     httpClient.Timeout = TimeSpan.FromSeconds(25);
 })
-.AddStandardResilienceHandler()
-.Configure(options =>
+.AddStandardResilienceHandler(options =>
 {
     options.Retry.MaxRetryAttempts = 3;
     options.Retry.Delay = TimeSpan.FromSeconds(2);
-    options.AttemptTimeout.Timeout = TimeSpan.FromSeconds(20);
+    options.AttemptTimeout.Timeout = TimeSpan.FromSeconds(10);
 });
 
 builder.Services.AddHttpClient<IGeminiProvider, GeminiProvider>(httpClient =>
 {
     var options = builder.Configuration.GetSection("OpenAI").Get<OpenAiOptions>();
-    httpClient.BaseAddress = new Uri(options?.GeminiBaseUrl ?? "https://generativelanguage.googleapis.com/v1beta/");
+    var geminiBaseUrl = options?.GeminiBaseUrl ?? "https://generativelanguage.googleapis.com/v1beta/";
+    if (!geminiBaseUrl.EndsWith('/'))
+    {
+        geminiBaseUrl += "/";
+    }
+
+    httpClient.BaseAddress = new Uri(geminiBaseUrl);
     httpClient.Timeout = TimeSpan.FromSeconds(25);
 })
-.AddStandardResilienceHandler()
-.Configure(options =>
+.AddStandardResilienceHandler(options =>
 {
     options.Retry.MaxRetryAttempts = 3;
     options.Retry.Delay = TimeSpan.FromSeconds(2);
-    options.AttemptTimeout.Timeout = TimeSpan.FromSeconds(20);
+    options.AttemptTimeout.Timeout = TimeSpan.FromSeconds(10);
 });
 
+builder.Services.AddScoped<IAiProviderClient, AiProviderClient>();
 builder.Services.AddScoped<IOpenAiAssistantService, AssistantService>();
 builder.Services.AddScoped<IAiProviderFallbackPolicy, AiProviderFallbackPolicy>();
 builder.Services.AddHttpClient<IAssistantWeatherContextService, AssistantWeatherContextService>(httpClient =>

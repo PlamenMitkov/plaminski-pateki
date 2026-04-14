@@ -1,0 +1,152 @@
+{
+  "audit_date": "2026-04-14",
+  "input_path": "C:\\Users\\35987\\source\\repos\\EcoProject\\ecoupdated.json",
+  "total_trails": 522,
+  "affected_trails": 522,
+  "total_findings": 1814,
+  "severity_counts": {
+    "high": 411,
+    "low": 314,
+    "medium": 1089
+  },
+  "category_counts": {
+    "contact_email_region_mismatch": 212,
+    "generic_description": 77,
+    "missing_length_km": 365,
+    "missing_nearest_town": 257,
+    "missing_photo_url": 296,
+    "missing_short_summary": 467,
+    "name_not_reflected_in_content": 78,
+    "placeholder_source": 7,
+    "summary_mismatch": 18,
+    "synthetic_without_sources": 37
+  },
+  "top_affected_trails": [
+    {
+      "trail_id": 250,
+      "trail_name": "Кечика Кая",
+      "findings": 6
+    },
+    {
+      "trail_id": 290,
+      "trail_name": "Обесен камък",
+      "findings": 6
+    },
+    {
+      "trail_id": 337,
+      "trail_name": "Странджански дъб",
+      "findings": 6
+    },
+    {
+      "trail_id": 401,
+      "trail_name": "на Чучулигите\n271. \\* Екопътека",
+      "findings": 6
+    },
+    {
+      "trail_id": 266,
+      "trail_name": "Кървавата скала",
+      "findings": 6
+    },
+    {
+      "trail_id": 281,
+      "trail_name": "Меаните",
+      "findings": 6
+    },
+    {
+      "trail_id": 284,
+      "trail_name": "Мечи стъпки",
+      "findings": 6
+    },
+    {
+      "trail_id": 518,
+      "trail_name": "Екопътека \"Тайните водопади\"",
+      "findings": 5
+    },
+    {
+      "trail_id": 15,
+      "trail_name": "Долина на река Благоевградска Бистрица",
+      "findings": 5
+    },
+    {
+      "trail_id": 153,
+      "trail_name": "Академика",
+      "findings": 5
+    },
+    {
+      "trail_id": 172,
+      "trail_name": "Беклемето",
+      "findings": 5
+    },
+    {
+      "trail_id": 177,
+      "trail_name": "Белоградчишки скали",
+      "findings": 5
+    },
+    {
+      "trail_id": 190,
+      "trail_name": "Българи",
+      "findings": 5
+    },
+    {
+      "trail_id": 191,
+      "trail_name": "Бяла река",
+      "findings": 5
+    },
+    {
+      "trail_id": 193,
+      "trail_name": "Варовитец",
+      "findings": 5
+    },
+    {
+      "trail_id": 194,
+      "trail_name": "Велека",
+      "findings": 5
+    },
+    {
+      "trail_id": 195,
+      "trail_name": "Видимско пръскало",
+      "findings": 5
+    },
+    {
+      "trail_id": 197,
+      "trail_name": "Врабча",
+      "findings": 5
+    },
+    {
+      "trail_id": 201,
+      "trail_name": "Геопарк Искър-Панега",
+      "findings": 5
+    },
+    {
+      "trail_id": 202,
+      "trail_name": "Гложенски манастир",
+      "findings": 5
+    },
+    {
+      "trail_id": 204,
+      "trail_name": "Горица",
+      "findings": 5
+    },
+    {
+      "trail_id": 206,
+      "trail_name": "Градище",
+      "findings": 5
+    },
+    {
+      "trail_id": 227,
+      "trail_name": "Етрополски водопад",
+      "findings": 5
+    },
+    {
+      "trail_id": 234,
+      "trail_name": "Изворите на Младежка",
+      "findings": 5
+    },
+    {
+      "trail_id": 260,
+      "trail_name": "Копрен",
+      "findings": 5
+    }
+  ],
+  "csv_report": "C:\\Users\\35987\\source\\repos\\EcoProject\\scripts\\data-quality\\reports\\full-freshness-findings-20260414-090536.csv"
+}

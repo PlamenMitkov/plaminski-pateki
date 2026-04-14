@@ -1,0 +1,44 @@
+EcoProject - Progress Report
+Date: 2026-04-01
+
+Summary
+This file tracks the implementation and debugging work completed so far in this workspace.
+
+1) Startup automation added
+- Created start.bat to launch the full stack (DB + API + Client).
+- Created stop.bat to stop containers cleanly.
+- Added README notes for one-click start/stop usage.
+
+2) main.py behavior changed
+- Updated main.py so it does not auto-start services.
+- Kept it as a non-launch informational file.
+
+3) Docker startup troubleshooting completed
+- Diagnosed "docker is not recognized" issue.
+- Added Docker executable auto-detection in start.bat and stop.bat.
+- Added Docker Desktop availability check before compose startup.
+- Added Docker resources bin to PATH within scripts.
+- Added temporary DOCKER_CONFIG handling in start.bat to bypass credential helper failure during image build.
+
+4) SQL Server startup/login issue resolved
+- Identified SQL login/database-open failure from stale persisted volume state.
+- Performed compose reset with volume removal and clean rebuild/start.
+- Verified containers can reach healthy/running status.
+
+5) Favorites/Trails tab display fix
+- Found frontend behavior where favorites listing could effectively rely on paged data source.
+- Updated HomePage list source logic for favorites mode:
+  trails = shouldShowOnlyFavorites ? mapFilteredTrails : fetchedTrails
+- Result: Favorites tab now uses the full filtered favorites dataset instead of only current page items.
+
+6) Validation performed
+- Ran frontend production build successfully (TypeScript + Vite).
+- Confirmed compile/build pass after UI data-source fix.
+
+Operational commands
+- Start project: .\start.bat
+- Stop project: .\stop.bat
+- If startup state is broken: docker compose down -v, then run .\start.bat
+
+Notes
+- This report is a standalone progress log for work completed to date.

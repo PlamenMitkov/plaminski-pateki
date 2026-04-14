@@ -3,6 +3,7 @@ using System.Text.Json;
 using System.Runtime.CompilerServices;
 using EcoTrails.Api.Contracts;
 using Microsoft.Extensions.Options;
+using Polly.Timeout;
 
 namespace EcoTrails.Api.Services;
 
@@ -37,21 +38,39 @@ public sealed class GeminiProvider(
                 Content = new StringContent(JsonSerializer.Serialize(payload, AiJsonContext.Default.GeminiPayload), Encoding.UTF8, "application/json")
             };
 
-            using var response = await httpClient.SendAsync(httpRequest, cancellationToken);
-            if (response.IsSuccessStatusCode)
+            HttpResponseMessage response;
+            try
             {
-                var content = await response.Content.ReadAsStringAsync(cancellationToken);
-                using var document = JsonDocument.Parse(content);
-                return ExtractText(document.RootElement);
+                response = await httpClient.SendAsync(httpRequest, cancellationToken);
+            }
+            catch (Exception ex) when (ex is TimeoutRejectedException || ex is TaskCanceledException || ex is HttpRequestException)
+            {
+                throw new AiProviderException(
+                    503,
+                    "AI услугата временно не отговаря. Опитайте отново след малко.",
+                    $"Gemini request timeout/unavailable for {candidateModel}.",
+                    ex);
             }
 
-            if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
             {
-                lastException = new AiProviderException(404, "Gemini моделът не е наличен.", $"Gemini 404 for {candidateModel}");
-                continue;
-            }
+                using (response)
+                {
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var content = await response.Content.ReadAsStringAsync(cancellationToken);
+                        using var document = JsonDocument.Parse(content);
+                        return ExtractText(document.RootElement);
+                    }
 
-            await HandleErrorAsync(response, candidateModel, cancellationToken);
+                    if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                    {
+                        lastException = new AiProviderException(404, "Gemini моделът не е наличен.", $"Gemini 404 for {candidateModel}");
+                        continue;
+                    }
+
+                    await HandleErrorAsync(response, candidateModel, cancellationToken);
+                }
+            }
         }
 
         if (lastException is not null) throw lastException;
@@ -107,7 +126,12 @@ public sealed class GeminiProvider(
         return new GeminiPayload
         {
             contents = [new GeminiContent { role = "user", parts = [new GeminiPart { text = combinedPrompt }] }],
-            generationConfig = new { temperature, maxOutputTokens = maxTokens, responseMimeType = forceJsonResponse ? "application/json" : "text/plain" }
+            generationConfig = new GeminiGenerationConfig
+            {
+                temperature = temperature,
+                maxOutputTokens = maxTokens,
+                responseMimeType = forceJsonResponse ? "application/json" : "text/plain"
+            }
         };
     }
 
@@ -132,8 +156,14 @@ public sealed class GeminiProvider(
     private async Task HandleErrorAsync(HttpResponseMessage response, string model, CancellationToken cancellationToken)
     {
         var statusCode = (int)response.StatusCode;
-        logger.LogError("Gemini API request failed. Status Code: {StatusCode}. Model: {Model}.", response.StatusCode, model);
+        var responseBody = await response.Content.ReadAsStringAsync(cancellationToken);
+        logger.LogError("Gemini API request failed. Status Code: {StatusCode}. Model: {Model}. Body: {Body}", response.StatusCode, model, responseBody);
         if (statusCode == 429) throw new AiProviderException(429, "Gemini quota limitReached.", $"Gemini 429 for {model}.");
-        throw new InvalidOperationException("Проблем при комуникацията с Gemini.");
+        if (statusCode == 503 || statusCode >= 500)
+        {
+            throw new AiProviderException(503, "Gemini временно не е достъпен.", $"Gemini {statusCode} for {model}.");
+        }
+
+        throw new AiProviderException(502, "Проблем при комуникацията с Gemini.", $"Gemini {statusCode} for {model}.");
     }
 }

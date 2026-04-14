@@ -9,6 +9,41 @@ import type {
 import AdminActionButton from '../AdminActionButton';
 import { AiFeedbackLoop } from './AiFeedbackLoop';
 
+const MESSAGE_LINK_REGEX = /(https?:\/\/[^\s]+|\/\?tab=map[^\s]*|\/trail\/\d+)/g;
+
+function renderMessageContent(content: string) {
+  const parts = content.split(MESSAGE_LINK_REGEX);
+  return parts.map((part, index) => {
+    if (/^https?:\/\//.test(part)) {
+      return (
+        <a
+          key={`msg-link-${index}`}
+          href={part}
+          target="_blank"
+          rel="noreferrer"
+          className="assistant-reply-link"
+        >
+          {part}
+        </a>
+      );
+    }
+
+    if (/^\/\?tab=map/.test(part) || /^\/trail\/\d+$/.test(part)) {
+      return (
+        <a
+          key={`msg-map-link-${index}`}
+          href={part}
+          className="assistant-reply-link"
+        >
+          {part}
+        </a>
+      );
+    }
+
+    return <span key={`msg-text-${index}`}>{part}</span>;
+  });
+}
+
 interface AssistantPanelProps {
   assistantPrompt: string;
   isTyping: boolean;
@@ -115,7 +150,8 @@ function AssistantPanel({
 
       <KnowledgeChips chips={assistantChips} />
 
-      <QuickActions actions={[...pinnedAssistantActions, ...assistantActions]} onAction={handlers.onQuickAction} />
+      <ToolStrip title="Инструменти за време и подготовка" actions={pinnedAssistantActions} onAction={handlers.onQuickAction} />
+      <QuickActions actions={assistantActions} onAction={handlers.onQuickAction} />
 
       {assistantUsedTrails.length > 0 && (
         <p className="assistant-meta">Контекст: {formatTrailCount(assistantUsedTrails.length)} от базата данни.</p>
@@ -204,11 +240,36 @@ const QuickActions = ({
   if (actions.length === 0) return null;
   return (
     <div className="assistant-quick-actions">
-      {actions.map((action) => (
-        <button key={`${action.id}-${action.value}`} type="button" className="secondary-btn" onClick={() => onAction(action)}>
+      {actions.map((action, index) => (
+        <button key={`${action.id}-${action.value}-${action.label}-${index}`} type="button" className="secondary-btn" onClick={() => onAction(action)}>
           {action.label}
         </button>
       ))}
+    </div>
+  );
+};
+
+const ToolStrip = ({
+  title,
+  actions,
+  onAction,
+}: {
+  title: string;
+  actions: AssistantQuickAction[];
+  onAction: (a: AssistantQuickAction) => void;
+}) => {
+  if (actions.length === 0) return null;
+
+  return (
+    <div className="assistant-inline-sessions">
+      <p className="assistant-meta">{title}</p>
+      <div className="assistant-quick-actions">
+        {actions.map((action, index) => (
+          <button key={`${action.id}-${action.value}-${action.label}-${index}`} type="button" className="secondary-btn" onClick={() => onAction(action)}>
+            {action.label}
+          </button>
+        ))}
+      </div>
     </div>
   );
 };
@@ -235,7 +296,7 @@ const MessageThread = ({
       {messages.map((m) => (
         <div key={m.id} className="assistant-message-wrapper" style={{ display: 'flex', flexDirection: 'column' }}>
           <p className={`assistant-reply ${m.role === 'assistant' ? 'assistant-reply-ai' : 'assistant-reply-user'}`}>
-            {m.content}
+            {renderMessageContent(m.content)}
           </p>
           {m.role === 'assistant' && (
             <AiFeedbackLoop
