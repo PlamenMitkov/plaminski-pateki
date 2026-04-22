@@ -1,5 +1,5 @@
 import { lazy, Suspense, useCallback, useEffect, useMemo, useState } from 'react';
-import { Mountain, Heart, List, Map as MapIcon, MessageCircle, Trash2 } from 'lucide-react';
+import { Mountain, Heart, List, Map as MapIcon, MessageCircle } from 'lucide-react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import {
   Bar,
@@ -22,13 +22,10 @@ import { useFavorites } from '../hooks/useFavorites';
 import apiClient from '../services/apiClient';
 import {
   createAssistantSession,
-  deleteAssistantSession,
   enrichTrailSemanticData,
   getAssistantSessionMessages,
-  getMyAssistantSessions,
   submitAssistantFeedback,
   type AssistantQuickAction,
-  type AssistantSessionResponse,
 } from '../services/assistantService';
 import '../App.css';
 
@@ -45,8 +42,12 @@ type SortBy = 'id' | 'name' | 'difficulty' | 'duration' | 'elevation';
 type SortDirection = 'asc' | 'desc';
 
 function parseTab(value: string | null): HomeTab {
-  if (value === 'home' || value === 'map' || value === 'favorites' || value === 'assistant' || value === 'list') {
+  if (value === 'home' || value === 'map' || value === 'assistant' || value === 'list') {
     return value;
+  }
+
+  if (value === 'favorites') {
+    return 'list';
   }
 
   return 'home';
@@ -92,10 +93,6 @@ function parseMapZoom(value: string | null, fallback = 7): number {
   }
 
   return Math.min(Math.max(Math.round(parsed), 3), 17);
-}
-
-function formatMessageCount(count: number): string {
-  return count === 1 ? '1 съобщение' : `${count} съобщения`;
 }
 
 function formatTrailCount(count: number): string {
@@ -206,12 +203,9 @@ function HomePage() {
 
   const assistantSessionId = sessionId ?? '';
   const [assistantPrompt, setAssistantPrompt] = useState('Препоръчай ми леки маршрути с координати.');
-  const [assistantUserSessions, setAssistantUserSessions] = useState<AssistantSessionResponse[]>([]);
   const [assistantAdminError, setAssistantAdminError] = useState('');
   const [assistantAdminNotice, setAssistantAdminNotice] = useState('');
   const [isAssistantEnriching, setIsAssistantEnriching] = useState(false);
-  const [isAssistantSessionsLoading, setIsAssistantSessionsLoading] = useState(false);
-  const [pendingDeleteSessionId, setPendingDeleteSessionId] = useState<string | null>(null);
   const [copyStatus, setCopyStatus] = useState('');
 
   useEffect(() => {
@@ -262,10 +256,7 @@ function HomePage() {
     }
 
     localStorage.setItem(ASSISTANT_SESSION_STORAGE_KEY, assistantSessionId);
-    if (authUser) {
-      void refreshMyAssistantSessions();
-    }
-  }, [assistantSessionId, authUser]);
+  }, [assistantSessionId]);
 
   useEffect(() => {
     if (!assistantSessionId || assistantActions.length === 0) {
@@ -302,28 +293,6 @@ function HomePage() {
       console.warn('Неуспешно възстановяване на assistant quick actions:', storageError);
     }
   }, [assistantActions.length, assistantSessionId, setQuickActions]);
-
-  const refreshMyAssistantSessions = async () => {
-    if (!authUser) {
-      setAssistantUserSessions([]);
-      return;
-    }
-
-    try {
-      setIsAssistantSessionsLoading(true);
-      const sessions = await getMyAssistantSessions(12);
-      setAssistantUserSessions(sessions);
-    } catch (requestError) {
-      console.error('Грешка при зареждане на AI сесиите за профила:', requestError);
-      setAssistantUserSessions([]);
-    } finally {
-      setIsAssistantSessionsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    void refreshMyAssistantSessions();
-  }, [authUser]);
 
   const {
     favoriteIds,
@@ -588,71 +557,11 @@ function HomePage() {
       const session = await createAssistantSession('Нова чат сесия');
       clearChat();
       setSessionId(session.sessionId);
-      if (authUser) {
-        void refreshMyAssistantSessions();
-      }
     } catch (requestError) {
       console.error('Грешка при създаване на нова сесия:', requestError);
       setAssistantAdminError('Неуспешно създаване на нова сесия. Опитай отново.');
     }
   };
-
-  const openAssistantSession = (sessionId: string) => {
-    if (!sessionId) {
-      return;
-    }
-
-    setSessionId(sessionId);
-    openTab('assistant');
-  };
-
-  const removeAssistantSession = async (sessionId: string) => {
-    try {
-      setAssistantAdminError('');
-      await deleteAssistantSession(sessionId);
-
-      if (assistantSessionId === sessionId) {
-        clearChat();
-        localStorage.removeItem(ASSISTANT_SESSION_STORAGE_KEY);
-      }
-
-      await refreshMyAssistantSessions();
-    } catch (requestError) {
-      console.error('Грешка при изтриване на сесия:', requestError);
-      setAssistantAdminError('Неуспешно изтриване на сесия. Опитай отново.');
-    }
-  };
-
-  const requestDeleteAssistantSession = (sessionId: string) => {
-    setPendingDeleteSessionId(sessionId);
-  };
-
-  const confirmDeleteAssistantSession = async () => {
-    if (!pendingDeleteSessionId) {
-      return;
-    }
-
-    const sessionId = pendingDeleteSessionId;
-    setPendingDeleteSessionId(null);
-    await removeAssistantSession(sessionId);
-  };
-
-  useEffect(() => {
-    if (!pendingDeleteSessionId) {
-      return;
-    }
-
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        setPendingDeleteSessionId(null);
-      }
-    };
-
-    window.addEventListener('keydown', onKeyDown);
-    return () => {
-      window.removeEventListener('keydown', onKeyDown);
-    };
-  }, [pendingDeleteSessionId]);
 
   const handleAssistantQuickAction = (action: AssistantQuickAction) => {
     if (action.id === 'show-map') {
@@ -764,12 +673,9 @@ function HomePage() {
       void startNewAssistantSession();
     },
     onOpenMapTab: () => openTab('map'),
-    onOpenFavoritesTab: () => openTab('favorites'),
     onRunAdminEnrichment: () => {
       void runAdminSemanticEnrichment();
     },
-    onOpenAssistantSession: (sessionId: string) => openAssistantSession(sessionId),
-    onRequestDeleteSession: (sessionId: string) => requestDeleteAssistantSession(sessionId),
     onQuickAction: (action: AssistantQuickAction) => handleAssistantQuickAction(action),
     onFeedback: (messageId: string, isPositive: boolean) => {
       const persistFeedback = async () => {
@@ -835,7 +741,6 @@ function HomePage() {
               onClick={() => {
                 clearAuth();
                 clearFavorites();
-                setAssistantUserSessions([]);
                 clearChat();
                 localStorage.removeItem(ASSISTANT_SESSION_STORAGE_KEY);
               }}
@@ -849,45 +754,6 @@ function HomePage() {
           </Link>
         )}
       </div>
-
-      {authUser && (
-        <div className="profile-assistant-card">
-          <h3>Профил: Моите AI сесии</h3>
-          {isAssistantSessionsLoading ? (
-            <p className="status-text">Зареждане на сесиите...</p>
-          ) : assistantUserSessions.length === 0 ? (
-            <p className="status-text">Все още нямаш запазени AI сесии.</p>
-          ) : (
-            <div className="assistant-session-list">
-              {assistantUserSessions.map((session) => (
-                <div
-                  key={session.sessionId}
-                  className={`assistant-session-item ${
-                    assistantSessionId === session.sessionId ? 'assistant-session-item-active' : ''
-                  }`}
-                >
-                  <button
-                    type="button"
-                    className="assistant-session-open"
-                    onClick={() => openAssistantSession(session.sessionId)}
-                  >
-                    <span>{session.title}</span>
-                    <small>{formatMessageCount(session.messageCount)}</small>
-                  </button>
-                  <button
-                    type="button"
-                    className="assistant-session-delete"
-                    onClick={() => requestDeleteAssistantSession(session.sessionId)}
-                    title="Изтрий сесия"
-                  >
-                    <Trash2 size={14} />
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
 
       {hasPendingCloudSync && (
         <div className="sync-banner">
@@ -929,14 +795,6 @@ function HomePage() {
         >
           <MapIcon size={16} />
           Карта
-        </button>
-        <button
-          type="button"
-          className={`tab-btn ${activeTab === 'favorites' ? 'active-tab' : ''}`}
-          onClick={() => openTab('favorites')}
-        >
-          <Heart size={16} fill={activeTab === 'favorites' ? 'currentColor' : 'none'} />
-          Любими
         </button>
         <button
           type="button"
@@ -994,7 +852,6 @@ function HomePage() {
           sortDirection={sortDirection}
           onlyWithCoords={onlyWithCoords}
           shouldShowOnlyFavorites={shouldShowOnlyFavorites}
-          isLoading={isLoading}
           onSearchInputChange={(value) => setSearchInput(value)}
           onApplySearch={applySearch}
           onDifficultyChange={(value) => {
@@ -1059,8 +916,6 @@ function HomePage() {
             isTyping={isTyping}
             isAdmin={isAdmin}
             isAssistantEnriching={isAssistantEnriching}
-            authUserEmail={authUser?.email ?? null}
-            assistantUserSessions={assistantUserSessions}
             assistantSessionId={assistantSessionId}
             assistantChips={assistantChips}
             pinnedAssistantActions={pinnedAssistantActions}
@@ -1071,7 +926,6 @@ function HomePage() {
             assistantAdminError={assistantAdminError}
             chatError={chatError}
             handlers={assistantHandlers}
-            formatMessageCount={formatMessageCount}
             formatTrailCount={formatTrailCount}
           />
         </Suspense>
@@ -1173,27 +1027,6 @@ function HomePage() {
         </>
       )}
 
-      {pendingDeleteSessionId && (
-        <div
-          className="assistant-modal-backdrop"
-          role="dialog"
-          aria-modal="true"
-          onClick={() => setPendingDeleteSessionId(null)}
-        >
-          <div className="assistant-modal-card" onClick={(event) => event.stopPropagation()}>
-            <h3>Потвърждение за изтриване</h3>
-            <p>Сигурен ли си, че искаш да изтриеш тази AI сесия?</p>
-            <div className="assistant-modal-actions">
-              <button type="button" className="secondary-btn" onClick={() => setPendingDeleteSessionId(null)}>
-                Отказ
-              </button>
-              <button type="button" className="primary-btn" onClick={() => void confirmDeleteAssistantSession()}>
-                Изтрий
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

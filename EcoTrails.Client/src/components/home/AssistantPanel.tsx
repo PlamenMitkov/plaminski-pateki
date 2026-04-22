@@ -1,46 +1,56 @@
-import { Trash2 } from 'lucide-react';
 import type { ChatMessage } from '../../hooks/useAssistant';
 import type {
   AssistantKnowledgeChip,
   AssistantQuickAction,
-  AssistantSessionResponse,
   AssistantTrailContext,
 } from '../../services/assistantService';
 import AdminActionButton from '../AdminActionButton';
 import { AiFeedbackLoop } from './AiFeedbackLoop';
 
-const MESSAGE_LINK_REGEX = /(https?:\/\/[^\s]+|\/\?tab=map[^\s]*|\/trail\/\d+)/g;
+const MESSAGE_LINK_REGEX = /(https?:\/\/[^\s]+|(?:\\\/|\/)\?tab=map[^\s]*|(?:\\\/|\/)trail(?:\\\/|\/)\d+(?:[/?#][^\s]*)?)/g;
+
+function normalizeEscapedLink(value: string) {
+  return value.replace(/\\\//g, '/');
+}
 
 function renderMessageContent(content: string) {
   const parts = content.split(MESSAGE_LINK_REGEX);
   return parts.map((part, index) => {
-    if (/^https?:\/\//.test(part)) {
+    const normalizedPart = normalizeEscapedLink(part);
+
+    if (/^https?:\/\//.test(normalizedPart)) {
       return (
         <a
           key={`msg-link-${index}`}
-          href={part}
+          href={normalizedPart}
           target="_blank"
           rel="noreferrer"
           className="assistant-reply-link"
         >
-          {part}
+          {normalizedPart}
         </a>
       );
     }
 
-    if (/^\/\?tab=map/.test(part) || /^\/trail\/\d+$/.test(part)) {
+    const internalLinkMatch = normalizedPart.match(/^(\/\?tab=map[^\s]*|\/trail\/\d+(?:[/?#][^\s]*)?)([)\].,!?]*)$/);
+    if (internalLinkMatch) {
+      const href = internalLinkMatch[1];
+      const suffix = internalLinkMatch[2] ?? '';
+
       return (
-        <a
-          key={`msg-map-link-${index}`}
-          href={part}
-          className="assistant-reply-link"
-        >
-          {part}
-        </a>
+        <span key={`msg-map-wrapper-${index}`}>
+          <a
+            href={href}
+            className="assistant-reply-link"
+          >
+            {href}
+          </a>
+          {suffix ? <span>{suffix}</span> : null}
+        </span>
       );
     }
 
-    return <span key={`msg-text-${index}`}>{part}</span>;
+    return <span key={`msg-text-${index}`}>{normalizedPart}</span>;
   });
 }
 
@@ -49,8 +59,6 @@ interface AssistantPanelProps {
   isTyping: boolean;
   isAdmin: boolean;
   isAssistantEnriching: boolean;
-  authUserEmail: string | null;
-  assistantUserSessions: AssistantSessionResponse[];
   assistantSessionId: string;
   assistantChips: AssistantKnowledgeChip[];
   pinnedAssistantActions: AssistantQuickAction[];
@@ -65,14 +73,10 @@ interface AssistantPanelProps {
     onGenerateReply: () => void;
     onStartNewSession: () => void;
     onOpenMapTab: () => void;
-    onOpenFavoritesTab: () => void;
     onRunAdminEnrichment: () => void;
-    onOpenAssistantSession: (sessionId: string) => void;
-    onRequestDeleteSession: (sessionId: string) => void;
     onQuickAction: (action: AssistantQuickAction) => void;
     onFeedback?: (messageId: string, isPositive: boolean) => void;
   };
-  formatMessageCount: (count: number) => string;
   formatTrailCount: (count: number) => string;
 }
 
@@ -81,8 +85,6 @@ function AssistantPanel({
   isTyping,
   isAdmin,
   isAssistantEnriching,
-  authUserEmail,
-  assistantUserSessions,
   assistantSessionId,
   assistantChips,
   pinnedAssistantActions,
@@ -93,7 +95,6 @@ function AssistantPanel({
   assistantAdminError,
   chatError,
   handlers,
-  formatMessageCount,
   formatTrailCount,
 }: AssistantPanelProps) {
   return (
@@ -127,9 +128,6 @@ function AssistantPanel({
         <button type="button" className="secondary-btn" onClick={handlers.onOpenMapTab}>
           Към карта
         </button>
-        <button type="button" className="secondary-btn" onClick={handlers.onOpenFavoritesTab}>
-          Към любими
-        </button>
         <AdminActionButton
           isAdmin={isAdmin}
           onClick={handlers.onRunAdminEnrichment}
@@ -139,19 +137,10 @@ function AssistantPanel({
         </AdminActionButton>
       </div>
 
-      <SessionList
-        authUserEmail={authUserEmail}
-        sessions={assistantUserSessions}
-        currentSessionId={assistantSessionId}
-        onOpen={handlers.onOpenAssistantSession}
-        onDelete={handlers.onRequestDeleteSession}
-        formatMessageCount={formatMessageCount}
-      />
-
       <KnowledgeChips chips={assistantChips} />
 
+      <ToolStrip title="Предложения за тази сесия" actions={assistantActions} onAction={handlers.onQuickAction} />
       <ToolStrip title="Инструменти за време и подготовка" actions={pinnedAssistantActions} onAction={handlers.onQuickAction} />
-      <QuickActions actions={assistantActions} onAction={handlers.onQuickAction} />
 
       {assistantUsedTrails.length > 0 && (
         <p className="assistant-meta">Контекст: {formatTrailCount(assistantUsedTrails.length)} от базата данни.</p>
@@ -172,51 +161,6 @@ function AssistantPanel({
 
 // Atomic Pure Components
 
-const SessionList = ({
-  authUserEmail,
-  sessions,
-  currentSessionId,
-  onOpen,
-  onDelete,
-  formatMessageCount,
-}: {
-  authUserEmail: string | null;
-  sessions: AssistantSessionResponse[];
-  currentSessionId: string;
-  onOpen: (sid: string) => void;
-  onDelete: (sid: string) => void;
-  formatMessageCount: (c: number) => string;
-}) => {
-  if (!authUserEmail || sessions.length === 0) return null;
-
-  return (
-    <div className="assistant-inline-sessions">
-      <p className="assistant-meta">Сесии в профила</p>
-      <div className="assistant-session-list">
-        {sessions.map((session) => (
-          <div
-            key={session.sessionId}
-            className={`assistant-session-item ${currentSessionId === session.sessionId ? 'assistant-session-item-active' : ''}`}
-          >
-            <button type="button" className="assistant-session-open" onClick={() => onOpen(session.sessionId)}>
-              <span>{session.title}</span>
-              <small>{formatMessageCount(session.messageCount)}</small>
-            </button>
-            <button
-              type="button"
-              className="assistant-session-delete"
-              onClick={() => onDelete(session.sessionId)}
-              title="Изтрий сесия"
-            >
-              <Trash2 size={14} />
-            </button>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
-
 const KnowledgeChips = ({ chips }: { chips: AssistantKnowledgeChip[] }) => {
   if (chips.length === 0) return null;
   return (
@@ -225,25 +169,6 @@ const KnowledgeChips = ({ chips }: { chips: AssistantKnowledgeChip[] }) => {
         <span key={`${chip.label}-${i}`} className={`assistant-chip assistant-chip-${chip.type}`}>
           {chip.label}
         </span>
-      ))}
-    </div>
-  );
-};
-
-const QuickActions = ({
-  actions,
-  onAction,
-}: {
-  actions: AssistantQuickAction[];
-  onAction: (a: AssistantQuickAction) => void;
-}) => {
-  if (actions.length === 0) return null;
-  return (
-    <div className="assistant-quick-actions">
-      {actions.map((action, index) => (
-        <button key={`${action.id}-${action.value}-${action.label}-${index}`} type="button" className="secondary-btn" onClick={() => onAction(action)}>
-          {action.label}
-        </button>
       ))}
     </div>
   );

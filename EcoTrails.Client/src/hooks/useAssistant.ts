@@ -53,6 +53,28 @@ const initialState: AssistantState = {
   quickActions: [],
 };
 
+function mergeQuickActions(existing: AssistantQuickAction[], incoming: AssistantQuickAction[]): AssistantQuickAction[] {
+  const merged = [...incoming, ...existing];
+  const seen = new Set<string>();
+  const result: AssistantQuickAction[] = [];
+
+  for (const action of merged) {
+    const key = `${action.id}::${action.value}::${action.label}`;
+    if (seen.has(key)) {
+      continue;
+    }
+
+    seen.add(key);
+    result.push(action);
+
+    if (result.length >= 12) {
+      break;
+    }
+  }
+
+  return result;
+}
+
 function assistantReducer(state: AssistantState, action: AssistantAction): AssistantState {
   switch (action.type) {
     case 'APPEND_USER_MESSAGE':
@@ -67,7 +89,7 @@ function assistantReducer(state: AssistantState, action: AssistantAction): Assis
         isTyping: false,
         usedTrails: action.usedTrails,
         knowledgeChips: action.knowledgeChips,
-        quickActions: action.quickActions,
+        quickActions: mergeQuickActions(state.quickActions, action.quickActions),
       };
     case 'SET_ERROR':
       return { ...state, error: action.error, isTyping: false };

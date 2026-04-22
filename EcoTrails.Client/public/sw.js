@@ -1,6 +1,6 @@
-const STATIC_CACHE = 'ecotrails-static-v1';
-const API_CACHE = 'ecotrails-api-v1';
-const TILE_CACHE = 'ecotrails-tiles-v1';
+const STATIC_CACHE = 'ecotrails-static-v2';
+const API_CACHE = 'ecotrails-api-v2';
+const TILE_CACHE = 'ecotrails-tiles-v2';
 
 const STATIC_ASSETS = ['/', '/index.html', '/manifest.webmanifest'];
 const API_PATHS = ['/api/trails/export', '/api/trails/summary', '/api/trails/offline-enrichment'];
@@ -74,6 +74,11 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  if (request.mode === 'navigate') {
+    event.respondWith(networkFirst('/index.html', STATIC_CACHE));
+    return;
+  }
+
   if (isApiRequest(request)) {
     event.respondWith(networkFirst(request, API_CACHE));
     return;
@@ -86,6 +91,11 @@ self.addEventListener('fetch', (event) => {
 
   const url = new URL(request.url);
   if (url.origin === self.location.origin) {
+    if (url.pathname === '/index.html') {
+      event.respondWith(networkFirst(request, STATIC_CACHE));
+      return;
+    }
+
     event.respondWith(cacheFirst(request, STATIC_CACHE));
   }
 });

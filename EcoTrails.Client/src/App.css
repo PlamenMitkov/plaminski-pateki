@@ -655,6 +655,18 @@
   background: #f5f3ff;
 }
 
+.assistant-chip-danger {
+  border-color: #fca5a5;
+  background: #fef2f2;
+  color: #991b1b;
+}
+
+.assistant-chip-neutral {
+  border-color: #cbd5e1;
+  background: #f8fafc;
+  color: #334155;
+}
+
 .assistant-quick-actions {
   margin-top: 10px;
   display: flex;
@@ -987,6 +999,86 @@
 
 .profile-post-item h4 {
   margin: 0 0 4px;
+}
+
+.user-post-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.user-post-note {
+  margin: 6px 0;
+  font-weight: 600;
+}
+
+.user-post-note-approved {
+  color: #166534;
+}
+
+.user-post-note-rejected {
+  color: #b91c1c;
+}
+
+.user-page .profile-hub-card {
+  max-width: 1080px;
+}
+
+.user-page .profile-card {
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+}
+
+.user-activity-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.user-activity-item {
+  border: 1px solid #dbe4f0;
+  border-radius: 10px;
+  padding: 10px 12px;
+  background: #ffffff;
+  display: grid;
+  gap: 4px;
+}
+
+.user-activity-item strong {
+  color: #0f172a;
+}
+
+.user-activity-item span,
+.user-activity-item small {
+  color: #475569;
+}
+
+.user-activity-session {
+  border-left: 4px solid #2563eb;
+}
+
+.user-activity-proposal {
+  border-left: 4px solid #16a34a;
+}
+
+.user-activity-post {
+  border-left: 4px solid #f59e0b;
+}
+
+.user-modal-card {
+  width: min(560px, calc(100vw - 24px));
+}
+
+.user-danger-card {
+  border: 1px solid #fecaca;
+  background: #fff7f7;
+}
+
+.user-danger-card h3,
+.user-danger-card p,
+.user-danger-card .auth-label {
+  color: #7f1d1d;
 }
 
 .post-image-grid {

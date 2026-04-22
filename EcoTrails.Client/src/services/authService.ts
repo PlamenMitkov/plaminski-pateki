@@ -195,6 +195,11 @@ export interface ChangePasswordResponse {
   token: string;
 }
 
+export interface DeleteAccountRequest {
+  currentPassword: string;
+  confirmationText: string;
+}
+
 export async function changePassword(request: ChangePasswordRequest): Promise<void> {
   const response = await apiClient.post<ChangePasswordResponse>('/auth/change-password', request);
   
@@ -205,4 +210,9 @@ export async function changePassword(request: ChangePasswordRequest): Promise<vo
   
   // Revalidate session with new token
   await validateAuthSession();
+}
+
+export async function deleteAccount(request: DeleteAccountRequest): Promise<void> {
+  await apiClient.post('/auth/delete-account', request);
+  logout();
 }

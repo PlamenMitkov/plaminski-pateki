@@ -10,7 +10,6 @@ interface FilterSidebarProps {
   sortDirection: SortDirection;
   onlyWithCoords: boolean;
   shouldShowOnlyFavorites: boolean;
-  isLoading: boolean;
   onSearchInputChange: (value: string) => void;
   onApplySearch: () => void;
   onDifficultyChange: (value: number | '') => void;
@@ -28,7 +27,6 @@ function FilterSidebar({
   sortDirection,
   onlyWithCoords,
   shouldShowOnlyFavorites,
-  isLoading,
   onSearchInputChange,
   onApplySearch,
   onDifficultyChange,
@@ -116,7 +114,6 @@ function FilterSidebar({
           <Heart size={16} fill={shouldShowOnlyFavorites ? 'currentColor' : 'none'} />
           Покажи само любими
         </button>
-        {!isLoading && <span className="map-copy-status">Офлайн карта: таб "Карта", после избери пътека.</span>}
       </div>
     </div>
   );

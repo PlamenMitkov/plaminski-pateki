@@ -5,17 +5,18 @@ import TrailDetails from './pages/TrailDetails';
 import AuthPage from './pages/AuthPage';
 import AboutPage from './pages/AboutPage';
 import AdminPanelPage from './pages/AdminPanelPage';
+import UserPage from './pages/UserPage';
 
 function App() {
   const location = useLocation();
   const activeTab = new URLSearchParams(location.search).get('tab');
 
   const isHomeActive = location.pathname === '/' && (!activeTab || activeTab === 'home');
-  const isTrailsActive =
-    location.pathname === '/' && (activeTab === 'list' || activeTab === 'map' || activeTab === 'favorites');
-  const isProfileActive = location.pathname === '/auth';
-  const isSettingsActive = location.pathname === '/' && activeTab === 'assistant';
+  const isTrailsActive = location.pathname === '/' && activeTab === 'list';
+  const isMapActive = location.pathname === '/' && activeTab === 'map';
+  const isAssistantActive = location.pathname === '/' && activeTab === 'assistant';
   const isAboutActive = location.pathname === '/about';
+  const isUserActive = location.pathname === '/user';
 
   const roundButtonClass = (isActive: boolean, extraClass = '') =>
     `round-button${isActive ? ' active-round-button' : ''}${extraClass ? ` ${extraClass}` : ''}`;
@@ -39,19 +40,22 @@ function App() {
         <Link to="/?tab=list" className={roundButtonClass(isTrailsActive)} title="Пътеки" aria-label="Пътеки">
           <i className="fas fa-route" aria-hidden="true"></i>
         </Link>
-        <Link to="/auth" className={roundButtonClass(isProfileActive)} title="Профил" aria-label="Профил">
-          <i className="fas fa-id-badge" aria-hidden="true"></i>
+        <Link to="/?tab=map" className={roundButtonClass(isMapActive)} title="Карта" aria-label="Карта">
+          <i className="fas fa-map" aria-hidden="true"></i>
         </Link>
         <Link to="/about" className={roundButtonClass(isAboutActive)} title="За нас" aria-label="За нас">
           <i className="fas fa-circle-info" aria-hidden="true"></i>
         </Link>
         <Link
           to="/?tab=assistant"
-          className={roundButtonClass(isSettingsActive)}
-          title="Настройки"
-          aria-label="Настройки"
+          className={roundButtonClass(isAssistantActive)}
+          title="Асистент"
+          aria-label="Асистент"
         >
-          <i className="fas fa-sliders" aria-hidden="true"></i>
+          <i className="fas fa-robot" aria-hidden="true"></i>
+        </Link>
+        <Link to="/user" className={roundButtonClass(isUserActive)} title="Профил" aria-label="Профил">
+          <i className="fas fa-user" aria-hidden="true"></i>
         </Link>
       </nav>
 
@@ -62,6 +66,7 @@ function App() {
           <Route path="/about" element={<AboutPage />} />
           <Route path="/trail/:id" element={<TrailDetails />} />
           <Route path="/admin" element={<AdminPanelPage />} />
+          <Route path="/user" element={<UserPage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>
