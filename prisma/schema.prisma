@@ -1,0 +1,127 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Trail {
+  id                 Int                 @id @default(autoincrement())
+  sourceTrailId      Int?                @unique @map("source_trail_id")
+  name               String
+  description        String?
+  shortSummary       String?             @map("short_summary")
+  sourceUrl          String?             @map("source_url")
+  photoUrl           String?             @map("photo_url")
+  bestSeason         String[]            @default([]) @map("best_season")
+  suitability        String[]            @default([])
+  equipmentNeeded    String[]            @default([]) @map("equipment_needed")
+  safetyWarnings     String[]            @default([]) @map("safety_warnings")
+  nearbyAmenities    String[]            @default([]) @map("nearby_amenities")
+  locationKeywords   String[]            @default([]) @map("location_keywords")
+  ingestedAt         DateTime            @default(now()) @map("ingested_at")
+  location           TrailLocation?
+  details            TrailDetails?
+  transportation     TrailTransportation?
+  accessibility      TrailAccessibility?
+  seasonalInfo       TrailSeasonalInfo?
+  contactInfo        TrailContactInfo?
+  rating             TrailRating?
+  metadata           TrailMetadata?
+  attractions        TrailAttraction[]
+
+  @@index([name])
+}
+
+model TrailLocation {
+  id           Int     @id @default(autoincrement())
+  trailId       Int     @unique @map("trail_id")
+  region        String?
+  nearestTown   String? @map("nearest_town")
+  latitude      Float?
+  longitude     Float?
+  trail         Trail   @relation(fields: [trailId], references: [id], onDelete: Cascade)
+
+  @@index([region])
+  @@index([nearestTown])
+}
+
+model TrailDetails {
+  id              Int     @id @default(autoincrement())
+  trailId         Int     @unique @map("trail_id")
+  lengthKm        Float?  @map("length_km")
+  durationText    String? @map("duration_text")
+  difficultyText  String? @map("difficulty_text")
+  routeType       String? @map("route_type")
+  establishedYear String? @map("established_year")
+  trail           Trail   @relation(fields: [trailId], references: [id], onDelete: Cascade)
+}
+
+model TrailTransportation {
+  id                 Int     @id @default(autoincrement())
+  trailId            Int     @unique @map("trail_id")
+  publicTransport    String? @map("public_transport")
+  parkingAvailable   Boolean? @map("parking_available")
+  trail              Trail   @relation(fields: [trailId], references: [id], onDelete: Cascade)
+}
+
+model TrailAccessibility {
+  id                   Int      @id @default(autoincrement())
+  trailId              Int      @unique @map("trail_id")
+  wheelchairAccessible Boolean? @map("wheelchair_accessible")
+  strollerFriendly     Boolean? @map("stroller_friendly")
+  bicycleAllowed       Boolean? @map("bicycle_allowed")
+  trail                Trail    @relation(fields: [trailId], references: [id], onDelete: Cascade)
+}
+
+model TrailSeasonalInfo {
+  id               Int      @id @default(autoincrement())
+  trailId          Int      @unique @map("trail_id")
+  bestMonths       String[] @default([]) @map("best_months")
+  winterAccessible Boolean? @map("winter_accessible")
+  weatherDependent Boolean? @map("weather_dependent")
+  trail            Trail    @relation(fields: [trailId], references: [id], onDelete: Cascade)
+}
+
+model TrailContactInfo {
+  id      Int     @id @default(autoincrement())
+  trailId Int     @unique @map("trail_id")
+  phone   String?
+  email   String?
+  website String?
+  trail   Trail   @relation(fields: [trailId], references: [id], onDelete: Cascade)
+}
+
+model TrailRating {
+  id           Int      @id @default(autoincrement())
+  trailId      Int      @unique @map("trail_id")
+  averageScore Float?   @map("average_score")
+  totalReviews Int?     @map("total_reviews")
+  lastUpdated  DateTime? @map("last_updated")
+  trail        Trail    @relation(fields: [trailId], references: [id], onDelete: Cascade)
+}
+
+model TrailMetadata {
+  id           Int      @id @default(autoincrement())
+  trailId      Int      @unique @map("trail_id")
+  lastVerified DateTime? @map("last_verified")
+  dataSource   String?  @map("data_source")
+  status       String?
+  trail        Trail    @relation(fields: [trailId], references: [id], onDelete: Cascade)
+}
+
+model TrailAttraction {
+  id    Int    @id @default(autoincrement())
+  trailId Int  @map("trail_id")
+  name  String
+  type  String?
+  trail Trail  @relation(fields: [trailId], references: [id], onDelete: Cascade)
+
+  @@index([trailId])
+}

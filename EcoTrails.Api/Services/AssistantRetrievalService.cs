@@ -33,9 +33,30 @@ public sealed class AssistantRetrievalService : IAssistantRetrievalService
     {
         var maxResults = Math.Clamp(request.MaxContextTrails, 5, 25);
         var hybridTrails = await HybridSearchTrailsAsync(prompt, maxResults, request.OnlyWithCoordinates, cancellationToken);
+        var combinedPrompt = BuildCombinedPrompt(prompt, request.FilterSummary);
+        var combinedTokens = TrailSearchTextMatcher.ExtractPromptTokens(combinedPrompt);
+        var geoPreferenceFromHybrid = BuildGeographicPreference(combinedPrompt, hybridTrails);
+
         if (hybridTrails.Count > 0)
         {
-            return hybridTrails.Select(MapToContext).ToList();
+            var rankedHybrid = hybridTrails
+                .Select((item, index) => new
+                {
+                    Trail = item,
+                    Score = ((hybridTrails.Count - index) * 10) + CalculateGeoScore(item, geoPreferenceFromHybrid)
+                })
+                .OrderByDescending(item => item.Score)
+                .ThenBy(item => item.Trail.Difficulty)
+                .ThenBy(item => item.Trail.DurationInHours)
+                .Select(item => item.Trail)
+                .ToList();
+
+            var localizedHybrid = ApplyLocalityOrdering(rankedHybrid, geoPreferenceFromHybrid)
+                .Take(maxResults)
+                .Select(MapToContext)
+                .ToList();
+
+            return localizedHybrid;
         }
 
         var query = _dbContext.Trails.AsNoTracking().AsQueryable();
@@ -66,23 +87,27 @@ public sealed class AssistantRetrievalService : IAssistantRetrievalService
             })
             .ToListAsync(cancellationToken);
 
-        var tokens = TrailSearchTextMatcher.ExtractPromptTokens(prompt);
-        var promptLower = prompt.ToLowerInvariant();
+        var promptLower = combinedPrompt.ToLowerInvariant();
+        var geoPreference = BuildGeographicPreference(combinedPrompt, candidates);
 
         var ranked = candidates
             .Select(item => new
             {
                 Trail = item,
-                Score = CalculateScore(item, tokens, promptLower)
+                Score = CalculateScore(item, combinedTokens, promptLower) + CalculateGeoScore(item, geoPreference)
             })
             .OrderByDescending(item => item.Score)
             .ThenBy(item => item.Trail.Difficulty)
             .ThenBy(item => item.Trail.DurationInHours)
-            .Take(maxResults)
-            .Select(item => MapToContext(item.Trail))
+            .Select(item => item.Trail)
             .ToList();
 
-        return ranked;
+        var localizedRanked = ApplyLocalityOrdering(ranked, geoPreference)
+            .Take(maxResults)
+            .Select(MapToContext)
+            .ToList();
+
+        return localizedRanked;
     }
 
     public async Task<List<AssistantTrailContext>> GetAlternativeTrailsAsync(
@@ -489,6 +514,217 @@ public sealed class AssistantRetrievalService : IAssistantRetrievalService
         return score;
     }
 
+    private static string BuildCombinedPrompt(string prompt, string? filterSummary)
+    {
+        if (string.IsNullOrWhiteSpace(filterSummary))
+        {
+            return prompt?.Trim() ?? string.Empty;
+        }
+
+        return string.IsNullOrWhiteSpace(prompt)
+            ? filterSummary.Trim()
+            : $"{prompt.Trim()} {filterSummary.Trim()}";
+    }
+
+    private static GeographicPreference BuildGeographicPreference(
+        string combinedPrompt,
+        IReadOnlyCollection<TrailSearchCandidate> candidates)
+    {
+        var preference = new GeographicPreference();
+        if (string.IsNullOrWhiteSpace(combinedPrompt) || candidates.Count == 0)
+        {
+            return preference;
+        }
+
+        var tokens = TrailSearchTextMatcher.ExtractPromptTokens(combinedPrompt);
+        if (tokens.Count == 0)
+        {
+            return preference;
+        }
+
+        foreach (var token in tokens)
+        {
+            foreach (var candidate in candidates)
+            {
+                if (!string.IsNullOrWhiteSpace(candidate.Region) &&
+                    TrailSearchTextMatcher.ContainsExactToken(candidate.Region, token))
+                {
+                    preference.Regions.Add(candidate.Region.Trim());
+                }
+
+                if (!string.IsNullOrWhiteSpace(candidate.Location) &&
+                    TrailSearchTextMatcher.ContainsExactToken(candidate.Location, token))
+                {
+                    preference.Locations.Add(candidate.Location.Trim());
+                }
+            }
+        }
+
+        if (!preference.HasExplicitArea)
+        {
+            return preference;
+        }
+
+        var anchor = candidates
+            .Where(HasCoordinates)
+            .Where(item => MatchesExplicitArea(item, preference))
+            .OrderByDescending(item => preference.Locations.Contains(item.Location))
+            .ThenByDescending(item => preference.Regions.Contains(item.Region))
+            .FirstOrDefault();
+
+        if (anchor is not null)
+        {
+            preference.AnchorLatitude = anchor.Latitude;
+            preference.AnchorLongitude = anchor.Longitude;
+        }
+
+        return preference;
+    }
+
+    private static IEnumerable<TrailSearchCandidate> ApplyLocalityOrdering(
+        IReadOnlyList<TrailSearchCandidate> ranked,
+        GeographicPreference preference)
+    {
+        if (!preference.HasExplicitArea || ranked.Count == 0)
+        {
+            return ranked;
+        }
+
+        var local = ranked.Where(item => IsLocalToPreference(item, preference)).ToList();
+        if (local.Count == 0)
+        {
+            return ranked;
+        }
+
+        var localIds = local.Select(item => item.Id).ToHashSet();
+        var distant = ranked.Where(item => !localIds.Contains(item.Id));
+        return local.Concat(distant);
+    }
+
+    private static bool IsLocalToPreference(TrailSearchCandidate trail, GeographicPreference preference)
+    {
+        if (MatchesExplicitArea(trail, preference))
+        {
+            return true;
+        }
+
+        if (!preference.AnchorLatitude.HasValue || !preference.AnchorLongitude.HasValue)
+        {
+            return false;
+        }
+
+        var distanceKm = ComputeDistanceInKm(
+            trail.Latitude,
+            trail.Longitude,
+            preference.AnchorLatitude,
+            preference.AnchorLongitude);
+
+        return distanceKm.HasValue && distanceKm.Value <= 120;
+    }
+
+    private static int CalculateGeoScore(TrailSearchCandidate trail, GeographicPreference preference)
+    {
+        if (!preference.HasExplicitArea)
+        {
+            return 0;
+        }
+
+        var score = 0;
+        var isExplicitMatch = MatchesExplicitArea(trail, preference);
+
+        if (isExplicitMatch)
+        {
+            score += 28;
+        }
+        else
+        {
+            score -= 14;
+        }
+
+        if (preference.AnchorLatitude.HasValue && preference.AnchorLongitude.HasValue)
+        {
+            var distanceKm = ComputeDistanceInKm(
+                trail.Latitude,
+                trail.Longitude,
+                preference.AnchorLatitude,
+                preference.AnchorLongitude);
+
+            if (distanceKm.HasValue)
+            {
+                if (distanceKm.Value <= 35)
+                {
+                    score += 14;
+                }
+                else if (distanceKm.Value <= 80)
+                {
+                    score += 8;
+                }
+                else if (distanceKm.Value <= 140)
+                {
+                    score += 2;
+                }
+                else if (distanceKm.Value <= 220)
+                {
+                    score -= 8;
+                }
+                else
+                {
+                    score -= 22;
+                }
+            }
+            else if (!isExplicitMatch)
+            {
+                score -= 8;
+            }
+        }
+
+        return score;
+    }
+
+    private static bool MatchesExplicitArea(TrailSearchCandidate trail, GeographicPreference preference)
+    {
+        if (preference.Locations.Count > 0 && preference.Locations.Contains(trail.Location))
+        {
+            return true;
+        }
+
+        return preference.Regions.Count > 0 && preference.Regions.Contains(trail.Region);
+    }
+
+    private static bool HasCoordinates(TrailSearchCandidate trail)
+    {
+        return trail.Latitude.HasValue && trail.Longitude.HasValue;
+    }
+
+    private static double? ComputeDistanceInKm(
+        double? latitude,
+        double? longitude,
+        double? referenceLatitude,
+        double? referenceLongitude)
+    {
+        if (!latitude.HasValue || !longitude.HasValue || !referenceLatitude.HasValue || !referenceLongitude.HasValue)
+        {
+            return null;
+        }
+
+        const double earthRadiusKm = 6371;
+        var lat1 = ToRadians(latitude.Value);
+        var lat2 = ToRadians(referenceLatitude.Value);
+        var latDiff = lat2 - lat1;
+        var lonDiff = ToRadians(referenceLongitude.Value - longitude.Value);
+
+        var a = Math.Sin(latDiff / 2) * Math.Sin(latDiff / 2) +
+                Math.Cos(lat1) * Math.Cos(lat2) * Math.Sin(lonDiff / 2) * Math.Sin(lonDiff / 2);
+        var c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
+
+        return earthRadiusKm * c;
+    }
+
+    private static double ToRadians(double degrees)
+    {
+        return degrees * (Math.PI / 180);
+    }
+
     private static AssistantTrailContext MapToContext(TrailSearchCandidate trail)
     {
         return new AssistantTrailContext
@@ -594,5 +830,14 @@ public sealed class AssistantRetrievalService : IAssistantRetrievalService
     {
         public TrailSearchCandidate Trail { get; set; } = new();
         public double CombinedScore { get; set; }
+    }
+
+    private sealed class GeographicPreference
+    {
+        public HashSet<string> Regions { get; } = new(StringComparer.OrdinalIgnoreCase);
+        public HashSet<string> Locations { get; } = new(StringComparer.OrdinalIgnoreCase);
+        public bool HasExplicitArea => Regions.Count > 0 || Locations.Count > 0;
+        public double? AnchorLatitude { get; set; }
+        public double? AnchorLongitude { get; set; }
     }
 }

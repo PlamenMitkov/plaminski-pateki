@@ -168,6 +168,45 @@ public class AuthController : ControllerBase
     }
 
     [Authorize]
+    [HttpPost("delete-account")]
+    public async Task<IActionResult> DeleteAccount(DeleteAccountRequest request)
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)
+            ?? User.FindFirstValue(ClaimTypes.Name)
+            ?? User.FindFirstValue("sub");
+
+        if (string.IsNullOrWhiteSpace(userId))
+        {
+            return Unauthorized();
+        }
+
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user is null)
+        {
+            return Unauthorized();
+        }
+
+        if (!string.Equals(request.ConfirmationText?.Trim(), "DELETE", StringComparison.OrdinalIgnoreCase))
+        {
+            return BadRequest("За потвърждение въведи DELETE.");
+        }
+
+        var passwordValid = await _userManager.CheckPasswordAsync(user, request.CurrentPassword);
+        if (!passwordValid)
+        {
+            return BadRequest("Невалидна текуща парола.");
+        }
+
+        var result = await _userManager.DeleteAsync(user);
+        if (!result.Succeeded)
+        {
+            return BadRequest(result.Errors.Select(error => error.Description));
+        }
+
+        return NoContent();
+    }
+
+    [Authorize]
     [HttpGet("me")]
     public async Task<ActionResult<AuthMeResponse>> Me()
     {

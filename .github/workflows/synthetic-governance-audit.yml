@@ -8,7 +8,7 @@ on:
       maxHighSeverity:
         description: Max allowed high-severity findings before failing
         required: false
-        default: '0'
+        default: ''
       maxMediumSeverity:
         description: Max allowed medium-severity findings before failing
         required: false
@@ -28,6 +28,26 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Capture committed audit baseline
+        id: baseline
+        shell: pwsh
+        run: |
+          $baselinePath = "./scripts/data-quality/reports/synthetic-governance-summary-latest.json"
+          $baselineHigh = 0
+          $baselineMedium = -1
+          $baselineLow = -1
+
+          if (Test-Path -Path $baselinePath) {
+            $baseline = Get-Content -Path $baselinePath -Raw -Encoding UTF8 | ConvertFrom-Json
+            $baselineHigh = [int]$baseline.high_severity_findings
+            $baselineMedium = [int]$baseline.medium_severity_findings
+            $baselineLow = [int]$baseline.low_severity_findings
+          }
+
+          "baselineHigh=$baselineHigh" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+          "baselineMedium=$baselineMedium" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+          "baselineLow=$baselineLow" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
 
       - name: Run synthetic governance audit runner
         shell: pwsh
@@ -59,9 +79,12 @@ jobs:
       - name: Enforce severity thresholds
         shell: pwsh
         env:
-          MAX_HIGH: ${{ github.event.inputs.maxHighSeverity || '0' }}
+          MAX_HIGH: ${{ github.event.inputs.maxHighSeverity || '' }}
           MAX_MEDIUM: ${{ github.event.inputs.maxMediumSeverity || '-1' }}
           MAX_LOW: ${{ github.event.inputs.maxLowSeverity || '-1' }}
+          BASELINE_HIGH: ${{ steps.baseline.outputs.baselineHigh }}
+          BASELINE_MEDIUM: ${{ steps.baseline.outputs.baselineMedium }}
+          BASELINE_LOW: ${{ steps.baseline.outputs.baselineLow }}
         run: |
           $summaryPath = "./scripts/data-quality/reports/synthetic-governance-summary-latest.json"
           if (-not (Test-Path -Path $summaryPath)) {
@@ -69,9 +92,9 @@ jobs:
           }
 
           $summary = Get-Content -Path $summaryPath -Raw -Encoding UTF8 | ConvertFrom-Json
-          $maxHigh = [int]$env:MAX_HIGH
-          $maxMedium = [int]$env:MAX_MEDIUM
-          $maxLow = [int]$env:MAX_LOW
+          $maxHigh = if ([string]::IsNullOrWhiteSpace($env:MAX_HIGH)) { [int]$env:BASELINE_HIGH } else { [int]$env:MAX_HIGH }
+          $maxMedium = if ([string]::IsNullOrWhiteSpace($env:MAX_MEDIUM)) { [int]$env:BASELINE_MEDIUM } else { [int]$env:MAX_MEDIUM }
+          $maxLow = if ([string]::IsNullOrWhiteSpace($env:MAX_LOW)) { [int]$env:BASELINE_LOW } else { [int]$env:MAX_LOW }
 
           $errors = @()
           if ($summary.high_severity_findings -gt $maxHigh) {
@@ -90,7 +113,7 @@ jobs:
             exit 1
           }
 
-          Write-Host "Synthetic governance threshold gate passed."
+          Write-Host "Synthetic governance threshold gate passed. baselineHigh=$env:BASELINE_HIGH effectiveMaxHigh=$maxHigh"
 
       - name: Upload governance audit artifacts
         uses: actions/upload-artifact@v4

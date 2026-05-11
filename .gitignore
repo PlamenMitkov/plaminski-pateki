@@ -30,3 +30,5 @@ obj/
 
 # Local environment secrets
 .env
+
+/generated/prisma

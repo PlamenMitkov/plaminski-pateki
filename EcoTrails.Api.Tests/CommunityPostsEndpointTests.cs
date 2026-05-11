@@ -19,6 +19,75 @@ public class CommunityPostsEndpointTests : IClassFixture<TrailsSummaryApiFactory
     }
 
     [Fact]
+    public async Task CreateMyPost_WithBulgarianTrailGuideContent_PersistsAndReturnsPayload()
+    {
+        const string userId = "community-owner-bg-1";
+        await EnsureUserAsync(userId, "community-owner-bg-1@ecotrails.test", "Start123");
+
+        const string title = "Екопътека „Чернелка“: По стъпките на каньона";
+        const string content = """
+Екопътека „Чернелка“ е един от най-впечатляващите маршрути в Централна Северна България. Тя е разположена в сърцето на едноименния карстов каньон и предлага перфектна комбинация от природа, история и лек физически преход.
+
+Ето структурирано съдържание, което можеш да използваш за описание или пътеводител:
+
+🌿 Екопътека „Чернелка“: По стъпките на каньона
+Екопътеката е изградена в пролома на река Чернелка и се простира на около 7 км дължина. Каньонът е обявен за природна забележителност заради уникалните си вертикални скали, които достигат до 30 метра височина.
+
+📍 Ключова информация
+Местоположение: Между селата Горталово и Къртожабене (на около 12 км от Плевен).
+
+Дължина: Около 7 км (в едната посока).
+
+Време за преход: 2.5 – 3 часа спокоен ход.
+
+Трудност: Ниска. Пътеката е почти равна, което я прави идеална за продължително ходене или леко планинско бягане.
+
+Инфраструктура: Изградени са 18 моста над реката, които позволяват лесно пресичане от бряг на бряг.
+
+🗺️ Какво ще видите по маршрута?
+Пътеката е наситена с природни и исторически обекти, които правят прехода динамичен:
+
+Скални образувания: Каньонът е изпълнен с причудливи форми, пещери и ниши във варовиковите скали.
+
+Пещера „Царева дупка": Една от най-известните пещери в района, обвита в легенди за цар Иван Шишман.
+
+Средновековна крепост „Градината": Останки от укрепление, което е пазило прохода в миналото.
+
+Местност „Провъртеника": Уникална скала с естествен отвор (дупка) в горната си част, през която преминава слънчевата светлина.
+
+Мъртвата долина: Район с драматичен ландшафт и интересна растителност.
+""";
+
+        using var client = _factory.CreateClient();
+        client.DefaultRequestHeaders.Add("X-Test-UserId", userId);
+
+        using var form = new MultipartFormDataContent
+        {
+            { new StringContent(title), "title" },
+            { new StringContent(content), "content" },
+            { new StringContent("General"), "postType" }
+        };
+
+        var response = await client.PostAsync("/api/communityposts/mine", form);
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        var payload = await response.Content.ReadFromJsonAsync<CommunityPostResponse>();
+        Assert.NotNull(payload);
+        Assert.Equal(title, payload!.Title);
+        Assert.Equal(content, payload.Content);
+        Assert.Equal("General", payload.PostType);
+
+        using var scope = _factory.Services.CreateScope();
+        var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        var saved = await dbContext.CommunityTrailPosts.FirstAsync(item => item.Id == payload.Id);
+
+        Assert.Equal(title, saved.Title);
+        Assert.Equal(content, saved.Content);
+        Assert.Equal(CommunityPostType.General, saved.PostType);
+    }
+
+    [Fact]
     public async Task UpdateMyPost_WhenOwned_UpdatesPostAndReturnsPayload()
     {
         const string userId = "community-owner-1";

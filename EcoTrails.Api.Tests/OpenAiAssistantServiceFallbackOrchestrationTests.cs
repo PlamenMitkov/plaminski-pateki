@@ -41,7 +41,7 @@ public class OpenAiAssistantServiceFallbackOrchestrationTests
             currentUserId: "user-1",
             CancellationToken.None);
 
-        Assert.Equal("openai-fallback-ok", response.Reply);
+        Assert.Contains("openai-fallback-ok", response.Reply, StringComparison.Ordinal);
         Assert.Single(aiClient.GeminiModels);
         Assert.Single(aiClient.OpenAiModels);
         Assert.Equal("gpt-4o", aiClient.OpenAiModels[0]);
@@ -81,7 +81,7 @@ public class OpenAiAssistantServiceFallbackOrchestrationTests
             currentUserId: "user-1",
             CancellationToken.None);
 
-        Assert.Equal("secondary-openai-ok", response.Reply);
+        Assert.Contains("secondary-openai-ok", response.Reply, StringComparison.Ordinal);
         Assert.Equal(2, aiClient.OpenAiModels.Count);
         Assert.Equal("gpt-4o-mini", aiClient.OpenAiModels[0]);
         Assert.Equal("gpt-4o", aiClient.OpenAiModels[1]);
@@ -123,7 +123,7 @@ public class OpenAiAssistantServiceFallbackOrchestrationTests
             currentUserId: "user-1",
             CancellationToken.None);
 
-        Assert.Equal("current-mode-ok", response.Reply);
+        Assert.Contains("current-mode-ok", response.Reply, StringComparison.Ordinal);
         Assert.Equal(2, aiClient.OpenAiUserPrompts.Count);
         Assert.Contains("mode:context_prompt", aiClient.OpenAiUserPrompts[0], StringComparison.Ordinal);
         Assert.Contains("mode:current", aiClient.OpenAiUserPrompts[1], StringComparison.Ordinal);
@@ -165,7 +165,7 @@ public class OpenAiAssistantServiceFallbackOrchestrationTests
             currentUserId: "user-1",
             CancellationToken.None);
 
-        Assert.Equal("current-after-empty-ok", response.Reply);
+        Assert.Contains("current-after-empty-ok", response.Reply, StringComparison.Ordinal);
         Assert.Equal(2, aiClient.OpenAiUserPrompts.Count);
         Assert.Contains("mode:context_prompt", aiClient.OpenAiUserPrompts[0], StringComparison.Ordinal);
         Assert.Contains("mode:current", aiClient.OpenAiUserPrompts[1], StringComparison.Ordinal);
@@ -207,7 +207,7 @@ public class OpenAiAssistantServiceFallbackOrchestrationTests
             currentUserId: "user-1",
             CancellationToken.None);
 
-        Assert.Equal("shadow-current-ok", response.Reply);
+        Assert.Contains("shadow-current-ok", response.Reply, StringComparison.Ordinal);
         Assert.Single(aiClient.OpenAiUserPrompts);
         Assert.DoesNotContain("mode:context_prompt", aiClient.OpenAiUserPrompts[0], StringComparison.Ordinal);
         Assert.Contains("mode:current", aiClient.OpenAiUserPrompts[0], StringComparison.Ordinal);

@@ -261,6 +261,7 @@ public sealed partial class AssistantService(
             Model = model,
             Provider = provider,
             UsedTrails = contextTrails,
+            SuggestedAlternatives = alternatives,
             SuggestedAlternativeIds = alternatives.Select(it => it.Id).Distinct().ToList(),
             KnowledgeChips = assistantResponseCompositionService.BuildKnowledgeChips(contextTrails, alternatives, provenanceContext.HasReliabilityWarning, isPotentialInjection),
             QuickActions = assistantResponseCompositionService.BuildQuickActions(contextTrails, alternatives, request, prompt)
@@ -329,8 +330,10 @@ public sealed partial class AssistantService(
         {
             var item = trailCandidates[index];
             var detailsUrl = $"/trail/{item.Id}";
+            var mapUrl = $"/?tab=map&selectedTrailId={item.Id}&onlySelectedOnMap=true";
 
             sb.AppendLine($"{index + 1}. {item.Name} ({item.Location})");
+            sb.AppendLine($"   Отвори на карта: {mapUrl}");
             sb.AppendLine($"   Отвори страницата: {detailsUrl}");
         }
 

@@ -19,6 +19,10 @@ public record ChangePasswordRequest(
 	[Required, MinLength(6), MaxLength(128)] string CurrentPassword,
 	[Required, MinLength(6), MaxLength(128)] string NewPassword);
 
+public record DeleteAccountRequest(
+	[Required, MinLength(6), MaxLength(128)] string CurrentPassword,
+	[Required, MaxLength(32)] string ConfirmationText);
+
 public record AuthResponse(string Token, string UserId, string Email);
 public record AuthMeResponse(
 	string UserId,

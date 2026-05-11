@@ -94,6 +94,44 @@ public class AuthProfileAndPasswordTests : IClassFixture<TrailsSummaryApiFactory
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
+    [Fact]
+    public async Task DeleteAccount_WithValidPasswordAndConfirmation_RemovesUser()
+    {
+        const string userId = "auth-delete-user-1";
+        await EnsureUserAsync(userId, "auth-delete-user-1@ecotrails.test", "Start123");
+
+        using var client = _factory.CreateClient();
+        client.DefaultRequestHeaders.Add("X-Test-UserId", userId);
+
+        var response = await client.PostAsJsonAsync(
+            "/api/auth/delete-account",
+            new DeleteAccountRequest("Start123", "DELETE"));
+
+        Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+
+        using var scope = _factory.Services.CreateScope();
+        var userManager = scope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
+        var user = await userManager.FindByIdAsync(userId);
+
+        Assert.Null(user);
+    }
+
+    [Fact]
+    public async Task DeleteAccount_WithInvalidConfirmation_ReturnsBadRequest()
+    {
+        const string userId = "auth-delete-user-2";
+        await EnsureUserAsync(userId, "auth-delete-user-2@ecotrails.test", "Start123");
+
+        using var client = _factory.CreateClient();
+        client.DefaultRequestHeaders.Add("X-Test-UserId", userId);
+
+        var response = await client.PostAsJsonAsync(
+            "/api/auth/delete-account",
+            new DeleteAccountRequest("Start123", "delete me"));
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
     private async Task EnsureUserAsync(string userId, string email, string password)
     {
         using var scope = _factory.Services.CreateScope();
