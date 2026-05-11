@@ -1,9 +1,9 @@
 {
-  "total_findings": 962,
-  "high_severity_findings": 44,
-  "medium_severity_findings": 622,
+  "total_findings": 891,
+  "high_severity_findings": 0,
+  "medium_severity_findings": 595,
   "low_severity_findings": 296,
-  "generated_at_utc": "2026-04-14T06:04:39.3355309Z",
-  "snapshot_csv": "scripts\\data-quality\\reports\\synthetic-governance-findings-20260414-090438.csv",
+  "generated_at_utc": "2026-05-11T18:04:48.8233621Z",
+  "snapshot_csv": "scripts\\data-quality\\reports\\synthetic-governance-findings-20260511-210448.csv",
   "latest_csv": "scripts\\data-quality\\reports\\synthetic-governance-findings-latest.csv"
 }

@@ -409,7 +409,8 @@
         "data_source": "manual_entry",
         "status": "active",
         "ai_enriched": true,
-        "enrichment_date": "2026-03-16"
+        "enrichment_date": "2026-03-16",
+        "sources_urls": "https://opoznai.bg/"
       },
       "photo_url": "https://example.com/trails/49.jpg",
       "short_summary": "Средно тежък панорамен маршрут до историческата местност „Збегове“ с изглед към Западния масив на Белоградчишките скали."
@@ -517,7 +518,8 @@
         "data_source": "manual_entry",
         "status": "active",
         "ai_enriched": true,
-        "enrichment_date": "2026-03-16"
+        "enrichment_date": "2026-03-16",
+        "sources_urls": "https://opoznai.bg/"
       },
       "photo_url": "https://example.com/trails/48.jpg",
       "auto_enrichment": {
@@ -617,7 +619,8 @@
         "data_source": "manual_entry",
         "status": "active",
         "ai_enriched": true,
-        "enrichment_date": "2026-03-16"
+        "enrichment_date": "2026-03-16",
+        "sources_urls": "https://opoznai.bg/"
       },
       "photo_url": "https://example.com/trails/60.jpg",
       "short_summary": "Кратък исторически маршрут край село Алдомировци до първия войнишки паметник в България."
@@ -896,7 +899,8 @@
         "data_source": "manual_entry",
         "status": "active",
         "ai_enriched": true,
-        "enrichment_date": "2026-03-16"
+        "enrichment_date": "2026-03-16",
+        "sources_urls": "Mestnost-Bialata-cheshma-Samuilovo.pdf"
       },
       "photo_url": "https://example.com/trails/156.jpg",
       "short_summary": "Лека паркова разходка край с. Самуилово до историческа чешма от Първата световна война и вековни чинари."
@@ -998,7 +1002,8 @@
         "data_source": "manual_entry",
         "status": "active",
         "ai_enriched": true,
-        "enrichment_date": "2026-03-16"
+        "enrichment_date": "2026-03-16",
+        "sources_urls": "Khaidushki-vodopadi-2.pdf"
       },
       "photo_url": "https://example.com/trails/222.jpg",
       "short_summary": "Живописен преход през ждрелото на Голяма река до каскадата на Хайдушките водопади край Берковица."
@@ -1669,7 +1674,8 @@
         "data_source": "manual_entry",
         "status": "active",
         "ai_enriched": true,
-        "enrichment_date": "2026-03-16"
+        "enrichment_date": "2026-03-16",
+        "sources_urls": "Белица туристически център"
       },
       "photo_url": "https://example.com/trails/43.jpg",
       "short_summary": "Образователен маршрут от Семково до Парка за танцуващи мечки с информация за дивия свят на Рила."
@@ -1765,7 +1771,8 @@
         "data_source": "manual_entry",
         "status": "active",
         "ai_enriched": true,
-        "enrichment_date": "2026-03-16"
+        "enrichment_date": "2026-03-16",
+        "sources_urls": "Влахи туристически център"
       },
       "photo_url": "https://example.com/trails/44.jpg",
       "short_summary": "Разходка до панорамна точка към Влахинския водопад сред тишината на дивия Пирин."
@@ -1861,7 +1868,8 @@
         "data_source": "manual_entry",
         "status": "active",
         "ai_enriched": true,
-        "enrichment_date": "2026-03-16"
+        "enrichment_date": "2026-03-16",
+        "sources_urls": "Ekopteka-Krstt.pdf"
       },
       "photo_url": "https://example.com/trails/71.jpg",
       "short_summary": "Лесен панорамен маршрут от парк „Ловен дом“ до мемориалния кръст над Благоевград."
@@ -2060,7 +2068,8 @@
         "data_source": "manual_entry",
         "status": "active",
         "ai_enriched": true,
-        "enrichment_date": "2026-03-16"
+        "enrichment_date": "2026-03-16",
+        "sources_urls": "Ekopteka-Ptekata-na-divata-koza.pdf"
       },
       "photo_url": "https://example.com/trails/103.jpg",
       "short_summary": "Високопланински образователен маршрут над село Добърско за наблюдение на дива коза и алпийска природа."
@@ -2158,7 +2167,8 @@
         "data_source": "manual_entry",
         "status": "active",
         "ai_enriched": true,
-        "enrichment_date": "2026-03-16"
+        "enrichment_date": "2026-03-16",
+        "sources_urls": "Ekopteka-Rimski-most-Brshchen.pdf"
       },
       "photo_url": "https://example.com/trails/108.jpg",
       "short_summary": "Лесен исторически маршрут край с. Бръщен до античен римски мост и паметника на Вергил Ваклинов."
@@ -2255,7 +2265,8 @@
         "data_source": "manual_entry",
         "status": "active",
         "ai_enriched": true,
-        "enrichment_date": "2026-03-16"
+        "enrichment_date": "2026-03-16",
+        "sources_urls": "Ekopteka-Tainite-na-vodata.pdf"
       },
       "photo_url": "https://example.com/trails/121.jpg",
       "short_summary": "Образователен маршрут в Беласица до величествения 21-метров водопад „Срамежливеца“."
@@ -3430,7 +3441,8 @@
         "data_source": "manual_entry",
         "status": "active",
         "ai_enriched": true,
-        "enrichment_date": "2026-03-16"
+        "enrichment_date": "2026-03-16",
+        "sources_urls": "Emenski-kanon.pdf"
       },
       "photo_url": "https://example.com/trails/133.jpg",
       "short_summary": "Исторически първата екопътека в страната през внушителния каньон на река Негованка до водопад „Момин скок“."
@@ -3732,7 +3744,8 @@
         "data_source": "manual_entry",
         "status": "active",
         "ai_enriched": true,
-        "enrichment_date": "2026-03-16"
+        "enrichment_date": "2026-03-16",
+        "sources_urls": "Khristovski-vodopad-Rukhovtsi.pdf"
       },
       "photo_url": "https://example.com/trails/224.jpg",
       "short_summary": "Красива водна каскада на река Мийковска с лесен достъп и отлични условия за пикник край Елена."
@@ -4212,7 +4225,8 @@
         "data_source": "manual_entry",
         "status": "active",
         "ai_enriched": true,
-        "enrichment_date": "2026-03-16"
+        "enrichment_date": "2026-03-16",
+        "sources_urls": "Niskoplaninska-obikolna-pteka.pdf"
       },
       "photo_url": "https://example.com/trails/166.jpg",
       "short_summary": "Най-дългият хоризонтален маршрут на Витоша, свързващ крайните квартали и села през гори и поляни."
@@ -4419,7 +4433,8 @@
         "data_source": "manual_entry",
         "status": "active",
         "ai_enriched": true,
-        "enrichment_date": "2026-03-16"
+        "enrichment_date": "2026-03-16",
+        "sources_urls": "Podkhod-ot-kv-Boiana.pdf"
       },
       "photo_url": "https://example.com/trails/170.jpg",
       "short_summary": "Планински преход от Бояна до хижа Камен дел през Копитото с букови гори и панорами."
@@ -4527,7 +4542,8 @@
         "data_source": "manual_entry",
         "status": "active",
         "ai_enriched": true,
-        "enrichment_date": "2026-03-16"
+        "enrichment_date": "2026-03-16",
+        "sources_urls": "Podkhod-ot-kv-Dragalevtsi.pdf"
       },
       "photo_url": "https://example.com/trails/171.jpg",
       "short_summary": "Предизвикателен преход от Драгалевци до хижа Алеко през заслон Кикиш и местността Платото."
@@ -4636,7 +4652,8 @@
         "data_source": "manual_entry",
         "status": "active",
         "ai_enriched": true,
-        "enrichment_date": "2026-03-16"
+        "enrichment_date": "2026-03-16",
+        "sources_urls": "Podkhod-ot-kv-Kniazhevo.pdf"
       },
       "photo_url": "https://example.com/trails/172.jpg",
       "short_summary": "Класически преход от Княжево до хижите Планинец и Тинтява през вековни букови гори."
@@ -4741,7 +4758,8 @@
         "data_source": "manual_entry",
         "status": "active",
         "ai_enriched": true,
-        "enrichment_date": "2026-03-16"
+        "enrichment_date": "2026-03-16",
+        "sources_urls": "Podkhod-ot-m-Zlatni-mostove.pdf"
       },
       "photo_url": "https://example.com/trails/173.jpg",
       "short_summary": "Популярен преход от Златни мостове до Черни връх през хижа Кумата и каменните реки."
@@ -4845,7 +4863,8 @@
         "data_source": "manual_entry",
         "status": "active",
         "ai_enriched": true,
-        "enrichment_date": "2026-03-16"
+        "enrichment_date": "2026-03-16",
+        "sources_urls": "Podkhod-ot-m-Iarema.pdf"
       },
       "photo_url": "https://example.com/trails/174.jpg",
       "short_summary": "Див и спокоен маршрут от местността Ярема до хижа Физкултурник през южното било."
@@ -4951,7 +4970,8 @@
         "data_source": "manual_entry",
         "status": "active",
         "ai_enriched": true,
-        "enrichment_date": "2026-03-16"
+        "enrichment_date": "2026-03-16",
+        "sources_urls": "Podkhod-ot-s-Bistritsa.pdf"
       },
       "photo_url": "https://example.com/trails/175.jpg",
       "short_summary": "Живописен преход от с. Бистрица до хижа Алеко през резерват „Бистришко бранище“ и морени."
@@ -5052,7 +5072,8 @@
         "data_source": "manual_entry",
         "status": "active",
         "ai_enriched": true,
-        "enrichment_date": "2026-03-16"
+        "enrichment_date": "2026-03-16",
+        "sources_urls": "Podkhod-ot-s-Bosnek.pdf"
       },
       "photo_url": "https://example.com/trails/176.jpg",
       "short_summary": "Лек карстов маршрут от с. Боснек до извора „Живата вода“ и връх Асланов рид."
@@ -5253,7 +5274,8 @@
         "data_source": "manual_entry",
         "status": "active",
         "ai_enriched": true,
-        "enrichment_date": "2026-03-16"
+        "enrichment_date": "2026-03-16",
+        "sources_urls": "Podkhod-ot-s-Zheleznitsa.pdf"
       },
       "photo_url": "https://example.com/trails/178.jpg",
       "short_summary": "Предизвикателно изкачване от с. Железница до х. Физкултурник с голяма денивелация и панорамни гледки."
@@ -5354,7 +5376,8 @@
         "data_source": "manual_entry",
         "status": "active",
         "ai_enriched": true,
-        "enrichment_date": "2026-03-16"
+        "enrichment_date": "2026-03-16",
+        "sources_urls": "Podkhod-ot-s-Kladnitsa.pdf"
       },
       "photo_url": "https://example.com/trails/179.jpg",
       "short_summary": "Спокоен преход от с. Кладница през букови гори до хижа Селимица и Черни връх."
@@ -5750,7 +5773,8 @@
         "data_source": "manual_entry",
         "status": "active",
         "ai_enriched": true,
-        "enrichment_date": "2026-03-16"
+        "enrichment_date": "2026-03-16",
+        "sources_urls": "Pteka-Sila-i-zhivot.pdf"
       },
       "photo_url": "https://example.com/trails/195.jpg",
       "short_summary": "Духовна екопътека от Симеоновските езера с 40 табели с мисли на Петър Дънов."
@@ -6213,7 +6237,8 @@
         "data_source": "manual_entry",
         "status": "active",
         "ai_enriched": true,
-        "enrichment_date": "2026-03-16"
+        "enrichment_date": "2026-03-16",
+        "sources_urls": "Природен парк 'Врачански Балкан'"
       },
       "photo_url": "https://example.com/trails/19.jpg",
       "short_summary": "Екстремен маршрут със стръмни стълби и мостове до 63-метровия водопад Боров камък."
@@ -6306,7 +6331,8 @@
         "data_source": "manual_entry",
         "status": "active",
         "ai_enriched": true,
-        "enrichment_date": "2026-03-16"
+        "enrichment_date": "2026-03-16",
+        "sources_urls": "Изходен пункт: м. Горски дом (преди х. Пършевица)"
       },
       "photo_url": "https://example.com/trails/24.jpg",
       "short_summary": "Интерактивен детски маршрут във Врачанския Балкан с приказни герои и образователни игри."
@@ -6877,7 +6903,8 @@
         "data_source": "manual_entry",
         "status": "active",
         "ai_enriched": true,
-        "enrichment_date": "2026-03-16"
+        "enrichment_date": "2026-03-16",
+        "sources_urls": "Nasledstvena-pteka-s-Ochin-dol.pdf"
       },
       "photo_url": "https://example.com/trails/164.jpg",
       "short_summary": "Образователен кръгов маршрут в с. Очин дол с училище на открито и панорами към Искърското дефиле."
@@ -7430,7 +7457,8 @@
         "data_source": "manual_entry",
         "status": "active",
         "ai_enriched": true,
-        "enrichment_date": "2026-03-16"
+        "enrichment_date": "2026-03-16",
+        "sources_urls": "Ekopteka-Ivanchova-poliana.pdf"
       },
       "photo_url": "https://example.com/trails/63.jpg",
       "short_summary": "Лечебен преход от Вършец до Иванчова поляна и водопад „Райски кът“."
@@ -8087,7 +8115,8 @@
         "data_source": "manual_entry",
         "status": "active",
         "ai_enriched": true,
-        "enrichment_date": "2026-03-16"
+        "enrichment_date": "2026-03-16",
+        "sources_urls": "Ekopteka-Rimskiiat-pt.pdf"
       },
       "photo_url": "https://example.com/trails/109.jpg",
       "short_summary": "Лесен исторически преход по античен римски път от IV век между с. Боженци и с. Източник."
@@ -9237,7 +9266,8 @@
         "data_source": "manual_entry",
         "status": "active",
         "ai_enriched": true,
-        "enrichment_date": "2026-03-16"
+        "enrichment_date": "2026-03-16",
+        "sources_urls": "document.pdf"
       },
       "photo_url": "https://example.com/trails/3.jpg",
       "short_summary": "Лесен и достъпен маршрут край Девинска река до минералните извори на Струилица."
@@ -9637,7 +9667,8 @@
         "data_source": "manual_entry",
         "status": "active",
         "ai_enriched": true,
-        "enrichment_date": "2026-03-16"
+        "enrichment_date": "2026-03-16",
+        "sources_urls": "https://opoznai.bg/"
       },
       "photo_url": "https://example.com/trails/62.jpg",
       "short_summary": "Лесен и образователен маршрут през вековна гора до величествения водопад Варовитец и Етрополския манастир."
@@ -9734,7 +9765,8 @@
         "data_source": "manual_entry",
         "status": "active",
         "ai_enriched": true,
-        "enrichment_date": "2026-03-16"
+        "enrichment_date": "2026-03-16",
+        "sources_urls": "https://opoznai.bg/"
       },
       "photo_url": "https://example.com/trails/53.jpg",
       "short_summary": "Живописен преход в подножието на Рила до 39-метровия Овчарченски водопад „Горица“."
@@ -9831,7 +9863,8 @@
         "data_source": "manual_entry",
         "status": "active",
         "ai_enriched": true,
-        "enrichment_date": "2026-03-16"
+        "enrichment_date": "2026-03-16",
+        "sources_urls": "Ekopteka-Goritsa2.pdf"
       },
       "photo_url": "https://example.com/trails/80.jpg",
       "short_summary": "Лека екопътека край Овчарци до най-високия от каскадата водопади в района — Горица."
@@ -10047,7 +10080,8 @@
         "data_source": "manual_entry",
         "status": "active",
         "ai_enriched": true,
-        "enrichment_date": "2026-03-16"
+        "enrichment_date": "2026-03-16",
+        "sources_urls": "Местни гидове"
       },
       "photo_url": "https://example.com/trails/17.jpg",
       "short_summary": "Комплексен маршрут край Орехово до три защитени водопада в сърцето на Родопите."
@@ -10149,7 +10183,8 @@
         "data_source": "manual_entry",
         "status": "active",
         "ai_enriched": true,
-        "enrichment_date": "2026-03-16"
+        "enrichment_date": "2026-03-16",
+        "sources_urls": "Kiselchovski-vodopad-Kiselchovo.pdf"
       },
       "photo_url": "https://example.com/trails/146.jpg",
       "short_summary": "Див и живописен преход през ждрело до 12-метровия Киселчовски водопад в Западните Родопи."
@@ -10252,7 +10287,8 @@
         "data_source": "manual_entry",
         "status": "active",
         "ai_enriched": true,
-        "enrichment_date": "2026-03-16"
+        "enrichment_date": "2026-03-16",
+        "sources_urls": "document.pdf"
       },
       "photo_url": "https://example.com/trails/5.jpg",
       "short_summary": "Класически литературен и природен маршрут до 85-метровия водопад Скакля в Искърското дефиле."
@@ -14350,7 +14386,8 @@
         "data_source": "manual_entry",
         "status": "active",
         "ai_enriched": true,
-        "enrichment_date": "2026-03-16"
+        "enrichment_date": "2026-03-16",
+        "sources_urls": "Zelenata-pteka-Bachkovski-manastir.pdf"
       },
       "photo_url": "https://example.com/trails/136.jpg",
       "short_summary": "Живописен маршрут от Бачковския манастир до свещената местност Клувията, включващ водопади и скални параклиси."
@@ -16840,7 +16877,8 @@
         "key_highlights": "Божевски водопад | Родопска гора | Пътят за село Мугла",
         "terrain_and_difficulty": "Див горски терен с лека денивелация. Пътеката е слабо утъпкана.",
         "confidence": "low",
-        "reviewer_notes": "Не е намерена точна информация за обекта, координатите са ориентировъчни за района. Системна грешка: Регионът е поправен от Пловдив на Смолян."
+        "reviewer_notes": "Не е намерена точна информация за обекта, координатите са ориентировъчни за района. Системна грешка: Регионът е поправен от Пловдив на Смолян.",
+        "sources_urls": "Екопътека.md файл"
       },
       "auto_enrichment": {
         "coords_updated_at": "2026-03-12",
@@ -23603,7 +23641,8 @@
         "key_highlights": "Кървавата скала | Горски пейзажи | Местни легенди",
         "terrain_and_difficulty": "Умерен горски терен.",
         "confidence": "low",
-        "reviewer_notes": "Не е намерена точна информация за локацията. Данните са базови."
+        "reviewer_notes": "Не е намерена точна информация за локацията. Данните са базови.",
+        "sources_urls": "Екопътека.md файл"
       },
       "auto_enrichment": {
         "coords_updated_at": "2026-03-12",
@@ -24787,7 +24826,8 @@
         "key_highlights": "Горска тишина | Уединение | Природни пейзажи",
         "terrain_and_difficulty": "Умерен горски терен с леки денивелации.",
         "confidence": "low",
-        "reviewer_notes": "Не е намерена информация за обект 'Меаните'."
+        "reviewer_notes": "Не е намерена информация за обект 'Меаните'.",
+        "sources_urls": "Екопътека.md файл"
       },
       "auto_enrichment": {
         "coords_updated_at": "2026-03-12",
@@ -25023,7 +25063,8 @@
         "key_highlights": "Скални образувания | Горски поляни | Легенди за мечки",
         "terrain_and_difficulty": "Лек до умерен горски терен.",
         "confidence": "low",
-        "reviewer_notes": "Не е намерена точна географска информация."
+        "reviewer_notes": "Не е намерена точна географска информация.",
+        "sources_urls": "Екопътека.md файл"
       },
       "auto_enrichment": {
         "coords_updated_at": "2026-03-12",
@@ -25496,7 +25537,8 @@
         "key_highlights": "Феномен Обесен камък | Природна фотография | Горски масиви",
         "terrain_and_difficulty": "Предимно горска пътека, която на места може да бъде стръмна.",
         "confidence": "low",
-        "reviewer_notes": "Не е намерена точна информация. Данните са предполагаеми."
+        "reviewer_notes": "Не е намерена точна информация. Данните са предполагаеми.",
+        "sources_urls": "Екопътека.md файл"
       },
       "auto_enrichment": {
         "coords_updated_at": "2026-03-12",
@@ -25576,7 +25618,8 @@
         "key_highlights": "Окопна манастир | Духовна атмосфера | Горски пейзажи",
         "terrain_and_difficulty": "Лек терен, подходящ за всички възрасти.",
         "confidence": "low",
-        "reviewer_notes": "Липсва информация за манастир с точно това име."
+        "reviewer_notes": "Липсва информация за манастир с точно това име.",
+        "sources_urls": "Екопътека.md файл"
       },
       "auto_enrichment": {
         "coords_updated_at": "2026-03-12",
@@ -26920,7 +26963,8 @@
         "key_highlights": "Тиха гора | Места за спорт и бягане | Чист въздух",
         "terrain_and_difficulty": "Лек и равен горски път.",
         "confidence": "low",
-        "reviewer_notes": "Името е твърде общо, данните са базови."
+        "reviewer_notes": "Името е твърде общо, данните са базови.",
+        "sources_urls": "Екопътека.md файл"
       },
       "auto_enrichment": {
         "coords_updated_at": "2026-03-12",
