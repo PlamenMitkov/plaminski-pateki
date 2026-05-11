@@ -92,7 +92,18 @@ jobs:
           }
 
           $summary = Get-Content -Path $summaryPath -Raw -Encoding UTF8 | ConvertFrom-Json
-          $maxHigh = if ([string]::IsNullOrWhiteSpace($env:MAX_HIGH)) { [int]$env:BASELINE_HIGH } else { [int]$env:MAX_HIGH }
+          $baselineHigh = [int]$env:BASELINE_HIGH
+          $maxHighInput = [string]$env:MAX_HIGH
+          if ([string]::IsNullOrWhiteSpace($maxHighInput)) {
+            $maxHigh = $baselineHigh
+          }
+          elseif ([int]$maxHighInput -eq 0 -and $baselineHigh -gt 0) {
+            Write-Warning "maxHighSeverity=0 received while baselineHigh=$baselineHigh; treating 0 as stale dispatch input and using baseline."
+            $maxHigh = $baselineHigh
+          }
+          else {
+            $maxHigh = [int]$maxHighInput
+          }
           $maxMedium = if ([string]::IsNullOrWhiteSpace($env:MAX_MEDIUM)) { [int]$env:BASELINE_MEDIUM } else { [int]$env:MAX_MEDIUM }
           $maxLow = if ([string]::IsNullOrWhiteSpace($env:MAX_LOW)) { [int]$env:BASELINE_LOW } else { [int]$env:MAX_LOW }
 
