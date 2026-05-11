@@ -96,6 +96,11 @@ jobs:
           $maxMedium = if ([string]::IsNullOrWhiteSpace($env:MAX_MEDIUM)) { [int]$env:BASELINE_MEDIUM } else { [int]$env:MAX_MEDIUM }
           $maxLow = if ([string]::IsNullOrWhiteSpace($env:MAX_LOW)) { [int]$env:BASELINE_LOW } else { [int]$env:MAX_LOW }
 
+          Write-Host "Synthetic governance thresholds: inputMaxHigh='$($env:MAX_HIGH)' baselineHigh=$($env:BASELINE_HIGH) effectiveMaxHigh=$maxHigh"
+          Write-Host "Synthetic governance thresholds: inputMaxMedium='$($env:MAX_MEDIUM)' baselineMedium=$($env:BASELINE_MEDIUM) effectiveMaxMedium=$maxMedium"
+          Write-Host "Synthetic governance thresholds: inputMaxLow='$($env:MAX_LOW)' baselineLow=$($env:BASELINE_LOW) effectiveMaxLow=$maxLow"
+          Write-Host "Synthetic governance findings: high=$($summary.high_severity_findings) medium=$($summary.medium_severity_findings) low=$($summary.low_severity_findings)"
+
           $errors = @()
           if ($summary.high_severity_findings -gt $maxHigh) {
             $errors += "high_severity_findings=$($summary.high_severity_findings) exceeds maxHighSeverity=$maxHigh"
