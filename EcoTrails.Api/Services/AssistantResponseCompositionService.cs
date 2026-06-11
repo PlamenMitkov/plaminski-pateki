@@ -5,10 +5,14 @@ namespace EcoTrails.Api.Services;
 public sealed class AssistantResponseCompositionService : IAssistantResponseCompositionService
 {
     private readonly IAssistantWeatherContextService _weatherContextService;
+    private readonly IAssistantDynamicPromptService _dynamicPromptService;
 
-    public AssistantResponseCompositionService(IAssistantWeatherContextService weatherContextService)
+    public AssistantResponseCompositionService(
+        IAssistantWeatherContextService weatherContextService,
+        IAssistantDynamicPromptService dynamicPromptService)
     {
         _weatherContextService = weatherContextService;
+        _dynamicPromptService = dynamicPromptService;
     }
 
     public List<AssistantKnowledgeChip> BuildKnowledgeChips(
@@ -149,99 +153,121 @@ public sealed class AssistantResponseCompositionService : IAssistantResponseComp
 
         if (primaryTrail is not null)
         {
+            var weatherPrompt = _dynamicPromptService.GenerateDynamicLocationPrompt(primaryLocation, regionOrLocation);
+            var weatherParts = weatherPrompt.Split("||");
             requiredActions.Add(new AssistantQuickAction
             {
                 Id = "weather-now",
-                Label = $"Време сега около {primaryLocation}",
-                Value = primaryLocation
+                Label = weatherParts[0],
+                Value = weatherParts.Length > 1 ? weatherParts[1] : primaryLocation
             });
 
+            var personalizedPrompt = _dynamicPromptService.GeneratePersonalizedIntroPrompt(regionOrLocation);
+            var personalizedParts = personalizedPrompt.Split("||");
             optionalActions.Add(new AssistantQuickAction
             {
                 Id = "ask-prompt",
-                Label = $"Дай 3 персонализирани маршрута в {regionOrLocation}",
-                Value = $"Препоръчай 3 персонализирани маршрута в {regionOrLocation} с кратко сравнение и ясно предложение кой е най-подходящ за мен."
+                Label = personalizedParts[0],
+                Value = personalizedParts.Length > 1 ? personalizedParts[1] : personalizedParts[0]
             });
 
+            var detailPrompt = _dynamicPromptService.GenerateDynamicDetailPrompt();
+            var detailParts = detailPrompt.Split("||");
             optionalActions.Add(new AssistantQuickAction
             {
                 Id = "ask-prompt",
-                Label = "Искам по-дълъг и детайлен съвет",
-                Value = "Дай по-дълъг и подробен отговор с план стъпка по стъпка: маршрут, време, екипировка, рискове и алтернативи."
+                Label = detailParts[0],
+                Value = detailParts.Length > 1 ? detailParts[1] : detailParts[0]
             });
 
+            var comparisonPrompt = _dynamicPromptService.GenerateDynamicComparisonPrompt(regionOrLocation);
+            var comparisonParts = comparisonPrompt.Split("||");
             optionalActions.Add(new AssistantQuickAction
             {
                 Id = "ask-prompt",
-                Label = $"Сравни ми топ 2 маршрута около {regionOrLocation}",
-                Value = $"Сравни 2-те най-подходящи маршрута около {regionOrLocation} по трудност, време, денивелация, вода и подходящост за начинаещ."
+                Label = comparisonParts[0],
+                Value = comparisonParts.Length > 1 ? comparisonParts[1] : comparisonParts[0]
             });
 
+            var gearPrompt = _dynamicPromptService.GenerateDynamicGearPrompt(primaryTrail.Name);
+            var gearParts = gearPrompt.Split("||");
             optionalActions.Add(new AssistantQuickAction
             {
                 Id = "ask-prompt",
-                Label = $"Каква е екипировката за {primaryTrail.Name}?",
-                Value = $"Каква е най-подходящата екипировка за {primaryTrail.Name} според условията и терена?"
+                Label = gearParts[0],
+                Value = gearParts.Length > 1 ? gearParts[1] : gearParts[0]
             });
         }
 
         if (trails.Any(item => !item.WaterSources))
         {
+            var waterPrompt = _dynamicPromptService.GenerateDynamicWaterPrompt();
+            var waterParts = waterPrompt.Split("||");
             optionalActions.Add(new AssistantQuickAction
             {
                 Id = "ask-prompt",
-                Label = "Искам маршрут с водоизточник",
-                Value = "Препоръчай маршрут с наличен водоизточник и ми кажи къде е критично да нося повече вода."
+                Label = waterParts[0],
+                Value = waterParts.Length > 1 ? waterParts[1] : waterParts[0]
             });
         }
 
         if (trails.Any(item => string.Equals(item.DifficultyLevel, "difficult", StringComparison.OrdinalIgnoreCase)))
         {
+            var easyPrompt = _dynamicPromptService.GenerateDynamicEasyVariantPrompt();
+            var easyParts = easyPrompt.Split("||");
             optionalActions.Add(new AssistantQuickAction
             {
                 Id = "ask-prompt",
-                Label = "Дай ми по-лек вариант",
-                Value = "Препоръчай ми по-лека алтернатива за начинаещ с по-малка денивелация и по-малък риск."
+                Label = easyParts[0],
+                Value = easyParts.Length > 1 ? easyParts[1] : easyParts[0]
             });
         }
 
         if (trails.Any(item => item.SuitableForKids))
         {
+            var familyPrompt = _dynamicPromptService.GenerateDynamicFamilyPrompt(regionOrLocation);
+            var familyParts = familyPrompt.Split("||");
             optionalActions.Add(new AssistantQuickAction
             {
                 Id = "ask-prompt",
-                Label = "Семеен маршрут за деца",
-                Value = $"Предложи семеен маршрут около {regionOrLocation}, подходящ за деца, с кратки съвети за безопасност."
+                Label = familyParts[0],
+                Value = familyParts.Length > 1 ? familyParts[1] : familyParts[0]
             });
         }
 
         if (request.FavoriteCount > 0)
         {
+            var favoritesPrompt = _dynamicPromptService.GenerateDynamicFavoritesPrompt(request.FavoriteCount);
+            var favoritesParts = favoritesPrompt.Split("||");
             optionalActions.Add(new AssistantQuickAction
             {
                 Id = "ask-prompt",
-                Label = "Съобрази с любимите ми",
-                Value = $"Съобрази предложенията с любимите ми пътеки ({request.FavoriteCount}) и обясни защо ги предпочиташ."
+                Label = favoritesParts[0],
+                Value = favoritesParts.Length > 1 ? favoritesParts[1] : favoritesParts[0]
             });
         }
 
         if (!string.IsNullOrWhiteSpace(request.FilterSummary))
         {
+            var filterPrompt = _dynamicPromptService.GenerateDynamicFilterPrompt();
+            var filterParts = filterPrompt.Split("||");
             optionalActions.Add(new AssistantQuickAction
             {
                 Id = "ask-prompt",
-                Label = "Обясни ми избора по филтрите",
-                Value = "Обясни защо избираш точно тези пътеки според текущите активни филтри и какво би променил при по-строги условия."
+                Label = filterParts[0],
+                Value = filterParts.Length > 1 ? filterParts[1] : filterParts[0]
             });
         }
 
         if (!string.IsNullOrWhiteSpace(prompt) && _weatherContextService.IsWeatherPrompt(prompt))
         {
+            var offlinePrompt = _dynamicPromptService.GenerateDynamicOfflinePrompt();
+            var offlineParts = offlinePrompt.Split("||");
             optionalActions.Add(new AssistantQuickAction
             {
                 Id = "ask-prompt",
-                Label = "Дай ми офлайн локация",
-                Value = "Ако няма интернет или GPS, как да се ориентирам офлайн по маршрута и кои са ключовите ориентири?"
+                Label = offlineParts[0],
+                Value = offlineParts.Length > 1 ? offlineParts[1] : offlineParts[0]
             });
         }
 

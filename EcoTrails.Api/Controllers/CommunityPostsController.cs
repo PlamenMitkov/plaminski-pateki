@@ -141,36 +141,39 @@ public class CommunityPostsController : ControllerBase
         _dbContext.CommunityTrailPosts.Add(post);
         await _dbContext.SaveChangesAsync(cancellationToken);
 
-        var imagesDirectory = Path.Combine(_environment.WebRootPath ?? Path.Combine(_environment.ContentRootPath, "wwwroot"), "uploads", "community", userId);
-        Directory.CreateDirectory(imagesDirectory);
-
-        foreach (var file in files)
+        if (files.Count > 0)
         {
-            var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
-            if (string.IsNullOrWhiteSpace(extension) || extension.Length > 10)
+            var imagesDirectory = Path.Combine(_environment.WebRootPath ?? Path.Combine(_environment.ContentRootPath, "wwwroot"), "uploads", "community", userId);
+            Directory.CreateDirectory(imagesDirectory);
+
+            foreach (var file in files)
             {
-                extension = ".jpg";
+                var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
+                if (string.IsNullOrWhiteSpace(extension) || extension.Length > 10)
+                {
+                    extension = ".jpg";
+                }
+
+                var generatedFileName = $"{Guid.NewGuid():N}{extension}";
+                var storagePath = Path.Combine(imagesDirectory, generatedFileName);
+
+                await using (var stream = System.IO.File.Create(storagePath))
+                {
+                    await file.CopyToAsync(stream, cancellationToken);
+                }
+
+                var publicUrl = $"/uploads/community/{Uri.EscapeDataString(userId)}/{generatedFileName}";
+                _dbContext.CommunityTrailPostImages.Add(new CommunityTrailPostImage
+                {
+                    CommunityTrailPostId = post.Id,
+                    ImageUrl = publicUrl,
+                    StoragePath = storagePath,
+                    CreatedAtUtc = DateTime.UtcNow,
+                });
             }
 
-            var generatedFileName = $"{Guid.NewGuid():N}{extension}";
-            var storagePath = Path.Combine(imagesDirectory, generatedFileName);
-
-            await using (var stream = System.IO.File.Create(storagePath))
-            {
-                await file.CopyToAsync(stream, cancellationToken);
-            }
-
-            var publicUrl = $"/uploads/community/{Uri.EscapeDataString(userId)}/{generatedFileName}";
-            _dbContext.CommunityTrailPostImages.Add(new CommunityTrailPostImage
-            {
-                CommunityTrailPostId = post.Id,
-                ImageUrl = publicUrl,
-                StoragePath = storagePath,
-                CreatedAtUtc = DateTime.UtcNow,
-            });
+            await _dbContext.SaveChangesAsync(cancellationToken);
         }
-
-        await _dbContext.SaveChangesAsync(cancellationToken);
 
         var savedPost = await _dbContext.CommunityTrailPosts
             .AsNoTracking()

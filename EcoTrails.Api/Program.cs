@@ -79,6 +79,7 @@ builder.Services.AddScoped<IAssistantProvenancePolicyService, AssistantProvenanc
 builder.Services.AddScoped<IAssistantRetrievalService, AssistantRetrievalService>();
 builder.Services.AddScoped<IAssistantEnrichmentWorkflowService, AssistantEnrichmentWorkflowService>();
 builder.Services.AddScoped<IAssistantResponseCompositionService, AssistantResponseCompositionService>();
+builder.Services.AddScoped<IAssistantDynamicPromptService, AssistantDynamicPromptService>();
 builder.Services.AddScoped<ITrailOfflineEnrichmentService, TrailOfflineEnrichmentService>();
 builder.Services.AddScoped<JwtTokenService>();
 builder.Services.AddHttpClient<OpenRouteService>(httpClient =>

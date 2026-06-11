@@ -36,6 +36,7 @@ services:
     volumes:
       - ./ecoupdated.json:/ecoupdated.json:ro
       - ./eco.json:/eco.json:ro
+      - uploads_data:/app/wwwroot/uploads
 
   client:
     build:
@@ -49,3 +50,4 @@ services:
 
 volumes:
   sql_data:
+  uploads_data:

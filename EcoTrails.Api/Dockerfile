@@ -11,10 +11,12 @@ FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS final
 WORKDIR /app
 
 RUN groupadd --gid 5678 appgroup \
-	&& useradd --uid 5678 --gid appgroup --no-create-home --shell /usr/sbin/nologin appuser \
-	&& chown -R appuser:appgroup /app
+	&& useradd --uid 5678 --gid appgroup --no-create-home --shell /usr/sbin/nologin appuser
 
 COPY --from=build /app/publish .
+
+RUN mkdir -p /app/wwwroot/uploads \
+	&& chown -R appuser:appgroup /app
 
 USER appuser
 

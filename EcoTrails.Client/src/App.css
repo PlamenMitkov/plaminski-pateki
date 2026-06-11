@@ -711,6 +711,24 @@
   display: grid;
   gap: 8px;
   margin-top: 6px;
+  max-height: 260px;
+  overflow-y: auto;
+  padding-right: 4px;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+
+.assistant-session-list::-webkit-scrollbar {
+  width: 5px;
+}
+
+.assistant-session-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.assistant-session-list::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
 }
 
 .assistant-session-item {
@@ -908,8 +926,13 @@
 
 .profile-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+  gap: 14px;
+}
+
+.profile-grid .profile-post-form,
+.profile-grid .profile-post-list {
+  grid-column: span 1;
 }
 
 .profile-card {
@@ -986,6 +1009,27 @@
   background: #f8fafc;
 }
 
+.profile-post-list-scroll {
+  max-height: 480px;
+  overflow-y: auto;
+  padding-right: 4px;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+
+.profile-post-list-scroll::-webkit-scrollbar {
+  width: 5px;
+}
+
+.profile-post-list-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.profile-post-list-scroll::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
 .profile-post-form textarea.auth-input {
   resize: vertical;
   min-height: 120px;
@@ -1034,6 +1078,24 @@
   display: grid;
   gap: 10px;
   margin-top: 12px;
+  max-height: 260px;
+  overflow-y: auto;
+  padding-right: 4px;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+
+.user-activity-list::-webkit-scrollbar {
+  width: 5px;
+}
+
+.user-activity-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.user-activity-list::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
 }
 
 .user-activity-item {

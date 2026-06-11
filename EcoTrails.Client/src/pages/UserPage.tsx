@@ -690,7 +690,8 @@ function UserPage() {
             ) : myPosts.length === 0 ? (
               <p className="status-text">Все още нямаш публикации.</p>
             ) : (
-              myPosts.slice(0, 8).map((post) => (
+              <div className="profile-post-list-scroll">
+              {myPosts.map((post) => (
                 <article key={post.id} className="profile-post-item">
                   <div className="user-post-header">
                     <h4>{post.title}</h4>
@@ -737,7 +738,8 @@ function UserPage() {
                     </button>
                   </div>
                 </article>
-              ))
+              ))}
+              </div>
             )}
           </section>
         </div>
